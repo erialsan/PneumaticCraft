@@ -17,77 +17,77 @@ import forestry.api.apiculture.IBeekeepingMode;
  */
 public interface IBreedingTracker {
 
-	/**
-	 * @return Name of the current {@link IBeekeepingMode}.
-	 */
-	String getModeName();
+    /**
+     * @return Name of the current {@link IBeekeepingMode}.
+     */
+    String getModeName();
 
-	/**
-	 * Set the current {@link IBeekeepingMode}.
-	 */
-	void setModeName(String name);
+    /**
+     * Set the current {@link IBeekeepingMode}.
+     */
+    void setModeName(String name);
 
-	/**
-	 * @return Amount of species discovered.
-	 */
-	int getSpeciesBred();
+    /**
+     * @return Amount of species discovered.
+     */
+    int getSpeciesBred();
 
-	/**
-	 * Register the birth of an individual. Will mark it as discovered.
-	 * 
-	 * @param individual
-	 */
-	void registerBirth(IIndividual individual);
+    /**
+     * Register the birth of an individual. Will mark it as discovered.
+     * 
+     * @param individual
+     */
+    void registerBirth(IIndividual individual);
 
-	/**
-	 * Register the pickup of an individual.
-	 * 
-	 * @param individual
-	 */
-	void registerPickup(IIndividual individual);
-	
-	/**
-	 * Marks a species as discovered. Should only be called from registerIndividual normally.
-	 * 
-	 * @param species
-	 */
-	void registerSpecies(IAlleleSpecies species);
+    /**
+     * Register the pickup of an individual.
+     * 
+     * @param individual
+     */
+    void registerPickup(IIndividual individual);
 
-	/**
-	 * Register a successful mutation. Will mark it as discovered.
-	 * 
-	 * @param mutation
-	 */
-	void registerMutation(IMutation mutation);
+    /**
+     * Marks a species as discovered. Should only be called from registerIndividual normally.
+     * 
+     * @param species
+     */
+    void registerSpecies(IAlleleSpecies species);
 
-	/**
-	 * Queries the tracker for discovered species.
-	 * 
-	 * @param mutation
-	 *            Mutation to query for.
-	 * @return true if the mutation has been discovered.
-	 */
-	boolean isDiscovered(IMutation mutation);
+    /**
+     * Register a successful mutation. Will mark it as discovered.
+     * 
+     * @param mutation
+     */
+    void registerMutation(IMutation mutation);
 
-	/**
-	 * Queries the tracker for discovered species.
-	 * 
-	 * @param species
-	 *            Species to check.
-	 * @return true if the species has been bred.
-	 */
-	boolean isDiscovered(IAlleleSpecies species);
+    /**
+     * Queries the tracker for discovered species.
+     * 
+     * @param mutation
+     *                 Mutation to query for.
+     * @return true if the mutation has been discovered.
+     */
+    boolean isDiscovered(IMutation mutation);
 
-	/**
-	 * Synchronizes the tracker to the client side. Should be called before opening any gui needing that information.
-	 * 
-	 * @param player
-	 */
-	void synchToPlayer(EntityPlayer player);
+    /**
+     * Queries the tracker for discovered species.
+     * 
+     * @param species
+     *                Species to check.
+     * @return true if the species has been bred.
+     */
+    boolean isDiscovered(IAlleleSpecies species);
 
-	/* LOADING & SAVING */
-	void decodeFromNBT(NBTTagCompound nbttagcompound);
+    /**
+     * Synchronizes the tracker to the client side. Should be called before opening any gui needing that information.
+     * 
+     * @param player
+     */
+    void synchToPlayer(EntityPlayer player);
 
-	void encodeToNBT(NBTTagCompound nbttagcompound);
+    /* LOADING & SAVING */
+    void decodeFromNBT(NBTTagCompound nbttagcompound);
+
+    void encodeToNBT(NBTTagCompound nbttagcompound);
 
 }

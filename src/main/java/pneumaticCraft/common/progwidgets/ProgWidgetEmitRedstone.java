@@ -10,74 +10,75 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import org.apache.commons.lang3.math.NumberUtils;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import pneumaticCraft.client.gui.GuiProgrammer;
 import pneumaticCraft.client.gui.programmer.GuiProgWidgetEmitRedstone;
 import pneumaticCraft.common.ai.IDroneBase;
 import pneumaticCraft.common.item.ItemPlasticPlants;
 import pneumaticCraft.lib.Textures;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
-public class ProgWidgetEmitRedstone extends ProgWidget implements IRedstoneEmissionWidget, ISidedWidget{
-    private boolean[] accessingSides = new boolean[]{true, true, true, true, true, true};
+public class ProgWidgetEmitRedstone extends ProgWidget implements IRedstoneEmissionWidget, ISidedWidget {
+
+    private boolean[] accessingSides = new boolean[] { true, true, true, true, true, true };
 
     @Override
-    public int getEmittingRedstone(){
-        if(getConnectedParameters()[0] != null) {
-            return NumberUtils.toInt(((ProgWidgetString)getConnectedParameters()[0]).string);
+    public int getEmittingRedstone() {
+        if (getConnectedParameters()[0] != null) {
+            return NumberUtils.toInt(((ProgWidgetString) getConnectedParameters()[0]).string);
         } else {
             return 0;
         }
     }
 
     @Override
-    public void setSides(boolean[] sides){
+    public void setSides(boolean[] sides) {
         accessingSides = sides;
     }
 
     @Override
-    public boolean[] getSides(){
+    public boolean[] getSides() {
         return accessingSides;
     }
 
     @Override
-    public void addErrors(List<String> curInfo, List<IProgWidget> widgets){
+    public void addErrors(List<String> curInfo, List<IProgWidget> widgets) {
         super.addErrors(curInfo, widgets);
 
         boolean sideActive = false;
-        for(boolean bool : accessingSides) {
+        for (boolean bool : accessingSides) {
             sideActive |= bool;
         }
-        if(!sideActive) curInfo.add("gui.progWidget.general.error.noSideActive");
+        if (!sideActive) curInfo.add("gui.progWidget.general.error.noSideActive");
     }
 
     @Override
-    public void getTooltip(List<String> curTooltip){
+    public void getTooltip(List<String> curTooltip) {
         super.getTooltip(curTooltip);
         curTooltip.add("Affecting sides:");
         curTooltip.add(getExtraStringInfo());
     }
 
     @Override
-    public String getExtraStringInfo(){
+    public String getExtraStringInfo() {
         boolean allSides = true;
         boolean noSides = true;
-        for(boolean bool : accessingSides) {
-            if(bool) {
+        for (boolean bool : accessingSides) {
+            if (bool) {
                 noSides = false;
             } else {
                 allSides = false;
             }
         }
-        if(allSides) {
+        if (allSides) {
             return "All sides";
-        } else if(noSides) {
+        } else if (noSides) {
             return "No Sides";
         } else {
             String tip = "";
-            for(int i = 0; i < 6; i++) {
-                if(accessingSides[i]) {
-                    switch(ForgeDirection.getOrientation(i)){
+            for (int i = 0; i < 6; i++) {
+                if (accessingSides[i]) {
+                    switch (ForgeDirection.getOrientation(i)) {
                         case UP:
                             tip += "top, ";
                             break;
@@ -104,88 +105,95 @@ public class ProgWidgetEmitRedstone extends ProgWidget implements IRedstoneEmiss
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound tag){
+    public void writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
-        for(int i = 0; i < 6; i++) {
-            tag.setBoolean(ForgeDirection.getOrientation(i).name(), accessingSides[i]);
+        for (int i = 0; i < 6; i++) {
+            tag.setBoolean(
+                ForgeDirection.getOrientation(i)
+                    .name(),
+                accessingSides[i]);
         }
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound tag){
+    public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
-        for(int i = 0; i < 6; i++) {
-            accessingSides[i] = tag.getBoolean(ForgeDirection.getOrientation(i).name());
+        for (int i = 0; i < 6; i++) {
+            accessingSides[i] = tag.getBoolean(
+                ForgeDirection.getOrientation(i)
+                    .name());
         }
     }
 
     @Override
-    public boolean hasStepInput(){
+    public boolean hasStepInput() {
         return true;
     }
 
     @Override
-    public Class<? extends IProgWidget> returnType(){
+    public Class<? extends IProgWidget> returnType() {
         return null;
     }
 
     @Override
-    public Class<? extends IProgWidget>[] getParameters(){
-        return new Class[]{ProgWidgetString.class};
+    public Class<? extends IProgWidget>[] getParameters() {
+        return new Class[] { ProgWidgetString.class };
     }
 
     @Override
-    protected boolean hasBlacklist(){
+    protected boolean hasBlacklist() {
         return false;
     }
 
     @Override
-    public String getWidgetString(){
+    public String getWidgetString() {
         return "emitRedstone";
     }
 
     @Override
-    public int getCraftingColorIndex(){
+    public int getCraftingColorIndex() {
         return ItemPlasticPlants.FIRE_FLOWER_DAMAGE;
     }
 
     @Override
-    public WidgetDifficulty getDifficulty(){
+    public WidgetDifficulty getDifficulty() {
         return WidgetDifficulty.EASY;
     }
 
     @Override
-    protected ResourceLocation getTexture(){
+    protected ResourceLocation getTexture() {
         return Textures.PROG_WIDGET_EMIT_REDSTONE;
     }
 
     @Override
     @SideOnly(Side.CLIENT)
-    public GuiScreen getOptionWindow(GuiProgrammer guiProgrammer){
+    public GuiScreen getOptionWindow(GuiProgrammer guiProgrammer) {
         return new GuiProgWidgetEmitRedstone(this, guiProgrammer);
     }
 
     @Override
-    public EntityAIBase getWidgetAI(IDroneBase drone, IProgWidget widget){
+    public EntityAIBase getWidgetAI(IDroneBase drone, IProgWidget widget) {
         return new DroneAIEmitRedstone(drone, widget);
     }
 
-    private static class DroneAIEmitRedstone extends EntityAIBase{
+    private static class DroneAIEmitRedstone extends EntityAIBase {
 
         private final IProgWidget widget;
         private final IDroneBase drone;
 
-        public DroneAIEmitRedstone(IDroneBase drone, IProgWidget widget){
+        public DroneAIEmitRedstone(IDroneBase drone, IProgWidget widget) {
             this.widget = widget;
             this.drone = drone;
         }
 
         @Override
-        public boolean shouldExecute(){
-            boolean[] sides = ((ISidedWidget)widget).getSides();
-            for(int i = 0; i < 6; i++) {
-                if(sides[i]) {
-                    drone.setEmittingRedstone(ForgeDirection.getOrientation(i), ((IRedstoneEmissionWidget)widget).getEmittingRedstone());
+        public boolean shouldExecute() {
+            boolean[] sides = ((ISidedWidget) widget).getSides();
+            for (int i = 0; i < 6; i++) {
+                if (sides[i]) {
+                    drone.setEmittingRedstone(
+                        ForgeDirection.getOrientation(i),
+                        ((IRedstoneEmissionWidget) widget).getEmittingRedstone());
                 }
             }
             return false;

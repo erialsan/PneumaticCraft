@@ -7,9 +7,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;
+
 import pneumaticCraft.common.network.PacketDescription;
 
-public interface ISemiBlock{
+public interface ISemiBlock {
 
     public World getWorld();
 

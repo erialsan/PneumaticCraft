@@ -12,13 +12,15 @@ import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidTankInfo;
+
 import pneumaticCraft.client.util.RenderUtils;
 import pneumaticCraft.client.util.RenderUtils.RenderInfo;
 import pneumaticCraft.common.tileentity.TileEntityThermopneumaticProcessingPlant;
 import pneumaticCraft.lib.Textures;
 
-public class ModelThermopneumaticProcessingPlant extends ModelBase implements IBaseModel{
-    //fields
+public class ModelThermopneumaticProcessingPlant extends ModelBase implements IBaseModel {
+
+    // fields
     ModelRenderer itemPart;
     ModelRenderer inputTank;
     ModelRenderer outputTank;
@@ -31,7 +33,7 @@ public class ModelThermopneumaticProcessingPlant extends ModelBase implements IB
     ModelRenderer airLeft;
     ModelRenderer airRight;
 
-    public ModelThermopneumaticProcessingPlant(){
+    public ModelThermopneumaticProcessingPlant() {
         textureWidth = 64;
         textureHeight = 64;
 
@@ -104,7 +106,7 @@ public class ModelThermopneumaticProcessingPlant extends ModelBase implements IB
     }
 
     @Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5){
+    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         super.render(entity, f, f1, f2, f3, f4, f5);
         setRotationAngles(f, f1, f2, f3, f4, f5, entity);
         itemPart.render(f5);
@@ -120,14 +122,14 @@ public class ModelThermopneumaticProcessingPlant extends ModelBase implements IB
         airRight.render(f5);
     }
 
-    private void setRotation(ModelRenderer model, float x, float y, float z){
+    private void setRotation(ModelRenderer model, float x, float y, float z) {
         model.rotateAngleX = x;
         model.rotateAngleY = y;
         model.rotateAngleZ = z;
     }
 
     @Override
-    public void renderStatic(float size, TileEntity te){
+    public void renderStatic(float size, TileEntity te) {
         itemPart.render(size);
         inputTank.render(size);
         outputTank.render(size);
@@ -140,36 +142,48 @@ public class ModelThermopneumaticProcessingPlant extends ModelBase implements IB
         airLeft.render(size);
         airRight.render(size);
 
-        if(te != null) {
-            TileEntityThermopneumaticProcessingPlant processor = (TileEntityThermopneumaticProcessingPlant)te;
+        if (te != null) {
+            TileEntityThermopneumaticProcessingPlant processor = (TileEntityThermopneumaticProcessingPlant) te;
             FluidTankInfo info = processor.getTankInfo(null)[0];
-            if(info.fluid != null && info.fluid.amount > 10) {
-                float percentageFull = (float)info.fluid.amount / info.capacity;
-                RenderInfo renderInfo = new RenderInfo(-8 / 16F + 0.01F, 24 / 16F - percentageFull * 9.999F / 16F, 1 / 16F + 0.01F, -1 / 16F - 0.01F, 24 / 16F - 0.01F, 8 / 16F - 0.01F);
+            if (info.fluid != null && info.fluid.amount > 10) {
+                float percentageFull = (float) info.fluid.amount / info.capacity;
+                RenderInfo renderInfo = new RenderInfo(
+                    -8 / 16F + 0.01F,
+                    24 / 16F - percentageFull * 9.999F / 16F,
+                    1 / 16F + 0.01F,
+                    -1 / 16F - 0.01F,
+                    24 / 16F - 0.01F,
+                    8 / 16F - 0.01F);
                 RenderUtils.INSTANCE.renderLiquid(info, renderInfo, processor.getWorldObj());
             }
 
             info = processor.getTankInfo(null)[1];
-            if(info.fluid != null && info.fluid.amount > 10) {
-                float percentageFull = (float)info.fluid.amount / info.capacity;
-                RenderInfo renderInfo = new RenderInfo(1 / 16F + 0.01F, 24 / 16F - percentageFull * 9.999F / 16F, 1 / 16F + 0.01F, 8 / 16F - 0.01F, 24 / 16F - 0.01F, 8 / 16F - 0.01F);
+            if (info.fluid != null && info.fluid.amount > 10) {
+                float percentageFull = (float) info.fluid.amount / info.capacity;
+                RenderInfo renderInfo = new RenderInfo(
+                    1 / 16F + 0.01F,
+                    24 / 16F - percentageFull * 9.999F / 16F,
+                    1 / 16F + 0.01F,
+                    8 / 16F - 0.01F,
+                    24 / 16F - 0.01F,
+                    8 / 16F - 0.01F);
                 RenderUtils.INSTANCE.renderLiquid(info, renderInfo, processor.getWorldObj());
             }
         }
     }
 
     @Override
-    public void renderDynamic(float size, TileEntity te, float partialTicks){
+    public void renderDynamic(float size, TileEntity te, float partialTicks) {
 
     }
 
     @Override
-    public ResourceLocation getModelTexture(TileEntity tile){
+    public ResourceLocation getModelTexture(TileEntity tile) {
         return Textures.MODEL_THERMOPNEUMATIC_PROCESSING_PLANT;
     }
 
     @Override
-    public boolean rotateModelBasedOnBlockMeta(){
+    public boolean rotateModelBasedOnBlockMeta() {
         return true;
     }
 

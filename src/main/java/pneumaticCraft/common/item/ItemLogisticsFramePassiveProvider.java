@@ -2,9 +2,9 @@ package pneumaticCraft.common.item;
 
 import pneumaticCraft.common.semiblock.SemiBlockPassiveProvider;
 
-public class ItemLogisticsFramePassiveProvider extends ItemLogisticsFrame{
+public class ItemLogisticsFramePassiveProvider extends ItemLogisticsFrame {
 
-    public ItemLogisticsFramePassiveProvider(){
+    public ItemLogisticsFramePassiveProvider() {
         super(SemiBlockPassiveProvider.ID);
     }
 

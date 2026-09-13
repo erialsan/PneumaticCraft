@@ -3,10 +3,11 @@ package pneumaticCraft.common.ai;
 import java.util.List;
 
 import net.minecraft.world.ChunkPosition;
+
 import pneumaticCraft.api.drone.IDrone;
 import pneumaticCraft.common.progwidgets.IProgWidget;
 
-public interface IDroneBase extends IDrone{
+public interface IDroneBase extends IDrone {
 
     public List<IProgWidget> getProgWidgets();
 

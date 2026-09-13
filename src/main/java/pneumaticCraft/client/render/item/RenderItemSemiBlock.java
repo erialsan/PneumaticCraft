@@ -5,36 +5,37 @@ import net.minecraftforge.client.IItemRenderer;
 
 import org.lwjgl.opengl.GL11;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import pneumaticCraft.client.semiblock.ClientSemiBlockManager;
 import pneumaticCraft.client.semiblock.ISemiBlockRenderer;
 import pneumaticCraft.common.semiblock.ISemiBlock;
 import pneumaticCraft.common.semiblock.SemiBlockManager;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class RenderItemSemiBlock implements IItemRenderer{
+public class RenderItemSemiBlock implements IItemRenderer {
+
     private final ISemiBlock renderSemiBlock;
 
-    public RenderItemSemiBlock(String key){
+    public RenderItemSemiBlock(String key) {
         renderSemiBlock = SemiBlockManager.getSemiBlockForKey(key);
     }
 
     @Override
-    public boolean handleRenderType(ItemStack item, ItemRenderType type){
+    public boolean handleRenderType(ItemStack item, ItemRenderType type) {
 
         return true;
     }
 
     @Override
-    public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper){
+    public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper) {
 
         return true;
     }
 
     @Override
-    public void renderItem(ItemRenderType type, ItemStack item, Object... data){
-        switch(type){
+    public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
+        switch (type) {
             case ENTITY: {
                 render(-0.5F, 0.0F, 0.5F, 0.5F);
                 return;
@@ -44,7 +45,7 @@ public class RenderItemSemiBlock implements IItemRenderer{
                 return;
             }
             case EQUIPPED_FIRST_PERSON: {
-                //   GL11.glRotatef(-90F, 0, 1F, 0);
+                // GL11.glRotatef(-90F, 0, 1F, 0);
                 render(0.5F, 0.7F, 1.9F, 0.5F);
                 return;
             }
@@ -57,7 +58,7 @@ public class RenderItemSemiBlock implements IItemRenderer{
         }
     }
 
-    private void render(float x, float y, float z, float scale){
+    private void render(float x, float y, float z, float scale) {
         GL11.glPushMatrix();
         // GL11.glDisable(GL11.GL_LIGHTING);
         // GL11.glDisable(GL11.GL_TEXTURE_2D);
@@ -70,7 +71,7 @@ public class RenderItemSemiBlock implements IItemRenderer{
         // Bind texture
 
         ISemiBlockRenderer renderer = ClientSemiBlockManager.getRenderer(renderSemiBlock);
-        if(renderer != null) renderer.render(renderSemiBlock, 0);
+        if (renderer != null) renderer.render(renderSemiBlock, 0);
 
         // GL11.glEnable(GL11.GL_TEXTURE_2D);
         // GL11.glEnable(GL11.GL_LIGHTING);

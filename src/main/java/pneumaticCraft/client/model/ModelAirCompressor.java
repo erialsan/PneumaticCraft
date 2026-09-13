@@ -8,26 +8,26 @@ import org.lwjgl.opengl.GL11;
 import pneumaticCraft.common.tileentity.TileEntityAirCompressor;
 import pneumaticCraft.lib.Textures;
 
-public class ModelAirCompressor extends BaseModel{
+public class ModelAirCompressor extends BaseModel {
 
     private final ResourceLocation activeTexture;
 
-    public ModelAirCompressor(String name){
+    public ModelAirCompressor(String name) {
         super("airCompressor.obj", name + ".png");
         activeTexture = new ResourceLocation(Textures.MODEL_LOCATION + name + "Active.png");
     }
 
     @Override
-    public boolean rotateModelBasedOnBlockMeta(){
+    public boolean rotateModelBasedOnBlockMeta() {
         GL11.glRotated(180, 0, 1, 0);
         return true;
     }
 
     @Override
-    public ResourceLocation getModelTexture(TileEntity tile){
+    public ResourceLocation getModelTexture(TileEntity tile) {
         boolean active = false;
-        if(tile != null) {
-            TileEntityAirCompressor compressor = (TileEntityAirCompressor)tile;
+        if (tile != null) {
+            TileEntityAirCompressor compressor = (TileEntityAirCompressor) tile;
             active = compressor.isActive;
         }
         return active ? activeTexture : resLoc;

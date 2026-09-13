@@ -15,7 +15,7 @@ import pneumaticCraft.common.item.ItemMachineUpgrade;
 import pneumaticCraft.common.tileentity.TileEntityChargingStation;
 import pneumaticCraft.lib.Textures;
 
-public class ModelChargingStation extends ModelBase implements IBaseModel{
+public class ModelChargingStation extends ModelBase implements IBaseModel {
 
     private final RenderItem customRenderItem;
     private final ModelChargingStationPad chargePad = new ModelChargingStationPad();
@@ -39,7 +39,7 @@ public class ModelChargingStation extends ModelBase implements IBaseModel{
     ModelRenderer Leg3;
     ModelRenderer Leg4;
 
-    public ModelChargingStation(){
+    public ModelChargingStation() {
         textureWidth = 64;
         textureHeight = 32;
 
@@ -152,9 +152,10 @@ public class ModelChargingStation extends ModelBase implements IBaseModel{
         Leg4.mirror = true;
         setRotation(Leg4, -0.5585054F, 2.356194F, 0F);
 
-        customRenderItem = new RenderItem(){
+        customRenderItem = new RenderItem() {
+
             @Override
-            public boolean shouldBob(){
+            public boolean shouldBob() {
 
                 return false;
             };
@@ -163,7 +164,7 @@ public class ModelChargingStation extends ModelBase implements IBaseModel{
     }
 
     @Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5){
+    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         super.render(entity, f, f1, f2, f3, f4, f5);
         setRotationAngles(f, f1, f2, f3, f4, f5, entity);
         Back1.render(f5);
@@ -187,20 +188,21 @@ public class ModelChargingStation extends ModelBase implements IBaseModel{
     }
 
     @Override
-    public void renderStatic(float size, TileEntity te){
+    public void renderStatic(float size, TileEntity te) {
         renderModel(size);
-        if(te instanceof TileEntityChargingStation) {
-            TileEntityChargingStation tile = (TileEntityChargingStation)te;
-            if(tile.getUpgrades(ItemMachineUpgrade.UPGRADE_DISPENSER_DAMAGE) > 0) {
+        if (te instanceof TileEntityChargingStation) {
+            TileEntityChargingStation tile = (TileEntityChargingStation) te;
+            if (tile.getUpgrades(ItemMachineUpgrade.UPGRADE_DISPENSER_DAMAGE) > 0) {
                 RenderManager.instance.renderEngine.bindTexture(Textures.MODEL_CHARGING_STATION_PAD);
                 chargePad.renderModel(size);
             }
-            if(tile.getStackInSlot(TileEntityChargingStation.CHARGE_INVENTORY_INDEX) != null) {
+            if (tile.getStackInSlot(TileEntityChargingStation.CHARGE_INVENTORY_INDEX) != null) {
                 float scaleFactor = 0.7F;
 
                 EntityItem ghostEntityItem = new EntityItem(tile.getWorldObj());
                 ghostEntityItem.hoverStart = 0.0F;
-                ghostEntityItem.setEntityItemStack(tile.getStackInSlot(TileEntityChargingStation.CHARGE_INVENTORY_INDEX));
+                ghostEntityItem
+                    .setEntityItemStack(tile.getStackInSlot(TileEntityChargingStation.CHARGE_INVENTORY_INDEX));
 
                 GL11.glTranslated(0, 1, 0);
                 GL11.glScalef(scaleFactor, scaleFactor, scaleFactor);
@@ -215,11 +217,11 @@ public class ModelChargingStation extends ModelBase implements IBaseModel{
     }
 
     @Override
-    public void renderDynamic(float size, TileEntity te, float partialTicks){
+    public void renderDynamic(float size, TileEntity te, float partialTicks) {
 
     }
 
-    public void renderModel(float size){
+    public void renderModel(float size) {
         Back1.render(size);
         Back2.render(size);
         Back3.render(size);
@@ -240,19 +242,19 @@ public class ModelChargingStation extends ModelBase implements IBaseModel{
         Leg4.render(size);
     }
 
-    private void setRotation(ModelRenderer model, float x, float y, float z){
+    private void setRotation(ModelRenderer model, float x, float y, float z) {
         model.rotateAngleX = x;
         model.rotateAngleY = y;
         model.rotateAngleZ = z;
     }
 
     @Override
-    public ResourceLocation getModelTexture(TileEntity tile){
+    public ResourceLocation getModelTexture(TileEntity tile) {
         return Textures.MODEL_CHARGING_STATION;
     }
 
     @Override
-    public boolean rotateModelBasedOnBlockMeta(){
+    public boolean rotateModelBasedOnBlockMeta() {
         return true;
     }
 

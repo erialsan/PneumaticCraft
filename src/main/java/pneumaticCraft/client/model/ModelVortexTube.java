@@ -7,16 +7,16 @@ import org.lwjgl.opengl.GL11;
 import pneumaticCraft.common.tileentity.TileEntityCompressedIronBlock;
 import pneumaticCraft.common.tileentity.TileEntityVortexTube;
 
-public class ModelVortexTube extends BaseModel{
+public class ModelVortexTube extends BaseModel {
 
-    public ModelVortexTube(){
+    public ModelVortexTube() {
         super("vortexTube.obj");
     }
 
     @Override
-    protected void applyRenderPreps(TileEntity te){
-        if(te instanceof TileEntityVortexTube) {
-            int roll = ((TileEntityVortexTube)te).getRoll();
+    protected void applyRenderPreps(TileEntity te) {
+        if (te instanceof TileEntityVortexTube) {
+            int roll = ((TileEntityVortexTube) te).getRoll();
             GL11.glTranslated(0, -8, 0);
             GL11.glRotated(roll * -90, 0, 0, 1);
             GL11.glTranslated(0, 8, 0);
@@ -26,10 +26,10 @@ public class ModelVortexTube extends BaseModel{
     }
 
     @Override
-    public void renderStatic(float size, TileEntity te){
+    public void renderStatic(float size, TileEntity te) {
         super.renderStatic(size, te);
-        if(te instanceof TileEntityVortexTube) {
-            if(((TileEntityVortexTube)te).shouldVisualize()) {
+        if (te instanceof TileEntityVortexTube) {
+            if (((TileEntityVortexTube) te).shouldVisualize()) {
                 GL11.glDisable(GL11.GL_TEXTURE_2D);
                 GL11.glDisable(GL11.GL_LIGHTING);
                 GL11.glEnable(GL11.GL_BLEND);
@@ -46,9 +46,9 @@ public class ModelVortexTube extends BaseModel{
     }
 
     @Override
-    protected void renderAll(TileEntity te){
-        if(te instanceof TileEntityVortexTube) {
-            TileEntityVortexTube tube = (TileEntityVortexTube)te;
+    protected void renderAll(TileEntity te) {
+        if (te instanceof TileEntityVortexTube) {
+            TileEntityVortexTube tube = (TileEntityVortexTube) te;
             int coldHeat = tube.getColdHeatLevel();
             int hotHeat = tube.getHotHeatLevel();
             model.renderAllExcept("Cold", "Hot_1", "Hot_2");
@@ -68,7 +68,7 @@ public class ModelVortexTube extends BaseModel{
 
     }
 
-    private void renderBox(int heatLevel){
+    private void renderBox(int heatLevel) {
 
         double minX = 0;
         double minY = 0;

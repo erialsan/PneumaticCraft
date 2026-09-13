@@ -5,10 +5,11 @@ import java.util.List;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+
 import pneumaticCraft.api.tileentity.IManoMeasurable;
 import pneumaticCraft.common.network.DescSynced;
 
-public class TileEntityPressureChamberWall extends TileEntityBase implements IManoMeasurable{
+public class TileEntityPressureChamberWall extends TileEntityBase implements IManoMeasurable {
 
     protected TileEntityPressureChamberValve teValve;
     @DescSynced
@@ -18,29 +19,30 @@ public class TileEntityPressureChamberWall extends TileEntityBase implements IMa
     @DescSynced
     private int valveZ;
 
-    public TileEntityPressureChamberWall(){}
+    public TileEntityPressureChamberWall() {}
 
-    public TileEntityPressureChamberValve getCore(){
-        if(teValve == null && (valveX != 0 || valveY != 0 || valveZ != 0)) {// when the saved TE equals null, check if we can
+    public TileEntityPressureChamberValve getCore() {
+        if (teValve == null && (valveX != 0 || valveY != 0 || valveZ != 0)) {// when the saved TE equals null, check if
+                                                                             // we can
             // retrieve the TE from the NBT saved coords.
 
             TileEntity te = worldObj.getTileEntity(valveX, valveY, valveZ);
-            setCore(te instanceof TileEntityPressureChamberValve ? (TileEntityPressureChamberValve)te : null);
+            setCore(te instanceof TileEntityPressureChamberValve ? (TileEntityPressureChamberValve) te : null);
         }
         return teValve;
     }
 
-    public void onBlockBreak(){
+    public void onBlockBreak() {
         teValve = getCore();
-        if(teValve != null) {
+        if (teValve != null) {
             teValve.onMultiBlockBreak();
         }
     }
 
-    public void setCore(TileEntityPressureChamberValve te){
+    public void setCore(TileEntityPressureChamberValve te) {
 
-        if(!worldObj.isRemote) {
-            if(te != null) {
+        if (!worldObj.isRemote) {
+            if (te != null) {
                 valveX = te.xCoord;
                 valveY = te.yCoord;
                 valveZ = te.zCoord;
@@ -54,7 +56,7 @@ public class TileEntityPressureChamberWall extends TileEntityBase implements IMa
     }
 
     @Override
-    public void onDescUpdate(){
+    public void onDescUpdate() {
         super.onDescUpdate();
         teValve = null;
     }
@@ -63,7 +65,7 @@ public class TileEntityPressureChamberWall extends TileEntityBase implements IMa
      * Reads a tile entity from NBT.
      */
     @Override
-    public void readFromNBT(NBTTagCompound tag){
+    public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
         valveX = tag.getInteger("valveX");
         valveY = tag.getInteger("valveY");
@@ -72,7 +74,7 @@ public class TileEntityPressureChamberWall extends TileEntityBase implements IMa
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound tag){
+    public void writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
         tag.setInteger("valveX", valveX);
         tag.setInteger("valveY", valveY);
@@ -80,14 +82,14 @@ public class TileEntityPressureChamberWall extends TileEntityBase implements IMa
     }
 
     @Override
-    public void printManometerMessage(EntityPlayer player, List<String> curInfo){
-        if(getCore() != null) {
+    public void printManometerMessage(EntityPlayer player, List<String> curInfo) {
+        if (getCore() != null) {
             teValve.printManometerMessage(player, curInfo);
         }
     }
 
     @Override
-    protected boolean shouldRerenderChunkOnDescUpdate(){
+    protected boolean shouldRerenderChunkOnDescUpdate() {
         return true;
     }
 

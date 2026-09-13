@@ -4,21 +4,17 @@ import java.util.ArrayList;
 
 import net.minecraft.item.ItemStack;
 
-public class AlchemicalPotionCreationHandler
-{
+public class AlchemicalPotionCreationHandler {
+
     public static ArrayList<AlchemyPotionHandlerComponent> registeredPotionEffects = new ArrayList();
 
-    public static void addPotion(ItemStack itemStack, int potionID, int tickDuration)
-    {
+    public static void addPotion(ItemStack itemStack, int potionID, int tickDuration) {
         registeredPotionEffects.add(new AlchemyPotionHandlerComponent(itemStack, potionID, tickDuration));
     }
 
-    public static int getPotionIDForStack(ItemStack itemStack)
-    {
-        for (AlchemyPotionHandlerComponent aphc : registeredPotionEffects)
-        {
-            if (aphc.compareItemStack(itemStack))
-            {
+    public static int getPotionIDForStack(ItemStack itemStack) {
+        for (AlchemyPotionHandlerComponent aphc : registeredPotionEffects) {
+            if (aphc.compareItemStack(itemStack)) {
                 return aphc.getPotionID();
             }
         }
@@ -26,13 +22,10 @@ public class AlchemicalPotionCreationHandler
         return -1;
     }
 
-    public static int getPotionTickDurationForStack(ItemStack itemStack)
-    {
+    public static int getPotionTickDurationForStack(ItemStack itemStack) {
         {
-            for (AlchemyPotionHandlerComponent aphc : registeredPotionEffects)
-            {
-                if (aphc.compareItemStack(itemStack))
-                {
+            for (AlchemyPotionHandlerComponent aphc : registeredPotionEffects) {
+                if (aphc.compareItemStack(itemStack)) {
                     return aphc.getTickDuration();
                 }
             }
@@ -41,14 +34,10 @@ public class AlchemicalPotionCreationHandler
         }
     }
 
-    public static boolean containsRegisteredPotionIngredient(ItemStack[] stackList)
-    {
-        for (ItemStack is : stackList)
-        {
-            for (AlchemyPotionHandlerComponent aphc : registeredPotionEffects)
-            {
-                if (aphc.compareItemStack(is))
-                {
+    public static boolean containsRegisteredPotionIngredient(ItemStack[] stackList) {
+        for (ItemStack is : stackList) {
+            for (AlchemyPotionHandlerComponent aphc : registeredPotionEffects) {
+                if (aphc.compareItemStack(is)) {
                     return true;
                 }
             }
@@ -57,16 +46,12 @@ public class AlchemicalPotionCreationHandler
         return false;
     }
 
-    public static int getRegisteredPotionIngredientPosition(ItemStack[] stackList)
-    {
+    public static int getRegisteredPotionIngredientPosition(ItemStack[] stackList) {
         int i = 0;
 
-        for (ItemStack is : stackList)
-        {
-            for (AlchemyPotionHandlerComponent aphc : registeredPotionEffects)
-            {
-                if (aphc.compareItemStack(is))
-                {
+        for (ItemStack is : stackList) {
+            for (AlchemyPotionHandlerComponent aphc : registeredPotionEffects) {
+                if (aphc.compareItemStack(is)) {
                     return i;
                 }
             }

@@ -1,6 +1,7 @@
 package pneumaticCraft.lib;
 
-public class BBConstants{
+public class BBConstants {
+
     public static final float PRESSURE_PIPE_MIN_POS = 0.375F;
     public static final float PRESSURE_PIPE_MAX_POS = 0.625F;
 

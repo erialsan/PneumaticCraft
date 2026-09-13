@@ -11,21 +11,22 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-public abstract class JsonConfig implements ISubConfig{
+public abstract class JsonConfig implements ISubConfig {
+
     protected File file;
     private final boolean inInit;
 
-    public JsonConfig(boolean inInit){
+    public JsonConfig(boolean inInit) {
         this.inInit = inInit;
     }
 
     @Override
-    public void init(File file) throws IOException{
+    public void init(File file) throws IOException {
         this.file = file;
-        if(inInit) {
-            if(file.exists()) {
+        if (inInit) {
+            if (file.exists()) {
                 readFromFile();
-                writeToFile();//Write back to the file so tags that weren't there in last version are included.
+                writeToFile();// Write back to the file so tags that weren't there in last version are included.
             } else {
                 file.createNewFile();
                 writeToFile();
@@ -34,9 +35,9 @@ public abstract class JsonConfig implements ISubConfig{
     }
 
     @Override
-    public void postInit() throws IOException{
-        if(!inInit) {
-            if(file.exists()) {
+    public void postInit() throws IOException {
+        if (!inInit) {
+            if (file.exists()) {
                 readFromFile();
                 writeToFile();
             } else {
@@ -46,21 +47,22 @@ public abstract class JsonConfig implements ISubConfig{
         }
     }
 
-    public void writeToFile() throws IOException{
+    public void writeToFile() throws IOException {
         JsonObject root = new JsonObject();
         writeToJson(root);
         String jsonString = root.toString();
 
         JsonParser parser = new JsonParser();
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Gson gson = new GsonBuilder().setPrettyPrinting()
+            .create();
 
         JsonElement el = parser.parse(jsonString);
         FileUtils.write(file, gson.toJson(el));
     }
 
-    private void readFromFile() throws IOException{
+    private void readFromFile() throws IOException {
         JsonParser parser = new JsonParser();
-        JsonObject root = (JsonObject)parser.parse(FileUtils.readFileToString(file));
+        JsonObject root = (JsonObject) parser.parse(FileUtils.readFileToString(file));
         readFromJson(root);
     }
 

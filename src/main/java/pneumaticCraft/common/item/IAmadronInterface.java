@@ -1,5 +1,5 @@
 package pneumaticCraft.common.item;
 
-public interface IAmadronInterface{
+public interface IAmadronInterface {
 
 }

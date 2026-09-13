@@ -8,29 +8,29 @@ import net.minecraft.item.ItemStack;
  * 
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class SlotUntouchable extends SlotBase implements IPhantomSlot{
+public class SlotUntouchable extends SlotBase implements IPhantomSlot {
 
-    public SlotUntouchable(IInventory contents, int id, int x, int y){
+    public SlotUntouchable(IInventory contents, int id, int x, int y) {
         super(contents, id, x, y);
     }
 
     @Override
-    public boolean isItemValid(ItemStack itemstack){
+    public boolean isItemValid(ItemStack itemstack) {
         return false;
     }
 
     @Override
-    public boolean canTakeStack(EntityPlayer par1EntityPlayer){
+    public boolean canTakeStack(EntityPlayer par1EntityPlayer) {
         return false;
     }
 
     @Override
-    public boolean canAdjust(){
+    public boolean canAdjust() {
         return false;
     }
 
     @Override
-    public boolean canShift(){
+    public boolean canShift() {
         return false;
     }
 }

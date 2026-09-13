@@ -5,10 +5,12 @@ import java.util.Set;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.ChunkPosition;
+
 import pneumaticCraft.common.entity.living.EntityDrone;
 import pneumaticCraft.common.progwidgets.IProgWidget;
 
-class DroneAICC extends EntityAIBase{
+class DroneAICC extends EntityAIBase {
+
     private final EntityDrone drone;
     private final ProgWidgetCC widget;
     private EntityAIBase curAction;
@@ -16,21 +18,21 @@ class DroneAICC extends EntityAIBase{
     private final TileEntityDroneInterface droneInterface;
     private boolean newAction;
 
-    public DroneAICC(EntityDrone drone, ProgWidgetCC widget, boolean targetAI){
+    public DroneAICC(EntityDrone drone, ProgWidgetCC widget, boolean targetAI) {
         this.drone = drone;
         this.widget = widget;
         Set<ChunkPosition> area = widget.getInterfaceArea();
-        for(ChunkPosition pos : area) {
+        for (ChunkPosition pos : area) {
             TileEntity te = drone.worldObj.getTileEntity(pos.chunkPosX, pos.chunkPosY, pos.chunkPosZ);
-            if(te instanceof TileEntityDroneInterface) {
-                TileEntityDroneInterface inter = (TileEntityDroneInterface)te;
-                if(targetAI) {
-                    if(inter.getDrone() == drone) {
+            if (te instanceof TileEntityDroneInterface) {
+                TileEntityDroneInterface inter = (TileEntityDroneInterface) te;
+                if (targetAI) {
+                    if (inter.getDrone() == drone) {
                         droneInterface = inter;
                         return;
                     }
                 } else {
-                    if(inter.getDrone() == null) {
+                    if (inter.getDrone() == null) {
                         droneInterface = inter;
                         droneInterface.setDrone(drone);
                         return;
@@ -41,25 +43,25 @@ class DroneAICC extends EntityAIBase{
         droneInterface = null;
     }
 
-    public ProgWidgetCC getWidget(){
+    public ProgWidgetCC getWidget() {
         return widget;
     }
 
     @Override
-    public synchronized boolean shouldExecute(){
+    public synchronized boolean shouldExecute() {
         newAction = false;
-        if(curAction != null) {
+        if (curAction != null) {
             curActionActive = curAction.shouldExecute();
-            if(curActionActive) curAction.startExecuting();
+            if (curActionActive) curAction.startExecuting();
         }
         return droneInterface != null && !droneInterface.isInvalid() && droneInterface.getDrone() == drone;
     }
 
     @Override
-    public synchronized boolean continueExecuting(){
-        if(!newAction && curActionActive && curAction != null) {
+    public synchronized boolean continueExecuting() {
+        if (!newAction && curActionActive && curAction != null) {
             boolean contin = curAction.continueExecuting();
-            if(!contin) curAction.resetTask();
+            if (!contin) curAction.resetTask();
             return contin;
         } else {
             return false;
@@ -67,22 +69,22 @@ class DroneAICC extends EntityAIBase{
     }
 
     @Override
-    public synchronized void updateTask(){
-        if(curActionActive && curAction != null) curAction.updateTask();
+    public synchronized void updateTask() {
+        if (curActionActive && curAction != null) curAction.updateTask();
     }
 
-    public synchronized void setAction(IProgWidget widget, EntityAIBase ai) throws IllegalArgumentException{
+    public synchronized void setAction(IProgWidget widget, EntityAIBase ai) throws IllegalArgumentException {
         curAction = ai;
         newAction = true;
         curActionActive = true;
     }
 
-    public synchronized void abortAction(){
+    public synchronized void abortAction() {
         curAction = null;
     }
 
-    public synchronized boolean isActionDone() throws Exception{
-        if(curAction == null) throw new IllegalStateException("There's no action active!");
+    public synchronized boolean isActionDone() throws Exception {
+        if (curAction == null) throw new IllegalStateException("There's no action active!");
         return !curActionActive;
     }
 }

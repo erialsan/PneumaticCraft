@@ -1,10 +1,8 @@
 package appeng.api.exceptions;
 
+public class CoreInaccessibleException extends RuntimeException {
 
-public class CoreInaccessibleException extends RuntimeException
-{
-	public CoreInaccessibleException( String message )
-	{
-		super( message );
-	}
+    public CoreInaccessibleException(String message) {
+        super(message);
+    }
 }

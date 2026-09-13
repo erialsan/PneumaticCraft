@@ -11,27 +11,29 @@ import net.minecraft.world.World;
 
 import org.lwjgl.util.Rectangle;
 
-import pneumaticCraft.api.universalSensor.IPollSensorSetting;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import pneumaticCraft.api.universalSensor.IPollSensorSetting;
 
-public class WorldTicktimeSensor implements IPollSensorSetting{
+public class WorldTicktimeSensor implements IPollSensorSetting {
 
     @Override
-    public String getSensorPath(){
+    public String getSensorPath() {
         return "dispenser/World/Tick time (lag)";
     }
 
     @Override
-    public boolean needsTextBox(){
+    public boolean needsTextBox() {
         return true;
     }
 
     @Override
-    public List<String> getDescription(){
+    public List<String> getDescription() {
         List<String> text = new ArrayList<String>();
-        text.add(EnumChatFormatting.BLACK + "Emits a redstone level dependant on the time used by the server to update the world this Universal Sensor is in. This time is calculated in the same way as Forge's /tps command. With the textbox you can select a resolution as follows:");
+        text.add(
+            EnumChatFormatting.BLACK
+                + "Emits a redstone level dependant on the time used by the server to update the world this Universal Sensor is in. This time is calculated in the same way as Forge's /tps command. With the textbox you can select a resolution as follows:");
         text.add(EnumChatFormatting.RED + "Strength = Ticktime(mS) * TextboxValue");
         text.add(EnumChatFormatting.GREEN + "Example:  Ticktime = 20mS ; Textbox text = '0.5'");
         text.add(EnumChatFormatting.GREEN + "Strength = 20 * 0.5 = 10");
@@ -39,25 +41,26 @@ public class WorldTicktimeSensor implements IPollSensorSetting{
     }
 
     @Override
-    public int getPollFrequency(TileEntity te){
+    public int getPollFrequency(TileEntity te) {
         return 40;
     }
 
     @Override
-    public int getRedstoneValue(World world, int x, int y, int z, int sensorRange, String textBoxText){
-        MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
+    public int getRedstoneValue(World world, int x, int y, int z, int sensorRange, String textBoxText) {
+        MinecraftServer server = FMLCommonHandler.instance()
+            .getMinecraftServerInstance();
         double worldTickTime = mean(server.worldTickTimes.get(world.provider.dimensionId)) * 1.0E-6D;
         try {
-            int redstoneStrength = (int)(worldTickTime * Double.parseDouble(textBoxText));
+            int redstoneStrength = (int) (worldTickTime * Double.parseDouble(textBoxText));
             return Math.min(15, redstoneStrength);
-        } catch(Exception e) {
+        } catch (Exception e) {
             return 0;
         }
     }
 
-    private static long mean(long[] values){
+    private static long mean(long[] values) {
         long sum = 0l;
-        for(long v : values) {
+        for (long v : values) {
             sum += v;
         }
 
@@ -66,10 +69,10 @@ public class WorldTicktimeSensor implements IPollSensorSetting{
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void drawAdditionalInfo(FontRenderer fontRenderer){}
+    public void drawAdditionalInfo(FontRenderer fontRenderer) {}
 
     @Override
-    public Rectangle needsSlot(){
+    public Rectangle needsSlot() {
         return null;
     }
 }

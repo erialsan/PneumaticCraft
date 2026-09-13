@@ -5,13 +5,13 @@ import net.minecraft.client.renderer.Tessellator;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
-public class RenderProgressBar{
+public class RenderProgressBar {
 
-    public static void render(double minX, double minY, double maxX, double maxY, double zLevel, int progress){
-        //float red = 0.5F;
+    public static void render(double minX, double minY, double maxX, double maxY, double zLevel, int progress) {
+        // float red = 0.5F;
         // float green = 0.5F;
         // float blue = 0.5F;
-        //float alpha = 0.3F;
+        // float alpha = 0.3F;
 
         Tessellator tessellator = Tessellator.instance;
         GL11.glPushMatrix();
@@ -29,8 +29,14 @@ public class RenderProgressBar{
         // tessellator.setColorRGBA_F(red, green, blue, alpha);
         tessellator.addVertex(minX + (maxX - minX) * caseDistance, minY + (maxY - minY) * caseDistance, zLevel);
         tessellator.addVertex(minX + (maxX - minX) * caseDistance, minY + (maxY - minY) * (1D - caseDistance), zLevel);
-        tessellator.addVertex(minX + (maxX - minX) * caseDistance + (maxX - minX) * (1D - 2 * caseDistance) * progress / 100D, minY + (maxY - minY) * (1D - caseDistance), zLevel);
-        tessellator.addVertex(minX + (maxX - minX) * caseDistance + (maxX - minX) * (1D - 2 * caseDistance) * progress / 100D, minY + (maxY - minY) * caseDistance, zLevel);
+        tessellator.addVertex(
+            minX + (maxX - minX) * caseDistance + (maxX - minX) * (1D - 2 * caseDistance) * progress / 100D,
+            minY + (maxY - minY) * (1D - caseDistance),
+            zLevel);
+        tessellator.addVertex(
+            minX + (maxX - minX) * caseDistance + (maxX - minX) * (1D - 2 * caseDistance) * progress / 100D,
+            minY + (maxY - minY) * caseDistance,
+            zLevel);
 
         tessellator.draw();
 

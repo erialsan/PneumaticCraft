@@ -16,45 +16,49 @@ import forestry.api.core.INBTTagable;
  */
 public interface IIndividual extends INBTTagable {
 
-	String getIdent();
+    String getIdent();
 
-	String getDisplayName();
+    String getDisplayName();
 
-	void addTooltip(List<String> list);
+    void addTooltip(List<String> list);
 
-	/**
-	 * Call to mark the IIndividual as analyzed. 
-	 * @return true if the IIndividual has not been analyzed previously.
-	 */
-	boolean analyze();
+    /**
+     * Call to mark the IIndividual as analyzed.
+     * 
+     * @return true if the IIndividual has not been analyzed previously.
+     */
+    boolean analyze();
 
-	boolean isAnalyzed();
+    boolean isAnalyzed();
 
-	boolean hasEffect();
+    boolean hasEffect();
 
-	boolean isSecret();
+    boolean isSecret();
 
-	IGenome getGenome();
+    IGenome getGenome();
 
-	/**
-	 * Check whether the genetic makeup of two IIndividuals is identical. Ignores additional data like generations, irregular mating, etc..
-	 * @param other
-	 * @return true if the given other IIndividual has the amount of chromosomes and their alleles are identical.
-	 */
-	boolean isGeneticEqual(IIndividual other);
+    /**
+     * Check whether the genetic makeup of two IIndividuals is identical. Ignores additional data like generations,
+     * irregular mating, etc..
+     * 
+     * @param other
+     * @return true if the given other IIndividual has the amount of chromosomes and their alleles are identical.
+     */
+    boolean isGeneticEqual(IIndividual other);
 
-	/**
-	 * @return A deep copy of this individual.
-	 */
-	IIndividual copy();
-	
-	/**
-	 * @param chromosomeOrdinal Ordinal of the chromosome to check.
-	 * @return true if both primary and secondary allele on the given chromosome match.
-	 * @deprecated since Forestry 3.3. Use the IChromosomeType version.
-	 */
-	@Deprecated
-	boolean isPureBred(int chromosomeOrdinal);
-	boolean isPureBred(IChromosomeType chromosomeType);
+    /**
+     * @return A deep copy of this individual.
+     */
+    IIndividual copy();
+
+    /**
+     * @param chromosomeOrdinal Ordinal of the chromosome to check.
+     * @return true if both primary and secondary allele on the given chromosome match.
+     * @deprecated since Forestry 3.3. Use the IChromosomeType version.
+     */
+    @Deprecated
+    boolean isPureBred(int chromosomeOrdinal);
+
+    boolean isPureBred(IChromosomeType chromosomeType);
 
 }

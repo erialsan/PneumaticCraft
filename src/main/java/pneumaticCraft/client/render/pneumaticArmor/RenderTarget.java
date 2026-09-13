@@ -19,6 +19,9 @@ import net.minecraftforge.client.event.MouseEvent;
 
 import org.lwjgl.opengl.GL11;
 
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import pneumaticCraft.PneumaticCraft;
 import pneumaticCraft.api.client.pneumaticHelmet.IEntityTrackEntry;
 import pneumaticCraft.api.client.pneumaticHelmet.IHackableEntity;
@@ -33,11 +36,8 @@ import pneumaticCraft.common.network.PacketHackingEntityStart;
 import pneumaticCraft.common.network.PacketUpdateDebuggingDrone;
 import pneumaticCraft.lib.NBTKeys;
 import pneumaticCraft.lib.Sounds;
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
-public class RenderTarget{
+public class RenderTarget {
 
     public Entity entity;
     private final RenderTargetCircle circle1;
@@ -52,68 +52,80 @@ public class RenderTarget{
     private final List<IEntityTrackEntry> trackEntries;
     private int hackTime;
 
-    public RenderTarget(Entity entity){
+    public RenderTarget(Entity entity) {
         this.entity = entity;
         trackEntries = EntityTrackHandler.getTrackersForEntity(entity);
         circle1 = new RenderTargetCircle();
         circle2 = new RenderTargetCircle();
         Item droppedItem = null;
-        if(entity instanceof EntityLiving) {
+        if (entity instanceof EntityLiving) {
             try {
-                droppedItem = EntityUtils.getLivingDrop((EntityLiving)entity);
-            } catch(Throwable e) {}
+                droppedItem = EntityUtils.getLivingDrop((EntityLiving) entity);
+            } catch (Throwable e) {}
         }
-        if(droppedItem != null) {
-            stat = new GuiAnimatedStat(null, entity.getCommandSenderName(), new ItemStack(droppedItem, 1, 0), 20, -20, 0x3000AA00, null, false);
+        if (droppedItem != null) {
+            stat = new GuiAnimatedStat(
+                null,
+                entity.getCommandSenderName(),
+                new ItemStack(droppedItem, 1, 0),
+                20,
+                -20,
+                0x3000AA00,
+                null,
+                false);
         } else {
             stat = new GuiAnimatedStat(null, entity.getCommandSenderName(), "", 20, -20, 0x3000AA00, null, false);
         }
         stat.setMinDimensionsAndReset(0, 0);
     }
 
-    public RenderDroneAI getDroneAIRenderer(){
-        for(IEntityTrackEntry tracker : trackEntries) {
-            if(tracker instanceof EntityTrackHandler.EntityTrackEntryDrone) {
-                return ((EntityTrackHandler.EntityTrackEntryDrone)tracker).getDroneAIRenderer();
+    public RenderDroneAI getDroneAIRenderer() {
+        for (IEntityTrackEntry tracker : trackEntries) {
+            if (tracker instanceof EntityTrackHandler.EntityTrackEntryDrone) {
+                return ((EntityTrackHandler.EntityTrackEntryDrone) tracker).getDroneAIRenderer();
             }
         }
         throw new IllegalStateException("[RenderTarget] Drone entity, but no drone AI Renderer?");
     }
 
-    public void update(){
+    public void update() {
         stat.update();
         stat.setTitle(entity.getCommandSenderName());
-        EntityPlayer player = FMLClientHandler.instance().getClient().thePlayer;
-        if(ticksExisted >= 30 && !didMakeLockSound) {
+        EntityPlayer player = FMLClientHandler.instance()
+            .getClient().thePlayer;
+        if (ticksExisted >= 30 && !didMakeLockSound) {
             didMakeLockSound = true;
             player.worldObj.playSound(player.posX, player.posY, player.posZ, Sounds.HUD_ENTITY_LOCK, 0.1F, 1.0F, true);
         }
-        boolean tagged = NBTUtil.getInteger(player.getCurrentArmor(3), NBTKeys.PNEUMATIC_HELMET_DEBUGGING_DRONE) == entity.getEntityId();
+        boolean tagged = NBTUtil.getInteger(player.getCurrentArmor(3), NBTKeys.PNEUMATIC_HELMET_DEBUGGING_DRONE)
+            == entity.getEntityId();
         circle1.setRenderingAsTagged(tagged);
         circle2.setRenderingAsTagged(tagged);
         circle1.update();
         circle2.update();
-        for(IEntityTrackEntry tracker : trackEntries) {
+        for (IEntityTrackEntry tracker : trackEntries) {
             tracker.update(entity);
         }
         isLookingAtTarget = isPlayerLookingAtTarget();
 
-        if(hackTime > 0) {
-            IHackableEntity hackableEntity = HackableHandler.getHackableForEntity(entity, PneumaticCraft.proxy.getPlayer());
-            if(hackableEntity != null) {
-                hackTime++;// = Math.min(hackTime + 1, hackableEntity.getHackTime(entity, PneumaticCraft.proxy.getPlayer()));
+        if (hackTime > 0) {
+            IHackableEntity hackableEntity = HackableHandler
+                .getHackableForEntity(entity, PneumaticCraft.proxy.getPlayer());
+            if (hackableEntity != null) {
+                hackTime++;// = Math.min(hackTime + 1, hackableEntity.getHackTime(entity,
+                           // PneumaticCraft.proxy.getPlayer()));
             } else {
                 hackTime = 0;
             }
         }
     }
 
-    public boolean isInitialized(){
+    public boolean isInitialized() {
         return ticksExisted > 120;
     }
 
-    public void render(float partialTicks, boolean justRenderWhenHovering){
-        for(IEntityTrackEntry tracker : trackEntries) {
+    public void render(float partialTicks, boolean justRenderWhenHovering) {
+        for (IEntityTrackEntry tracker : trackEntries) {
             tracker.render(entity, partialTicks);
         }
         double x = entity.prevPosX + (entity.posX - entity.prevPosX) * partialTicks;
@@ -136,11 +148,11 @@ public class RenderTarget{
         float green;
         float blue;
         float alpha = 0.5F;
-        if(entity instanceof EntityDrone) {
+        if (entity instanceof EntityDrone) {
             red = 1;
             green = 1;
             blue = 0;
-        } else if(entity instanceof EntityMob || entity instanceof EntitySlime) {
+        } else if (entity instanceof EntityMob || entity instanceof EntitySlime) {
             red = 1;
             green = 0;
             blue = 0;
@@ -152,7 +164,7 @@ public class RenderTarget{
 
         float size = entity.height * 0.5F;
 
-        if(ticksExisted < 60) {
+        if (ticksExisted < 60) {
             size += 5 - Math.abs(ticksExisted) * 0.083F;
             alpha = Math.abs(ticksExisted) * 0.005F;
         }
@@ -165,8 +177,8 @@ public class RenderTarget{
         float renderSize = oldSize + (size - oldSize) * partialTicks;
         circle1.render(renderSize, partialTicks);
         circle2.render(renderSize + 0.2D, partialTicks);
-        int targetAcquireProgress = (int)((ticksExisted - 50) / 0.7F);
-        if(ticksExisted <= 120 && ticksExisted > 50) {
+        int targetAcquireProgress = (int) ((ticksExisted - 50) / 0.7F);
+        if (ticksExisted <= 120 && ticksExisted > 50) {
             GL11.glColor4d(0, 1, 0, 0.8D);
             RenderProgressBar.render(0D, 0.4D, 1.8D, 0.9D, 0, targetAcquireProgress);
         }
@@ -176,28 +188,28 @@ public class RenderTarget{
         FontRenderer fontRenderer = RenderManager.instance.getFontRenderer();
         GL11.glScaled(0.02D, 0.02D, 0.02D);
         GL11.glColor4d(red, green, blue, alpha);
-        if(ticksExisted > 120) {
-            if(justRenderWhenHovering && !isLookingAtTarget) {
+        if (ticksExisted > 120) {
+            if (justRenderWhenHovering && !isLookingAtTarget) {
                 stat.closeWindow();
             } else {
                 stat.openWindow();
             }
             textList = new ArrayList<String>();
-            for(IEntityTrackEntry tracker : trackEntries) {
+            for (IEntityTrackEntry tracker : trackEntries) {
                 tracker.addInfo(entity, textList);
             }
             stat.setText(textList);
             stat.render(-1, -1, partialTicks);
-        } else if(ticksExisted > 50) {
+        } else if (ticksExisted > 50) {
             fontRenderer.drawString("Acquiring Target...", 0, 0, 0x7F7F7F);
             fontRenderer.drawString(targetAcquireProgress + "%", 37, 28, 0x002F00);
-        } else if(ticksExisted < -30) {
+        } else if (ticksExisted < -30) {
             stat.closeWindow();
 
-            //if(stat.getWidth() > stat.getMinWidth() || stat.getHeight() > stat.getMinHeight()) {
-            //    stat.setText(new ArrayList<String>());
+            // if(stat.getWidth() > stat.getMinWidth() || stat.getHeight() > stat.getMinHeight()) {
+            // stat.setText(new ArrayList<String>());
             stat.render(-1, -1, partialTicks);
-            //            }
+            // }
             fontRenderer.drawString("Lost Target!", 0, 0, 0xFF0000);
         }
 
@@ -210,45 +222,53 @@ public class RenderTarget{
         oldSize = size;
     }
 
-    public List<String> getEntityText(){
+    public List<String> getEntityText() {
         return textList;
     }
 
-    private boolean isPlayerLookingAtTarget(){
+    private boolean isPlayerLookingAtTarget() {
         // code used from the Enderman player looking code.
-        EntityPlayer player = FMLClientHandler.instance().getClient().thePlayer;
-        World world = FMLClientHandler.instance().getClient().theWorld;
-        Vec3 vec3 = player.getLook(1.0F).normalize();
-        Vec3 vec31 = Vec3.createVectorHelper(entity.posX - player.posX, entity.boundingBox.minY + entity.height / 2.0F - (player.posY + player.getEyeHeight()), entity.posZ - player.posZ);
+        EntityPlayer player = FMLClientHandler.instance()
+            .getClient().thePlayer;
+        World world = FMLClientHandler.instance()
+            .getClient().theWorld;
+        Vec3 vec3 = player.getLook(1.0F)
+            .normalize();
+        Vec3 vec31 = Vec3.createVectorHelper(
+            entity.posX - player.posX,
+            entity.boundingBox.minY + entity.height / 2.0F - (player.posY + player.getEyeHeight()),
+            entity.posZ - player.posZ);
         double d0 = vec31.lengthVector();
         vec31 = vec31.normalize();
         double d1 = vec3.dotProduct(vec31);
         return d1 > 1.0D - 0.050D / d0;
     }
 
-    public void hack(){
-        if(isInitialized() && isPlayerLookingAtTarget()) {
+    public void hack() {
+        if (isInitialized() && isPlayerLookingAtTarget()) {
             IHackableEntity hackable = HackableHandler.getHackableForEntity(entity, PneumaticCraft.proxy.getPlayer());
-            if(hackable != null && (hackTime == 0 || hackTime > hackable.getHackTime(entity, PneumaticCraft.proxy.getPlayer()))) NetworkHandler.sendToServer(new PacketHackingEntityStart(entity));
+            if (hackable != null
+                && (hackTime == 0 || hackTime > hackable.getHackTime(entity, PneumaticCraft.proxy.getPlayer())))
+                NetworkHandler.sendToServer(new PacketHackingEntityStart(entity));
         }
     }
 
-    public void selectAsDebuggingTarget(){
-        if(isInitialized() && isPlayerLookingAtTarget() && entity instanceof EntityDrone) {
+    public void selectAsDebuggingTarget() {
+        if (isInitialized() && isPlayerLookingAtTarget() && entity instanceof EntityDrone) {
             NetworkHandler.sendToServer(new PacketUpdateDebuggingDrone(entity.getEntityId()));
         }
     }
 
-    public void onHackConfirmServer(){
+    public void onHackConfirmServer() {
         hackTime = 1;
     }
 
-    public int getHackTime(){
+    public int getHackTime() {
         return hackTime;
     }
 
-    public boolean scroll(MouseEvent event){
-        if(isInitialized() && isPlayerLookingAtTarget()) {
+    public boolean scroll(MouseEvent event) {
+        if (isInitialized() && isPlayerLookingAtTarget()) {
             return stat.handleMouseWheel(event.dwheel);
         }
         return false;

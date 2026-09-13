@@ -1,6 +1,7 @@
 package pneumaticCraft.common.remote;
 
-public interface IActionWidgetLabeled{
+public interface IActionWidgetLabeled {
+
     public void setText(String text);
 
     public String getText();

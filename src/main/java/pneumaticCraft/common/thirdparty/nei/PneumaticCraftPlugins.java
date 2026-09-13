@@ -7,12 +7,7 @@ import java.util.List;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
-import pneumaticCraft.api.IHeatExchangerLogic;
-import pneumaticCraft.api.PneumaticRegistry;
-import pneumaticCraft.client.gui.GuiUtils;
-import pneumaticCraft.client.gui.widget.IGuiWidget;
-import pneumaticCraft.client.gui.widget.WidgetTank;
-import pneumaticCraft.client.gui.widget.WidgetTemperature;
+
 import codechicken.lib.gui.GuiDraw;
 import codechicken.nei.NEIClientUtils;
 import codechicken.nei.PositionedStack;
@@ -20,9 +15,17 @@ import codechicken.nei.guihook.GuiContainerManager;
 import codechicken.nei.recipe.GuiRecipe;
 import codechicken.nei.recipe.TemplateRecipeHandler;
 import cpw.mods.fml.client.FMLClientHandler;
+import pneumaticCraft.api.IHeatExchangerLogic;
+import pneumaticCraft.api.PneumaticRegistry;
+import pneumaticCraft.client.gui.GuiUtils;
+import pneumaticCraft.client.gui.widget.IGuiWidget;
+import pneumaticCraft.client.gui.widget.WidgetTank;
+import pneumaticCraft.client.gui.widget.WidgetTemperature;
 
-public abstract class PneumaticCraftPlugins extends TemplateRecipeHandler{
-    public class MultipleInputOutputRecipe extends CachedRecipe{
+public abstract class PneumaticCraftPlugins extends TemplateRecipeHandler {
+
+    public class MultipleInputOutputRecipe extends CachedRecipe {
+
         private final List<PositionedStack> input = new ArrayList<PositionedStack>();
         private final List<PositionedStack> output = new ArrayList<PositionedStack>();
         private final List<WidgetTank> inputLiquids = new ArrayList<WidgetTank>();
@@ -34,110 +37,137 @@ public abstract class PneumaticCraftPlugins extends TemplateRecipeHandler{
         private WidgetTemperature tempWidget;
         private IHeatExchangerLogic heatExchanger;
 
-        public void addIngredient(PositionedStack stack){
+        public void addIngredient(PositionedStack stack) {
             input.add(stack);
         }
 
-        public void addIngredient(PositionedStack[] stacks){
-            for(PositionedStack stack : stacks) {
+        public void addIngredient(PositionedStack[] stacks) {
+            for (PositionedStack stack : stacks) {
                 input.add(stack);
             }
         }
 
-        public void addOutput(PositionedStack stack){
+        public void addOutput(PositionedStack stack) {
             output.add(stack);
         }
 
         @Override
-        public PositionedStack getResult(){
+        public PositionedStack getResult() {
             return null;
         }
 
         @Override
-        public List<PositionedStack> getIngredients(){
+        public List<PositionedStack> getIngredients() {
             return getCycledIngredients(cycleticks / 20, input);
         }
 
         @Override
-        public List<PositionedStack> getOtherStacks(){
+        public List<PositionedStack> getOtherStacks() {
             return output;
         }
 
-        protected void addInputLiquid(FluidStack liquid, int x, int y){
+        protected void addInputLiquid(FluidStack liquid, int x, int y) {
             WidgetTank tank = new WidgetTank(x, y, liquid);
             addInputLiquid(tank);
         }
 
-        protected void addInputLiquid(WidgetTank tank){
+        protected void addInputLiquid(WidgetTank tank) {
             inputLiquids.add(tank);
             tooltipWidgets.add(tank);
             recalculateTankSizes();
         }
 
-        protected void addOutputLiquid(FluidStack liquid, int x, int y){
+        protected void addOutputLiquid(FluidStack liquid, int x, int y) {
             WidgetTank tank = new WidgetTank(x, y, liquid);
             addOutputLiquid(tank);
         }
 
-        protected void addOutputLiquid(WidgetTank tank){
+        protected void addOutputLiquid(WidgetTank tank) {
             outputLiquids.add(tank);
             tooltipWidgets.add(tank);
             recalculateTankSizes();
         }
 
-        private void recalculateTankSizes(){
+        private void recalculateTankSizes() {
             int maxFluid = 0;
-            for(WidgetTank w : inputLiquids) {
-                maxFluid = Math.max(maxFluid, w.getTank().getFluidAmount());
+            for (WidgetTank w : inputLiquids) {
+                maxFluid = Math.max(
+                    maxFluid,
+                    w.getTank()
+                        .getFluidAmount());
             }
-            for(WidgetTank w : outputLiquids) {
-                maxFluid = Math.max(maxFluid, w.getTank().getFluidAmount());
+            for (WidgetTank w : outputLiquids) {
+                maxFluid = Math.max(
+                    maxFluid,
+                    w.getTank()
+                        .getFluidAmount());
             }
 
-            if(maxFluid <= 10) {
+            if (maxFluid <= 10) {
                 maxFluid = 10;
-            } else if(maxFluid <= 100) {
+            } else if (maxFluid <= 100) {
                 maxFluid = 100;
-            } else if(maxFluid <= 1000) {
+            } else if (maxFluid <= 1000) {
                 maxFluid = 1000;
             } else {
                 maxFluid = 16000;
             }
-            for(WidgetTank w : inputLiquids) {
-                w.getTank().setCapacity(maxFluid);
+            for (WidgetTank w : inputLiquids) {
+                w.getTank()
+                    .setCapacity(maxFluid);
             }
-            for(WidgetTank w : outputLiquids) {
-                w.getTank().setCapacity(maxFluid);
+            for (WidgetTank w : outputLiquids) {
+                w.getTank()
+                    .setCapacity(maxFluid);
             }
         }
 
-        protected void addWidget(IGuiWidget widget){
+        protected void addWidget(IGuiWidget widget) {
             tooltipWidgets.add(widget);
         }
 
-        protected void setUsedPressure(int x, int y, float pressure){
+        protected void setUsedPressure(int x, int y, float pressure) {
             usePressure = true;
             this.pressure = pressure;
             gaugeX = x;
             gaugeY = y;
         }
 
-        protected void setUsedTemperature(int x, int y, double temperature){
-            tempWidget = new WidgetTemperature(0, x, y, 273, 673, heatExchanger = PneumaticRegistry.getInstance().getHeatExchangerLogic(), (int)temperature);
+        protected void setUsedTemperature(int x, int y, double temperature) {
+            tempWidget = new WidgetTemperature(
+                0,
+                x,
+                y,
+                273,
+                673,
+                heatExchanger = PneumaticRegistry.getInstance()
+                    .getHeatExchangerLogic(),
+                (int) temperature);
         }
 
     }
 
     @Override
-    public int recipiesPerPage(){
+    public int recipiesPerPage() {
         return 1;
     }
 
-    public void drawAnimatedPressureGauge(int x, int y, float minPressure, float minWorkingPressure, float dangerPressure, float maxPressure, float progress){
-        GuiUtils.drawPressureGauge(FMLClientHandler.instance().getClient().fontRenderer, minPressure, maxPressure, dangerPressure, minWorkingPressure, minWorkingPressure * progress, x, y, -90);
+    public void drawAnimatedPressureGauge(int x, int y, float minPressure, float minWorkingPressure,
+        float dangerPressure, float maxPressure, float progress) {
+        GuiUtils.drawPressureGauge(
+            FMLClientHandler.instance()
+                .getClient().fontRenderer,
+            minPressure,
+            maxPressure,
+            dangerPressure,
+            minWorkingPressure,
+            minWorkingPressure * progress,
+            x,
+            y,
+            -90);
     }
 
-    protected void addTransferRect(Rectangle rect){
+    protected void addTransferRect(Rectangle rect) {
         transferRects.add(new RecipeTransferRect(rect, getRecipeName()));
     }
 
@@ -149,10 +179,11 @@ public abstract class PneumaticCraftPlugins extends TemplateRecipeHandler{
      * @param results  Objects representing the results that matching recipes must produce.
      */
     @Override
-    public void loadCraftingRecipes(String outputId, Object... results){
+    public void loadCraftingRecipes(String outputId, Object... results) {
         super.loadCraftingRecipes(outputId, results);
-        if(outputId.equals(getRecipeName())) loadAllRecipes();
-        if(outputId.equals("liquid") && results.length > 0 && results[0] instanceof FluidStack) loadCraftingRecipes((FluidStack)results[0]);
+        if (outputId.equals(getRecipeName())) loadAllRecipes();
+        if (outputId.equals("liquid") && results.length > 0 && results[0] instanceof FluidStack)
+            loadCraftingRecipes((FluidStack) results[0]);
     }
 
     /**
@@ -163,52 +194,57 @@ public abstract class PneumaticCraftPlugins extends TemplateRecipeHandler{
      * @param ingredients Objects representing the ingredients that matching recipes must contain.
      */
     @Override
-    public void loadUsageRecipes(String inputId, Object... ingredients){
+    public void loadUsageRecipes(String inputId, Object... ingredients) {
         super.loadUsageRecipes(inputId, ingredients);
-        if(inputId.equals(getRecipeName())) loadAllRecipes();
-        if(inputId.equals("liquid") && ingredients.length > 0 && ingredients[0] instanceof FluidStack) loadUsageRecipes((FluidStack)ingredients[0]);
+        if (inputId.equals(getRecipeName())) loadAllRecipes();
+        if (inputId.equals("liquid") && ingredients.length > 0 && ingredients[0] instanceof FluidStack)
+            loadUsageRecipes((FluidStack) ingredients[0]);
     }
 
     @Override
-    public boolean keyTyped(GuiRecipe gui, char keyChar, int keyCode, int recipe){
+    public boolean keyTyped(GuiRecipe gui, char keyChar, int keyCode, int recipe) {
         loadTankTransferRects(recipe);
         return super.keyTyped(gui, keyChar, keyCode, recipe);
     }
 
     @Override
-    public boolean mouseClicked(GuiRecipe gui, int button, int recipe){
+    public boolean mouseClicked(GuiRecipe gui, int button, int recipe) {
         loadTankTransferRects(recipe);
         return super.mouseClicked(gui, button, recipe);
     }
 
-    private void loadTankTransferRects(int recipe){
-        MultipleInputOutputRecipe r = (MultipleInputOutputRecipe)arecipes.get(recipe);
+    private void loadTankTransferRects(int recipe) {
+        MultipleInputOutputRecipe r = (MultipleInputOutputRecipe) arecipes.get(recipe);
         transferRects.clear();
         loadTransferRects();
-        for(WidgetTank tank : r.inputLiquids) {
+        for (WidgetTank tank : r.inputLiquids) {
             transferRects.add(new RecipeTransferRect(tank.getBounds(), "liquid", tank.getFluid()));
         }
-        for(WidgetTank tank : r.outputLiquids) {
+        for (WidgetTank tank : r.outputLiquids) {
             transferRects.add(new RecipeTransferRect(tank.getBounds(), "liquid", tank.getFluid()));
         }
     }
 
     @Override
-    public List<String> handleTooltip(GuiRecipe<?> guiRecipe, List<String> currenttip, int recipe){
-        //  super.handleTooltip(guiRecipe, currenttip, recipe);
-        MultipleInputOutputRecipe r = (MultipleInputOutputRecipe)arecipes.get(recipe);
-        if(GuiContainerManager.shouldShowTooltip(guiRecipe)) {
+    public List<String> handleTooltip(GuiRecipe<?> guiRecipe, List<String> currenttip, int recipe) {
+        // super.handleTooltip(guiRecipe, currenttip, recipe);
+        MultipleInputOutputRecipe r = (MultipleInputOutputRecipe) arecipes.get(recipe);
+        if (GuiContainerManager.shouldShowTooltip(guiRecipe)) {
             Point mouse = GuiDraw.getMousePosition();
             Point offset = guiRecipe.getRecipePosition(recipe);
-            Point relMouse = new Point(mouse.x - (guiRecipe.width - 176) / 2 - offset.x, mouse.y - (guiRecipe.height - 166) / 2 - offset.y);
+            Point relMouse = new Point(
+                mouse.x - (guiRecipe.width - 176) / 2 - offset.x,
+                mouse.y - (guiRecipe.height - 166) / 2 - offset.y);
 
-            for(IGuiWidget widget : r.tooltipWidgets) {
-                if(widget.getBounds().contains(relMouse)) {
+            for (IGuiWidget widget : r.tooltipWidgets) {
+                if (widget.getBounds()
+                    .contains(relMouse)) {
                     widget.addTooltip(mouse.x, mouse.y, currenttip, false);
                 }
             }
-            if(r.tempWidget != null) {
-                if(r.tempWidget.getBounds().contains(relMouse)) {
+            if (r.tempWidget != null) {
+                if (r.tempWidget.getBounds()
+                    .contains(relMouse)) {
                     r.heatExchanger.setTemperature(r.tempWidget.getScales()[0]);
                     r.tempWidget.addTooltip(mouse.x, mouse.y, currenttip, false);
                 }
@@ -218,16 +254,18 @@ public abstract class PneumaticCraftPlugins extends TemplateRecipeHandler{
     }
 
     @Override
-    public void drawExtras(int recipe){
-        MultipleInputOutputRecipe r = (MultipleInputOutputRecipe)arecipes.get(recipe);
-        // drawAnimatedPressureGauge(120, 27, -1, r.getRequiredPressure(null, null), PneumaticValues.DANGER_PRESSURE_PRESSURE_CHAMBER, PneumaticValues.MAX_PRESSURE_PRESSURE_CHAMBER, cycleticks % 48 / 48F);
-        for(IGuiWidget widget : r.tooltipWidgets) {
+    public void drawExtras(int recipe) {
+        MultipleInputOutputRecipe r = (MultipleInputOutputRecipe) arecipes.get(recipe);
+        // drawAnimatedPressureGauge(120, 27, -1, r.getRequiredPressure(null, null),
+        // PneumaticValues.DANGER_PRESSURE_PRESSURE_CHAMBER, PneumaticValues.MAX_PRESSURE_PRESSURE_CHAMBER, cycleticks %
+        // 48 / 48F);
+        for (IGuiWidget widget : r.tooltipWidgets) {
             widget.render(0, 0, 0);
         }
-        if(r.usePressure) {
+        if (r.usePressure) {
             drawAnimatedPressureGauge(r.gaugeX, r.gaugeY, -1, r.pressure, 5, 7, cycleticks % 48 / 48F);
         }
-        if(r.tempWidget != null) {
+        if (r.tempWidget != null) {
             r.heatExchanger.setTemperature(cycleticks % 48 / 48F * (r.tempWidget.getScales()[0] - 273) + 273);
             r.tempWidget.render(0, 0, 0);
         }
@@ -235,10 +273,11 @@ public abstract class PneumaticCraftPlugins extends TemplateRecipeHandler{
 
     protected abstract List<MultipleInputOutputRecipe> getAllRecipes();
 
-    protected void loadCraftingRecipes(FluidStack stack){
-        for(MultipleInputOutputRecipe recipe : getAllRecipes()) {
-            for(WidgetTank tank : recipe.outputLiquids) {
-                if(tank.getFluid() != null && tank.getFluid().getFluid() == stack.getFluid()) {
+    protected void loadCraftingRecipes(FluidStack stack) {
+        for (MultipleInputOutputRecipe recipe : getAllRecipes()) {
+            for (WidgetTank tank : recipe.outputLiquids) {
+                if (tank.getFluid() != null && tank.getFluid()
+                    .getFluid() == stack.getFluid()) {
                     arecipes.add(recipe);
                 }
             }
@@ -246,11 +285,11 @@ public abstract class PneumaticCraftPlugins extends TemplateRecipeHandler{
     }
 
     @Override
-    public void loadCraftingRecipes(ItemStack output){
-        for(MultipleInputOutputRecipe recipe : getAllRecipes()) {
-            for(PositionedStack stack : recipe.output) {
-                for(ItemStack itemStack : stack.items) {
-                    if(NEIClientUtils.areStacksSameTypeCrafting(itemStack, output)) {
+    public void loadCraftingRecipes(ItemStack output) {
+        for (MultipleInputOutputRecipe recipe : getAllRecipes()) {
+            for (PositionedStack stack : recipe.output) {
+                for (ItemStack itemStack : stack.items) {
+                    if (NEIClientUtils.areStacksSameTypeCrafting(itemStack, output)) {
                         arecipes.add(recipe);
                     }
                 }
@@ -258,10 +297,11 @@ public abstract class PneumaticCraftPlugins extends TemplateRecipeHandler{
         }
     }
 
-    protected void loadUsageRecipes(FluidStack stack){
-        for(MultipleInputOutputRecipe recipe : getAllRecipes()) {
-            for(WidgetTank tank : recipe.inputLiquids) {
-                if(tank.getFluid() != null && tank.getFluid().getFluid() == stack.getFluid()) {
+    protected void loadUsageRecipes(FluidStack stack) {
+        for (MultipleInputOutputRecipe recipe : getAllRecipes()) {
+            for (WidgetTank tank : recipe.inputLiquids) {
+                if (tank.getFluid() != null && tank.getFluid()
+                    .getFluid() == stack.getFluid()) {
                     arecipes.add(recipe);
                 }
             }
@@ -274,11 +314,11 @@ public abstract class PneumaticCraftPlugins extends TemplateRecipeHandler{
      * @param ingredient The ingredient the recipes must contain.
      */
     @Override
-    public void loadUsageRecipes(ItemStack ingredient){
-        for(MultipleInputOutputRecipe recipe : getAllRecipes()) {
-            for(PositionedStack stack : recipe.input) {
-                for(ItemStack itemStack : stack.items) {
-                    if(NEIClientUtils.areStacksSameTypeCrafting(itemStack, ingredient)) {
+    public void loadUsageRecipes(ItemStack ingredient) {
+        for (MultipleInputOutputRecipe recipe : getAllRecipes()) {
+            for (PositionedStack stack : recipe.input) {
+                for (ItemStack itemStack : stack.items) {
+                    if (NEIClientUtils.areStacksSameTypeCrafting(itemStack, ingredient)) {
                         arecipes.add(recipe);
                     }
                 }
@@ -286,8 +326,8 @@ public abstract class PneumaticCraftPlugins extends TemplateRecipeHandler{
         }
     }
 
-    protected void loadAllRecipes(){
-        for(MultipleInputOutputRecipe recipe : getAllRecipes()) {
+    protected void loadAllRecipes() {
+        for (MultipleInputOutputRecipe recipe : getAllRecipes()) {
             arecipes.add(recipe);
         }
     }

@@ -8,16 +8,18 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import pneumaticCraft.common.block.Blockss;
 import pneumaticCraft.common.recipes.programs.AssemblyProgram;
 import pneumaticCraft.common.recipes.programs.ProgramDrill;
 import pneumaticCraft.common.recipes.programs.ProgramDrillLaser;
 import pneumaticCraft.common.recipes.programs.ProgramLaser;
 import pneumaticCraft.lib.Textures;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
-public class ItemAssemblyProgram extends ItemPneumatic{
+public class ItemAssemblyProgram extends ItemPneumatic {
+
     public static final int PROGRAMS_AMOUNT = 3;
 
     public static final int DRILL_DAMAGE = 0;
@@ -27,13 +29,13 @@ public class ItemAssemblyProgram extends ItemPneumatic{
     private IIcon[] texture;
     private AssemblyProgram[] referencePrograms;
 
-    public ItemAssemblyProgram(){
+    public ItemAssemblyProgram() {
         setHasSubtypes(true);
     }
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister par1IconRegister){
+    public void registerIcons(IIconRegister par1IconRegister) {
         texture = new IIcon[PROGRAMS_AMOUNT];
         texture[0] = par1IconRegister.registerIcon(Textures.ITEM_PROGRAM_DRILL);
         texture[1] = par1IconRegister.registerIcon(Textures.ITEM_PROGRAM_LASER);
@@ -41,44 +43,44 @@ public class ItemAssemblyProgram extends ItemPneumatic{
     }
 
     @Override
-    public IIcon getIconFromDamage(int meta){
+    public IIcon getIconFromDamage(int meta) {
         return texture[meta < texture.length ? meta : 0];
     }
 
     @Override
-    public String getUnlocalizedName(ItemStack is){
+    public String getUnlocalizedName(ItemStack is) {
         return super.getUnlocalizedName(is) + is.getItemDamage();
     }
 
     @Override
-    public int getMetadata(int meta){
+    public int getMetadata(int meta) {
         return meta;
     }
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void getSubItems(Item par1, CreativeTabs tab, List subItems){
-        for(int i = 0; i < PROGRAMS_AMOUNT; i++) {
+    public void getSubItems(Item par1, CreativeTabs tab, List subItems) {
+        for (int i = 0; i < PROGRAMS_AMOUNT; i++) {
             subItems.add(new ItemStack(this, 1, i));
         }
     }
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void addInformation(ItemStack stack, EntityPlayer player, List infoList, boolean par4){
+    public void addInformation(ItemStack stack, EntityPlayer player, List infoList, boolean par4) {
         infoList.add("Required Machines:");
         infoList.add("-" + Blockss.assemblyController.getLocalizedName());
 
-        if(referencePrograms == null) {
+        if (referencePrograms == null) {
             referencePrograms = new AssemblyProgram[PROGRAMS_AMOUNT];
-            for(int i = 0; i < PROGRAMS_AMOUNT; i++) {
+            for (int i = 0; i < PROGRAMS_AMOUNT; i++) {
                 referencePrograms[i] = getProgramFromItem(i);
             }
         }
         AssemblyProgram program = referencePrograms[Math.min(stack.getItemDamage(), PROGRAMS_AMOUNT - 1)];
         AssemblyProgram.EnumMachine[] requiredMachines = program.getRequiredMachines();
-        for(AssemblyProgram.EnumMachine machine : requiredMachines) {
-            switch(machine){
+        for (AssemblyProgram.EnumMachine machine : requiredMachines) {
+            switch (machine) {
                 case PLATFORM:
                     infoList.add("-" + Blockss.assemblyPlatform.getLocalizedName());
                     break;
@@ -89,7 +91,7 @@ public class ItemAssemblyProgram extends ItemPneumatic{
                     infoList.add("-" + Blockss.assemblyLaser.getLocalizedName());
                     break;
                 case IO_UNIT_EXPORT:
-                    infoList.add("-" + Blockss.assemblyIOUnit.getLocalizedName() + " (export)");//TODO localize
+                    infoList.add("-" + Blockss.assemblyIOUnit.getLocalizedName() + " (export)");// TODO localize
                     break;
                 case IO_UNIT_IMPORT:
                     infoList.add("-" + Blockss.assemblyIOUnit.getLocalizedName() + " (import)");
@@ -98,8 +100,8 @@ public class ItemAssemblyProgram extends ItemPneumatic{
         }
     }
 
-    public static AssemblyProgram getProgramFromItem(int meta){
-        switch(meta){
+    public static AssemblyProgram getProgramFromItem(int meta) {
+        switch (meta) {
             case DRILL_DAMAGE:
                 return new ProgramDrill();
             case LASER_DAMAGE:

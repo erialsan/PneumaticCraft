@@ -7,34 +7,43 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import pneumaticCraft.client.gui.widget.GuiAnimatedStat;
 import pneumaticCraft.common.block.Blockss;
 import pneumaticCraft.common.inventory.ContainerOmnidirectionalHopper;
 import pneumaticCraft.common.tileentity.TileEntityOmnidirectionalHopper;
 import pneumaticCraft.common.util.PneumaticCraftUtils;
 import pneumaticCraft.lib.Textures;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class GuiOmnidirectionalHopper extends GuiPneumaticContainerBase<TileEntityOmnidirectionalHopper>{
+public class GuiOmnidirectionalHopper extends GuiPneumaticContainerBase<TileEntityOmnidirectionalHopper> {
+
     private GuiAnimatedStat statusStat;
     private final GuiButtonSpecial[] modeButtons = new GuiButtonSpecial[2];
 
-    public GuiOmnidirectionalHopper(InventoryPlayer player, TileEntityOmnidirectionalHopper te){
+    public GuiOmnidirectionalHopper(InventoryPlayer player, TileEntityOmnidirectionalHopper te) {
 
         super(new ContainerOmnidirectionalHopper(player, te), te, Textures.GUI_OMNIDIRECTIONAL_HOPPER);
     }
 
     @Override
-    public void initGui(){
+    public void initGui() {
         super.initGui();
-        statusStat = addAnimatedStat("gui.tab.hopperStatus", new ItemStack(Blockss.omnidirectionalHopper), 0xFFFFAA00, false);
+        statusStat = addAnimatedStat(
+            "gui.tab.hopperStatus",
+            new ItemStack(Blockss.omnidirectionalHopper),
+            0xFFFFAA00,
+            false);
 
-        GuiAnimatedStat optionStat = addAnimatedStat("gui.tab.gasLift.mode", new ItemStack(net.minecraft.init.Blocks.lever), 0xFFFFCC00, false);
+        GuiAnimatedStat optionStat = addAnimatedStat(
+            "gui.tab.gasLift.mode",
+            new ItemStack(net.minecraft.init.Blocks.lever),
+            0xFFFFCC00,
+            false);
         List<String> text = new ArrayList<String>();
-        for(int i = 0; i < 4; i++)
-            text.add("               ");
+        for (int i = 0; i < 4; i++) text.add("               ");
         optionStat.setTextWithoutCuttingString(text);
 
         GuiButtonSpecial button = new GuiButtonSpecial(1, 5, 20, 20, 20, "");
@@ -51,27 +60,30 @@ public class GuiOmnidirectionalHopper extends GuiPneumaticContainerBase<TileEnti
     }
 
     @Override
-    protected void drawGuiContainerForegroundLayer(int x, int y){
+    protected void drawGuiContainerForegroundLayer(int x, int y) {
         super.drawGuiContainerForegroundLayer(x, y);
         fontRendererObj.drawString("Upgr.", 28, 19, 4210752);
     }
 
     @Override
-    public void updateScreen(){
+    public void updateScreen() {
         super.updateScreen();
         statusStat.setText(getStatus());
         modeButtons[0].enabled = te.doesLeaveMaterial();
         modeButtons[1].enabled = !te.doesLeaveMaterial();
     }
 
-    private List<String> getStatus(){
+    private List<String> getStatus() {
         List<String> textList = new ArrayList<String>();
         int itemsPer = te.getMaxItems();
-        if(itemsPer > 1) {
+        if (itemsPer > 1) {
             textList.add(I18n.format("gui.tab.hopperStatus.itemTransferPerTick", itemsPer));
         } else {
             int transferInterval = te.getItemTransferInterval();
-            textList.add(I18n.format("gui.tab.hopperStatus.itemTransferPerSecond", transferInterval == 0 ? "20" : PneumaticCraftUtils.roundNumberTo(20F / transferInterval, 1)));
+            textList.add(
+                I18n.format(
+                    "gui.tab.hopperStatus.itemTransferPerSecond",
+                    transferInterval == 0 ? "20" : PneumaticCraftUtils.roundNumberTo(20F / transferInterval, 1)));
         }
         return textList;
     }

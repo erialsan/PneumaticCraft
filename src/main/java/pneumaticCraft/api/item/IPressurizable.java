@@ -5,7 +5,8 @@ import net.minecraft.item.ItemStack;
 /**
  * Any item implementing this interface will be able to (dis)charge in a Charging Station.
  */
-public interface IPressurizable{
+public interface IPressurizable {
+
     /**
      * This method should return the current pressure of the ItemStack given.
      * 

@@ -5,11 +5,13 @@ import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
+
 import pneumaticCraft.client.model.IBaseModel;
 import pneumaticCraft.lib.Textures;
 
-public class ModelAirGrate extends ModelBase implements IBaseModel{
-    //fields
+public class ModelAirGrate extends ModelBase implements IBaseModel {
+
+    // fields
     ModelRenderer top;
     ModelRenderer side1;
     ModelRenderer side2;
@@ -19,7 +21,7 @@ public class ModelAirGrate extends ModelBase implements IBaseModel{
     ModelRenderer base2;
     ModelRenderer base3;
 
-    public ModelAirGrate(){
+    public ModelAirGrate() {
         textureWidth = 128;
         textureHeight = 128;
 
@@ -74,7 +76,7 @@ public class ModelAirGrate extends ModelBase implements IBaseModel{
     }
 
     @Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5){
+    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         super.render(entity, f, f1, f2, f3, f4, f5);
         setRotationAngles(f, f1, f2, f3, f4, f5, entity);
         top.render(f5);
@@ -87,14 +89,14 @@ public class ModelAirGrate extends ModelBase implements IBaseModel{
         base3.render(f5);
     }
 
-    private void setRotation(ModelRenderer model, float x, float y, float z){
+    private void setRotation(ModelRenderer model, float x, float y, float z) {
         model.rotateAngleX = x;
         model.rotateAngleY = y;
         model.rotateAngleZ = z;
     }
 
     @Override
-    public void renderStatic(float size, TileEntity tile){
+    public void renderStatic(float size, TileEntity tile) {
         top.render(size);
         side1.render(size);
         side2.render(size);
@@ -106,17 +108,17 @@ public class ModelAirGrate extends ModelBase implements IBaseModel{
     }
 
     @Override
-    public ResourceLocation getModelTexture(TileEntity tile){
+    public ResourceLocation getModelTexture(TileEntity tile) {
         return Textures.MODEL_AIR_GRATE;
     }
 
     @Override
-    public boolean rotateModelBasedOnBlockMeta(){
+    public boolean rotateModelBasedOnBlockMeta() {
         return false;
     }
 
     @Override
-    public void renderDynamic(float size, TileEntity te, float partialTicks){
+    public void renderDynamic(float size, TileEntity te, float partialTicks) {
 
     }
 

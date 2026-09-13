@@ -12,8 +12,9 @@ import pneumaticCraft.client.gui.GuiPneumaticContainerBase;
 import pneumaticCraft.common.tileentity.TileEntityAssemblyLaser;
 import pneumaticCraft.lib.Textures;
 
-public class ModelAssemblyLaser extends ModelBase implements IBaseModel{
-    //fields
+public class ModelAssemblyLaser extends ModelBase implements IBaseModel {
+
+    // fields
     ModelRenderer Base;
     ModelRenderer BaseTurn;
     ModelRenderer BaseTurn2;
@@ -25,7 +26,7 @@ public class ModelAssemblyLaser extends ModelBase implements IBaseModel{
     ModelRenderer LaserBase;
     ModelRenderer Laser;
 
-    public ModelAssemblyLaser(){
+    public ModelAssemblyLaser() {
         textureWidth = 64;
         textureHeight = 64;
 
@@ -92,7 +93,7 @@ public class ModelAssemblyLaser extends ModelBase implements IBaseModel{
     }
 
     @Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5){
+    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         super.render(entity, f, f1, f2, f3, f4, f5);
         setRotationAngles(f, f1, f2, f3, f4, f5, entity);
         Base.render(f5);
@@ -108,25 +109,25 @@ public class ModelAssemblyLaser extends ModelBase implements IBaseModel{
     }
 
     @Override
-    public void renderStatic(float size, TileEntity te){
+    public void renderStatic(float size, TileEntity te) {
 
     }
 
     @Override
-    public void renderDynamic(float size, TileEntity te, float partialTicks){
-        if(te instanceof TileEntityAssemblyLaser) {
-            TileEntityAssemblyLaser tile = (TileEntityAssemblyLaser)te;
+    public void renderDynamic(float size, TileEntity te, float partialTicks) {
+        if (te instanceof TileEntityAssemblyLaser) {
+            TileEntityAssemblyLaser tile = (TileEntityAssemblyLaser) te;
             float[] renderAngles = new float[5];
-            for(int i = 0; i < 5; i++) {
+            for (int i = 0; i < 5; i++) {
                 renderAngles[i] = tile.oldAngles[i] + (tile.angles[i] - tile.oldAngles[i]) * partialTicks;
             }
             renderModel(0.0625F, renderAngles, tile.isLaserOn);
         } else {
-            renderModel(size, new float[]{0, 0, 35, 55, 0}, false);
+            renderModel(size, new float[] { 0, 0, 35, 55, 0 }, false);
         }
     }
 
-    public void renderModel(float size, float[] angles, boolean laserOn){
+    public void renderModel(float size, float[] angles, boolean laserOn) {
         Base.render(size);
         GL11.glPushMatrix();
         GL11.glRotatef(angles[0], 0, 1, 0);
@@ -147,14 +148,14 @@ public class ModelAssemblyLaser extends ModelBase implements IBaseModel{
         GL11.glRotatef(angles[3], 1, 0, 0);
         GL11.glTranslated(0, -3 / 16F, -6 / 16F);
         LaserBase.render(size);
-        if(laserOn) {
+        if (laserOn) {
             GL11.glPushMatrix();
             GL11.glTranslated(0, 2.75 / 16D, 1 / 16D);
             GL11.glDisable(GL11.GL_TEXTURE_2D);
             GL11.glColor4d(1.0D, 0.1D, 0, 1);
             // GL11.glTranslated(0, 3 / 16F, 0);
-            //  GL11.glRotatef(angles[4], 0, 0, 1);
-            //  GL11.glTranslated(0, -3 / 16F, 0);
+            // GL11.glRotatef(angles[4], 0, 0, 1);
+            // GL11.glTranslated(0, -3 / 16F, 0);
 
             Laser.render(size / 8);
             GL11.glPopMatrix();
@@ -171,19 +172,19 @@ public class ModelAssemblyLaser extends ModelBase implements IBaseModel{
         GL11.glPopMatrix();
     }
 
-    private void setRotation(ModelRenderer model, float x, float y, float z){
+    private void setRotation(ModelRenderer model, float x, float y, float z) {
         model.rotateAngleX = x;
         model.rotateAngleY = y;
         model.rotateAngleZ = z;
     }
 
     @Override
-    public ResourceLocation getModelTexture(TileEntity tile){
+    public ResourceLocation getModelTexture(TileEntity tile) {
         return Textures.MODEL_ASSEMBLY_LASER_AND_DRILL;
     }
 
     @Override
-    public boolean rotateModelBasedOnBlockMeta(){
+    public boolean rotateModelBasedOnBlockMeta() {
         return false;
     }
 

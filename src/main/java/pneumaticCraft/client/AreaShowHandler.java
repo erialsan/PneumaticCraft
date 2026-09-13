@@ -7,18 +7,19 @@ import net.minecraft.world.ChunkPosition;
 
 import org.lwjgl.opengl.GL11;
 
-public class AreaShowHandler{
+public class AreaShowHandler {
+
     private final Set<ChunkPosition> showingPositions;
     private final int color;
     private int renderList;
 
-    public AreaShowHandler(Set<ChunkPosition> area, int color){
+    public AreaShowHandler(Set<ChunkPosition> area, int color) {
         showingPositions = area;
         this.color = color;
         compileRenderList();
     }
 
-    private void compileRenderList(){
+    private void compileRenderList() {
         renderList = GL11.glGenLists(1);
         GL11.glNewList(renderList, GL11.GL_COMPILE);
 
@@ -26,7 +27,7 @@ public class AreaShowHandler{
         t.startDrawingQuads();
         t.setColorRGBA_I(color, 150);
 
-        for(ChunkPosition pos : showingPositions) {
+        for (ChunkPosition pos : showingPositions) {
             t.addTranslation(pos.chunkPosX + 0.25F, pos.chunkPosY + 0.25F, pos.chunkPosZ + 0.25F);
 
             t.addVertex(0, 0, 0);
@@ -67,7 +68,7 @@ public class AreaShowHandler{
         t.startDrawing(GL11.GL_LINES);
         t.setColorRGBA_I(0, 150);
 
-        for(ChunkPosition pos : showingPositions) {
+        for (ChunkPosition pos : showingPositions) {
             t.addTranslation(pos.chunkPosX + 0.25F, pos.chunkPosY + 0.25F, pos.chunkPosZ + 0.25F);
 
             t.addVertex(0, 0, 0);
@@ -107,7 +108,7 @@ public class AreaShowHandler{
         GL11.glEndList();
     }
 
-    public void render(){
+    public void render() {
         GL11.glCallList(renderList);
     }
 }

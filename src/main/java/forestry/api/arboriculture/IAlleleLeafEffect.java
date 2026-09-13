@@ -15,6 +15,6 @@ import forestry.api.genetics.IEffectData;
  */
 public interface IAlleleLeafEffect extends IAlleleEffect {
 
-	IEffectData doEffect(ITreeGenome genome, IEffectData storedData, World world, int x, int y, int z);
+    IEffectData doEffect(ITreeGenome genome, IEffectData storedData, World world, int x, int y, int z);
 
 }

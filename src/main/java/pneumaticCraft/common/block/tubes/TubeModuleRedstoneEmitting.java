@@ -5,7 +5,8 @@ import java.util.List;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
 
-public abstract class TubeModuleRedstoneEmitting extends TubeModule{
+public abstract class TubeModuleRedstoneEmitting extends TubeModule {
+
     protected int redstone;
 
     /**
@@ -13,10 +14,10 @@ public abstract class TubeModuleRedstoneEmitting extends TubeModule{
      * @param level
      * @return true if the redstone has changed compared to last time.
      */
-    protected boolean setRedstone(int level){
+    protected boolean setRedstone(int level) {
         level = Math.max(level, 0);
         level = Math.min(level, 15);
-        if(redstone != level) {
+        if (redstone != level) {
             redstone = level;
             updateNeighbors();
             return true;
@@ -26,37 +27,37 @@ public abstract class TubeModuleRedstoneEmitting extends TubeModule{
     }
 
     @Override
-    public int getRedstoneLevel(){
+    public int getRedstoneLevel() {
         return redstone;
     }
 
     @Override
-    public void addInfo(List<String> curInfo){
+    public void addInfo(List<String> curInfo) {
         curInfo.add("Emitting redstone: " + EnumChatFormatting.WHITE + redstone);
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound tag){
+    public void writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
         tag.setInteger("redstone", redstone);
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound tag){
+    public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
         redstone = tag.getInteger("redstone");
     }
 
     @Override
-    public void update(){
-        if(upgraded && !advancedConfig) {
-            if(higherBound < lowerBound) {
-                if(higherBound != lowerBound - 0.1F) {
+    public void update() {
+        if (upgraded && !advancedConfig) {
+            if (higherBound < lowerBound) {
+                if (higherBound != lowerBound - 0.1F) {
                     higherBound = lowerBound - 0.1F;
                     sendDescriptionPacket();
                 }
             } else {
-                if(higherBound != lowerBound + 0.1F) {
+                if (higherBound != lowerBound + 0.1F) {
                     higherBound = lowerBound + 0.1F;
                     sendDescriptionPacket();
                 }

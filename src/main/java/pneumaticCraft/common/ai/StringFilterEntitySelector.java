@@ -6,36 +6,37 @@ import java.util.List;
 
 import net.minecraft.command.IEntitySelector;
 import net.minecraft.entity.Entity;
+
 import pneumaticCraft.common.util.PneumaticCraftUtils;
 
-public class StringFilterEntitySelector implements IEntitySelector{
+public class StringFilterEntitySelector implements IEntitySelector {
 
     private List<String> filter = new ArrayList<String>();
 
     @Override
-    public boolean isEntityApplicable(Entity entity){
+    public boolean isEntityApplicable(Entity entity) {
         List<String> filte = getFilter();
-        for(String filt : filte) {
-            if(PneumaticCraftUtils.isEntityValidForFilter(filt, entity)) return true;
+        for (String filt : filte) {
+            if (PneumaticCraftUtils.isEntityValidForFilter(filt, entity)) return true;
         }
         return false;
     }
 
-    protected List<String> getFilter(){
+    protected List<String> getFilter() {
         return filter;
     }
 
-    public StringFilterEntitySelector setFilter(String filter){
-        this.filter = Arrays.asList(new String[]{filter});
+    public StringFilterEntitySelector setFilter(String filter) {
+        this.filter = Arrays.asList(new String[] { filter });
         return this;
     }
 
-    public StringFilterEntitySelector setFilter(List<String> filter){
+    public StringFilterEntitySelector setFilter(List<String> filter) {
         this.filter = filter;
         return this;
     }
 
-    public StringFilterEntitySelector addEntry(String filterEntry){
+    public StringFilterEntitySelector addEntry(String filterEntry) {
         filter.add(filterEntry);
         return this;
     }

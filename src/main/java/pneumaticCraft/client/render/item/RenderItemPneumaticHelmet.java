@@ -14,17 +14,27 @@ import pneumaticCraft.client.ClientEventHandler;
 import pneumaticCraft.common.config.Config;
 import pneumaticCraft.lib.Models;
 
-public class RenderItemPneumaticHelmet implements IItemRenderer{
+public class RenderItemPneumaticHelmet implements IItemRenderer {
+
     private IModelCustom helmetModel, faceModel, eyesModel;
 
     public static RenderItemPneumaticHelmet INSTANCE = new RenderItemPneumaticHelmet();
 
-    public void render(EntityLivingBase entityLiving){
+    public void render(EntityLivingBase entityLiving) {
         GL11.glPushMatrix();
-        float rot1 = entityLiving.prevRotationYawHead + (entityLiving.rotationYawHead - entityLiving.prevRotationYawHead) * ClientEventHandler.playerRenderPartialTick;
-        float rot2 = entityLiving.prevRenderYawOffset + (entityLiving.renderYawOffset - entityLiving.prevRenderYawOffset) * ClientEventHandler.playerRenderPartialTick;
+        float rot1 = entityLiving.prevRotationYawHead
+            + (entityLiving.rotationYawHead - entityLiving.prevRotationYawHead)
+                * ClientEventHandler.playerRenderPartialTick;
+        float rot2 = entityLiving.prevRenderYawOffset
+            + (entityLiving.renderYawOffset - entityLiving.prevRenderYawOffset)
+                * ClientEventHandler.playerRenderPartialTick;
         GL11.glRotated(rot1 - rot2, 0, 1, 0);
-        GL11.glRotated(entityLiving.prevRotationPitch + (entityLiving.rotationPitch - entityLiving.prevRotationPitch) * ClientEventHandler.playerRenderPartialTick, 1, 0, 0);
+        GL11.glRotated(
+            entityLiving.prevRotationPitch + (entityLiving.rotationPitch - entityLiving.prevRotationPitch)
+                * ClientEventHandler.playerRenderPartialTick,
+            1,
+            0,
+            0);
         GL11.glTranslated(-0.08, 0.1, -0.4);
         double scale = 1.5 / 16D;
         GL11.glScaled(scale, -scale, -scale);
@@ -32,13 +42,14 @@ public class RenderItemPneumaticHelmet implements IItemRenderer{
         GL11.glPopMatrix();
     }
 
-    public void render(){
-        if(helmetModel == null) {
+    public void render() {
+        if (helmetModel == null) {
             helmetModel = AdvancedModelLoader.loadModel(Models.PNEUMATIC_HELMET);
             eyesModel = AdvancedModelLoader.loadModel(Models.PNEUMATIC_HELMET_EYES);
             faceModel = AdvancedModelLoader.loadModel(Models.PNEUMATIC_HELMET_FACE);
-            if(!Config.useHelmetModel) {
-                PneumaticCraft.proxy.getPlayer().addChatComponentMessage(new ChatComponentTranslation("message.date.ironman"));
+            if (!Config.useHelmetModel) {
+                PneumaticCraft.proxy.getPlayer()
+                    .addChatComponentMessage(new ChatComponentTranslation("message.date.ironman"));
             }
         }
 
@@ -55,18 +66,18 @@ public class RenderItemPneumaticHelmet implements IItemRenderer{
     }
 
     @Override
-    public boolean handleRenderType(ItemStack item, ItemRenderType type){
+    public boolean handleRenderType(ItemStack item, ItemRenderType type) {
         return true;
     }
 
     @Override
-    public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper){
+    public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper) {
         return true;
     }
 
     @Override
-    public void renderItem(ItemRenderType type, ItemStack item, Object... data){
-        switch(type){
+    public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
+        switch (type) {
             case ENTITY: {
                 GL11.glRotated(180, 1, 0, 0);
                 render(0.0F, 3.0F, 1.0F, 0.08F);
@@ -75,7 +86,7 @@ public class RenderItemPneumaticHelmet implements IItemRenderer{
             case EQUIPPED: {
                 GL11.glRotatef(180F, 1, 0.0F, 0.0F);
                 GL11.glRotatef(180F, 0, 1F, 0.0F);
-                //  GL11.glRotatef(70F, 0, 0F, 1.0F);
+                // GL11.glRotatef(70F, 0, 0F, 1.0F);
                 render(-3F, 0F, 2F, 0.15F);
                 return;
             }
@@ -95,7 +106,7 @@ public class RenderItemPneumaticHelmet implements IItemRenderer{
         }
     }
 
-    private void render(float x, float y, float z, float scale){
+    private void render(float x, float y, float z, float scale) {
 
         GL11.glPushMatrix();
         GL11.glRotatef(-90F, 1F, 0, 0);
@@ -103,7 +114,7 @@ public class RenderItemPneumaticHelmet implements IItemRenderer{
         // Scale, Translate, Rotate
         GL11.glScalef(scale, scale, scale);
         GL11.glTranslatef(x, y, z);
-        //     GL11.glRotatef(-90F, 1F, 0, 0);
+        // GL11.glRotatef(-90F, 1F, 0, 0);
         GL11.glRotatef(-90F, 1F, 0, 0);
         // Render
         render();

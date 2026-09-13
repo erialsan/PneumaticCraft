@@ -1,18 +1,14 @@
 /*
  * The MIT License (MIT)
- *
  * Copyright (c) 2013 AlgorithmX2
- *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
  * the Software without restriction, including without limitation the rights to
  * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
  * the Software, and to permit persons to whom the Software is furnished to do so,
  * subject to the following conditions:
- *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
  * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
@@ -23,109 +19,107 @@
 
 package appeng.api.definitions;
 
-
 import appeng.api.util.AEItemDefinition;
-
 
 /**
  * @deprecated use {@link IBlocks} now
  */
 @Deprecated
-public class Blocks
-{
-	public AEItemDefinition blockQuartzOre;
+public class Blocks {
 
-	public AEItemDefinition blockQuartzOreCharged;
+    public AEItemDefinition blockQuartzOre;
 
-	public AEItemDefinition blockMatrixFrame;
+    public AEItemDefinition blockQuartzOreCharged;
 
-	public AEItemDefinition blockQuartz;
+    public AEItemDefinition blockMatrixFrame;
 
-	public AEItemDefinition blockQuartzPillar;
+    public AEItemDefinition blockQuartz;
 
-	public AEItemDefinition blockQuartzChiseled;
+    public AEItemDefinition blockQuartzPillar;
 
-	public AEItemDefinition blockQuartzGlass;
+    public AEItemDefinition blockQuartzChiseled;
 
-	public AEItemDefinition blockQuartzVibrantGlass;
+    public AEItemDefinition blockQuartzGlass;
 
-	public AEItemDefinition blockQuartzTorch;
+    public AEItemDefinition blockQuartzVibrantGlass;
 
-	public AEItemDefinition blockFluix;
+    public AEItemDefinition blockQuartzTorch;
 
-	public AEItemDefinition blockSkyStone;
+    public AEItemDefinition blockFluix;
 
-	public AEItemDefinition blockSkyChest;
+    public AEItemDefinition blockSkyStone;
 
-	public AEItemDefinition blockSkyCompass;
+    public AEItemDefinition blockSkyChest;
 
-	public AEItemDefinition blockGrindStone;
+    public AEItemDefinition blockSkyCompass;
 
-	public AEItemDefinition blockCrankHandle;
+    public AEItemDefinition blockGrindStone;
 
-	public AEItemDefinition blockInscriber;
+    public AEItemDefinition blockCrankHandle;
 
-	public AEItemDefinition blockWireless;
+    public AEItemDefinition blockInscriber;
 
-	public AEItemDefinition blockCharger;
+    public AEItemDefinition blockWireless;
 
-	public AEItemDefinition blockTinyTNT;
+    public AEItemDefinition blockCharger;
 
-	public AEItemDefinition blockSecurity;
+    public AEItemDefinition blockTinyTNT;
 
-	public AEItemDefinition blockQuantumRing;
+    public AEItemDefinition blockSecurity;
 
-	public AEItemDefinition blockQuantumLink;
+    public AEItemDefinition blockQuantumRing;
 
-	public AEItemDefinition blockSpatialPylon;
+    public AEItemDefinition blockQuantumLink;
 
-	public AEItemDefinition blockSpatialIOPort;
+    public AEItemDefinition blockSpatialPylon;
 
-	public AEItemDefinition blockMultiPart;
+    public AEItemDefinition blockSpatialIOPort;
 
-	public AEItemDefinition blockController;
+    public AEItemDefinition blockMultiPart;
 
-	public AEItemDefinition blockDrive;
+    public AEItemDefinition blockController;
 
-	public AEItemDefinition blockChest;
+    public AEItemDefinition blockDrive;
 
-	public AEItemDefinition blockInterface;
+    public AEItemDefinition blockChest;
 
-	public AEItemDefinition blockCellWorkbench;
+    public AEItemDefinition blockInterface;
 
-	public AEItemDefinition blockIOPort;
+    public AEItemDefinition blockCellWorkbench;
 
-	public AEItemDefinition blockCondenser;
+    public AEItemDefinition blockIOPort;
 
-	public AEItemDefinition blockEnergyAcceptor;
+    public AEItemDefinition blockCondenser;
 
-	public AEItemDefinition blockVibrationChamber;
+    public AEItemDefinition blockEnergyAcceptor;
 
-	public AEItemDefinition blockQuartzGrowthAccelerator;
+    public AEItemDefinition blockVibrationChamber;
 
-	public AEItemDefinition blockEnergyCell;
+    public AEItemDefinition blockQuartzGrowthAccelerator;
 
-	public AEItemDefinition blockEnergyCellDense;
+    public AEItemDefinition blockEnergyCell;
 
-	public AEItemDefinition blockEnergyCellCreative;
+    public AEItemDefinition blockEnergyCellDense;
 
-	public AEItemDefinition blockCraftingUnit;
+    public AEItemDefinition blockEnergyCellCreative;
 
-	public AEItemDefinition blockCraftingAccelerator;
+    public AEItemDefinition blockCraftingUnit;
 
-	public AEItemDefinition blockCraftingStorage1k;
+    public AEItemDefinition blockCraftingAccelerator;
 
-	public AEItemDefinition blockCraftingStorage4k;
+    public AEItemDefinition blockCraftingStorage1k;
 
-	public AEItemDefinition blockCraftingStorage16k;
+    public AEItemDefinition blockCraftingStorage4k;
 
-	public AEItemDefinition blockCraftingStorage64k;
+    public AEItemDefinition blockCraftingStorage16k;
 
-	public AEItemDefinition blockCraftingMonitor;
+    public AEItemDefinition blockCraftingStorage64k;
 
-	public AEItemDefinition blockMolecularAssembler;
+    public AEItemDefinition blockCraftingMonitor;
 
-	public AEItemDefinition blockLightDetector;
+    public AEItemDefinition blockMolecularAssembler;
 
-	public AEItemDefinition blockPaint;
+    public AEItemDefinition blockLightDetector;
+
+    public AEItemDefinition blockPaint;
 }

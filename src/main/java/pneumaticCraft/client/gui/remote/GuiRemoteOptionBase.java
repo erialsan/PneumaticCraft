@@ -2,6 +2,7 @@ package pneumaticCraft.client.gui.remote;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
+
 import pneumaticCraft.client.gui.GuiPneumaticScreenBase;
 import pneumaticCraft.client.gui.GuiRemoteEditor;
 import pneumaticCraft.client.gui.widget.WidgetComboBox;
@@ -12,14 +13,15 @@ import pneumaticCraft.common.remote.ActionWidget;
 import pneumaticCraft.common.remote.IActionWidgetLabeled;
 import pneumaticCraft.lib.Textures;
 
-public class GuiRemoteOptionBase<Widget extends ActionWidget> extends GuiPneumaticScreenBase{
+public class GuiRemoteOptionBase<Widget extends ActionWidget> extends GuiPneumaticScreenBase {
+
     protected Widget widget;
     protected GuiRemoteEditor guiRemote;
     private WidgetTextField labelField, tooltipField;
     private WidgetComboBox enableField;
     private WidgetTextFieldNumber xValueField, yValueField, zValueField;
 
-    public GuiRemoteOptionBase(Widget widget, GuiRemoteEditor guiRemote){
+    public GuiRemoteOptionBase(Widget widget, GuiRemoteEditor guiRemote) {
         this.widget = widget;
         this.guiRemote = guiRemote;
         xSize = 183;
@@ -27,8 +29,8 @@ public class GuiRemoteOptionBase<Widget extends ActionWidget> extends GuiPneumat
     }
 
     @Override
-    public void keyTyped(char key, int keyCode){
-        if(keyCode == 1) {
+    public void keyTyped(char key, int keyCode) {
+        if (keyCode == 1) {
             onGuiClosed();
             mc.displayGuiScreen(guiRemote);
         } else {
@@ -37,24 +39,24 @@ public class GuiRemoteOptionBase<Widget extends ActionWidget> extends GuiPneumat
     }
 
     @Override
-    public void drawScreen(int mouseX, int mouseY, float partialTicks){
+    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         drawDefaultBackground();
         super.drawScreen(mouseX, mouseY, partialTicks);
 
     }
 
     @Override
-    protected ResourceLocation getTexture(){
+    protected ResourceLocation getTexture() {
         return Textures.GUI_WIDGET_OPTIONS;
     }
 
     @Override
-    public boolean doesGuiPauseGame(){
+    public boolean doesGuiPauseGame() {
         return false;
     }
 
     @Override
-    public void initGui(){
+    public void initGui() {
         super.initGui();
 
         String title = I18n.format("remote." + widget.getId() + ".name");
@@ -62,7 +64,7 @@ public class GuiRemoteOptionBase<Widget extends ActionWidget> extends GuiPneumat
         addLabel(title, width / 2 - fontRendererObj.getStringWidth(title) / 2, guiTop + 5);
         addLabel("#", guiLeft + 10, guiTop + 161);
 
-        if(widget instanceof IActionWidgetLabeled) {
+        if (widget instanceof IActionWidgetLabeled) {
             addLabel(I18n.format("gui.remote.text"), guiLeft + 10, guiTop + 20);
             addLabel(I18n.format("gui.remote.tooltip"), guiLeft + 10, guiTop + 46);
         }
@@ -73,7 +75,7 @@ public class GuiRemoteOptionBase<Widget extends ActionWidget> extends GuiPneumat
         addLabel("Z:", guiLeft + 124, guiTop + 186);
 
         enableField = new WidgetComboBox(fontRendererObj, guiLeft + 18, guiTop + 160, 152, 10);
-        enableField.setElements(((ContainerRemote)guiRemote.inventorySlots).variables);
+        enableField.setElements(((ContainerRemote) guiRemote.inventorySlots).variables);
         enableField.setText(widget.getEnableVariable());
         enableField.setTooltip(I18n.format("gui.remote.enable.tooltip"));
         addWidget(enableField);
@@ -95,27 +97,27 @@ public class GuiRemoteOptionBase<Widget extends ActionWidget> extends GuiPneumat
         zValueField.setTooltip(valueTooltip);
         addWidget(zValueField);
 
-        if(widget instanceof IActionWidgetLabeled) {
+        if (widget instanceof IActionWidgetLabeled) {
             labelField = new WidgetTextField(fontRendererObj, guiLeft + 10, guiTop + 30, 160, 10);
-            labelField.setText(((IActionWidgetLabeled)widget).getText());
+            labelField.setText(((IActionWidgetLabeled) widget).getText());
             labelField.setTooltip(I18n.format("gui.remote.label.tooltip"));
             labelField.setMaxStringLength(1000);
             addWidget(labelField);
 
             tooltipField = new WidgetTextField(fontRendererObj, guiLeft + 10, guiTop + 56, 160, 10);
-            tooltipField.setText(((IActionWidgetLabeled)widget).getTooltip());
+            tooltipField.setText(((IActionWidgetLabeled) widget).getTooltip());
             addWidget(tooltipField);
         }
     }
 
     @Override
-    public void onGuiClosed(){
+    public void onGuiClosed() {
         super.onGuiClosed();
         widget.setEnableVariable(enableField.getText());
         widget.setEnablingValue(xValueField.getValue(), yValueField.getValue(), zValueField.getValue());
-        if(widget instanceof IActionWidgetLabeled) {
-            ((IActionWidgetLabeled)widget).setText(labelField.getText());
-            ((IActionWidgetLabeled)widget).setTooltip(tooltipField.getText());
+        if (widget instanceof IActionWidgetLabeled) {
+            ((IActionWidgetLabeled) widget).setText(labelField.getText());
+            ((IActionWidgetLabeled) widget).setTooltip(tooltipField.getText());
         }
     }
 }

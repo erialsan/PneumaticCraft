@@ -2,7 +2,7 @@ package pneumaticCraft.lib;
 
 import net.minecraft.util.ResourceLocation;
 
-public class Textures{
+public class Textures {
 
     public static final String ICON_LOCATION = "pneumaticcraft:";
     public static final String MODEL_LOCATION = ICON_LOCATION + "textures/model/";
@@ -17,57 +17,97 @@ public class Textures{
     public static final String ARMOR_LOCATION = ICON_LOCATION + "textures/armor/";
     public static final String RENDER_LOCATION = ICON_LOCATION + "textures/render/";
 
-    public static final ResourceLocation MODEL_GREY_TEXTURE = new ResourceLocation(MODEL_LOCATION + "pressureTubeTexture.png");
-    public static final ResourceLocation MODEL_PRESSURE_TUBE = new ResourceLocation(MODEL_LOCATION + "PressureTube.png");
-    public static final ResourceLocation MODEL_ADVANCED_PRESSURE_TUBE = new ResourceLocation(MODEL_LOCATION + "PressureTubeAdvanced.png");
+    public static final ResourceLocation MODEL_GREY_TEXTURE = new ResourceLocation(
+        MODEL_LOCATION + "pressureTubeTexture.png");
+    public static final ResourceLocation MODEL_PRESSURE_TUBE = new ResourceLocation(
+        MODEL_LOCATION + "PressureTube.png");
+    public static final ResourceLocation MODEL_ADVANCED_PRESSURE_TUBE = new ResourceLocation(
+        MODEL_LOCATION + "PressureTubeAdvanced.png");
     public static final ResourceLocation MODEL_AIR_CANNON = new ResourceLocation(MODEL_LOCATION + "airCannon.png");
-    public static final ResourceLocation MODEL_CHARGING_STATION = new ResourceLocation(MODEL_LOCATION + "ChargingStation.png");
-    public static final ResourceLocation MODEL_CHARGING_STATION_PAD = new ResourceLocation(MODEL_LOCATION + "chargingStationPad.png");
-    public static final ResourceLocation MODEL_VORTEX_CANNON = new ResourceLocation(MODEL_LOCATION + "VortexCannon.png");
+    public static final ResourceLocation MODEL_CHARGING_STATION = new ResourceLocation(
+        MODEL_LOCATION + "ChargingStation.png");
+    public static final ResourceLocation MODEL_CHARGING_STATION_PAD = new ResourceLocation(
+        MODEL_LOCATION + "chargingStationPad.png");
+    public static final ResourceLocation MODEL_VORTEX_CANNON = new ResourceLocation(
+        MODEL_LOCATION + "VortexCannon.png");
     public static final ResourceLocation MODEL_ELEVATOR = new ResourceLocation(MODEL_LOCATION + "elevator.png");
-    public static final ResourceLocation MODEL_PNEUMATIC_CILINDER = new ResourceLocation(MODEL_LOCATION + "pneumaticCilinder.png");
-    public static final ResourceLocation MODEL_PRESSURE_CHAMBER_INTERFACE = new ResourceLocation(MODEL_LOCATION + "pressureChamberInterface.png");
+    public static final ResourceLocation MODEL_PNEUMATIC_CILINDER = new ResourceLocation(
+        MODEL_LOCATION + "pneumaticCilinder.png");
+    public static final ResourceLocation MODEL_PRESSURE_CHAMBER_INTERFACE = new ResourceLocation(
+        MODEL_LOCATION + "pressureChamberInterface.png");
     public static final ResourceLocation MODEL_VACUUM_PUMP = new ResourceLocation(MODEL_LOCATION + "vacuumPump.png");
-    public static final ResourceLocation MODEL_PNEUMATIC_DOOR = new ResourceLocation(MODEL_LOCATION + "PneumaticDoor.png");
-    public static final ResourceLocation MODEL_PNEUMATIC_DOOR_BASE = new ResourceLocation(MODEL_LOCATION + "PneumaticDoorBase.png");
-    public static final ResourceLocation MODEL_ASSEMBLY_IO_EXPORT = new ResourceLocation(MODEL_LOCATION + "AssemblyIOExport.png");
-    public static final ResourceLocation MODEL_ASSEMBLY_IO_IMPORT = new ResourceLocation(MODEL_LOCATION + "AssemblyIOImport.png");
-    public static final ResourceLocation MODEL_ASSEMBLY_LASER_AND_DRILL = new ResourceLocation(MODEL_LOCATION + "AssemblyLaserAndDrill.png");
-    public static final ResourceLocation MODEL_ASSEMBLY_PLATFORM = new ResourceLocation(MODEL_LOCATION + "AssemblyPlatform.png");
-    public static final ResourceLocation MODEL_ASSEMBLY_CONTROLLER = new ResourceLocation(MODEL_LOCATION + "AssemblyController.png");
+    public static final ResourceLocation MODEL_PNEUMATIC_DOOR = new ResourceLocation(
+        MODEL_LOCATION + "PneumaticDoor.png");
+    public static final ResourceLocation MODEL_PNEUMATIC_DOOR_BASE = new ResourceLocation(
+        MODEL_LOCATION + "PneumaticDoorBase.png");
+    public static final ResourceLocation MODEL_ASSEMBLY_IO_EXPORT = new ResourceLocation(
+        MODEL_LOCATION + "AssemblyIOExport.png");
+    public static final ResourceLocation MODEL_ASSEMBLY_IO_IMPORT = new ResourceLocation(
+        MODEL_LOCATION + "AssemblyIOImport.png");
+    public static final ResourceLocation MODEL_ASSEMBLY_LASER_AND_DRILL = new ResourceLocation(
+        MODEL_LOCATION + "AssemblyLaserAndDrill.png");
+    public static final ResourceLocation MODEL_ASSEMBLY_PLATFORM = new ResourceLocation(
+        MODEL_LOCATION + "AssemblyPlatform.png");
+    public static final ResourceLocation MODEL_ASSEMBLY_CONTROLLER = new ResourceLocation(
+        MODEL_LOCATION + "AssemblyController.png");
     public static final ResourceLocation MODEL_UV_LIGHTBOX = new ResourceLocation(MODEL_LOCATION + "UVLightBox.png");
     public static final ResourceLocation MODEL_TEST_TEXTURE = new ResourceLocation(MODEL_LOCATION + "testTexture.png");
-    public static final ResourceLocation MODEL_SECURITY_STATION = new ResourceLocation(MODEL_LOCATION + "securityStation.png");
-    public static final ResourceLocation MODEL_UNIVERSAL_SENSOR = new ResourceLocation(MODEL_LOCATION + "UniversalSensor.png");
-    public static final ResourceLocation MODEL_PNEUMATIC_ENGINE_BLUE = new ResourceLocation(MODEL_LOCATION + "PneumaticEngineBlue.png");
-    public static final ResourceLocation MODEL_PNEUMATIC_GENERATOR = new ResourceLocation(MODEL_LOCATION + "pneumaticGenerator.png");
-    public static final ResourceLocation MODEL_PNEUMATIC_ENGINE_GREEN = new ResourceLocation(MODEL_LOCATION + "PneumaticEngineGreen.png");
-    public static final ResourceLocation MODEL_PNEUMATIC_ENGINE_YELLOW = new ResourceLocation(MODEL_LOCATION + "PneumaticEngineYellow.png");
-    public static final ResourceLocation MODEL_PNEUMATIC_ENGINE_RED = new ResourceLocation(MODEL_LOCATION + "PneumaticEngineRed.png");
-    public static final ResourceLocation MODEL_OMNIDIRECTIONAL_HOPPER = new ResourceLocation(MODEL_LOCATION + "omnidirectionalHopper.png");
-    public static final ResourceLocation MODEL_LIQUID_HOPPER = new ResourceLocation(MODEL_LOCATION + "liquidHopper.png");
+    public static final ResourceLocation MODEL_SECURITY_STATION = new ResourceLocation(
+        MODEL_LOCATION + "securityStation.png");
+    public static final ResourceLocation MODEL_UNIVERSAL_SENSOR = new ResourceLocation(
+        MODEL_LOCATION + "UniversalSensor.png");
+    public static final ResourceLocation MODEL_PNEUMATIC_ENGINE_BLUE = new ResourceLocation(
+        MODEL_LOCATION + "PneumaticEngineBlue.png");
+    public static final ResourceLocation MODEL_PNEUMATIC_GENERATOR = new ResourceLocation(
+        MODEL_LOCATION + "pneumaticGenerator.png");
+    public static final ResourceLocation MODEL_PNEUMATIC_ENGINE_GREEN = new ResourceLocation(
+        MODEL_LOCATION + "PneumaticEngineGreen.png");
+    public static final ResourceLocation MODEL_PNEUMATIC_ENGINE_YELLOW = new ResourceLocation(
+        MODEL_LOCATION + "PneumaticEngineYellow.png");
+    public static final ResourceLocation MODEL_PNEUMATIC_ENGINE_RED = new ResourceLocation(
+        MODEL_LOCATION + "PneumaticEngineRed.png");
+    public static final ResourceLocation MODEL_OMNIDIRECTIONAL_HOPPER = new ResourceLocation(
+        MODEL_LOCATION + "omnidirectionalHopper.png");
+    public static final ResourceLocation MODEL_LIQUID_HOPPER = new ResourceLocation(
+        MODEL_LOCATION + "liquidHopper.png");
     public static final ResourceLocation MODEL_PROGRAMMER = new ResourceLocation(MODEL_LOCATION + "programmer.png");
-    public static final ResourceLocation MODEL_DRONE_INTERFACE = new ResourceLocation(MODEL_LOCATION + "droneInterface.png");
-    public static final ResourceLocation MODEL_THIRD_PARTY_COMPRESSOR = new ResourceLocation(MODEL_LOCATION + "ThirdPartyCompressor.png");
-    public static final ResourceLocation MODEL_PLASTIC_TROLLEY = new ResourceLocation(MODEL_LOCATION + "harvesterPlastic.png");
-    public static final ResourceLocation MODEL_KINETIC_COMPRESSOR = new ResourceLocation(MODEL_LOCATION + "kineticCompressor.png");
-    public static final ResourceLocation MODEL_PNEUMATIC_DYNAMO_ON = new ResourceLocation(MODEL_LOCATION + "pneumaticDynamoOn.png");
-    public static final ResourceLocation MODEL_PNEUMATIC_DYNAMO_OFF = new ResourceLocation(MODEL_LOCATION + "pneumaticDynamoOff.png");
-    public static final ResourceLocation MODEL_PLASTIC_MIXER = new ResourceLocation(MODEL_LOCATION + "plasticMixer.png");
+    public static final ResourceLocation MODEL_DRONE_INTERFACE = new ResourceLocation(
+        MODEL_LOCATION + "droneInterface.png");
+    public static final ResourceLocation MODEL_THIRD_PARTY_COMPRESSOR = new ResourceLocation(
+        MODEL_LOCATION + "ThirdPartyCompressor.png");
+    public static final ResourceLocation MODEL_PLASTIC_TROLLEY = new ResourceLocation(
+        MODEL_LOCATION + "harvesterPlastic.png");
+    public static final ResourceLocation MODEL_KINETIC_COMPRESSOR = new ResourceLocation(
+        MODEL_LOCATION + "kineticCompressor.png");
+    public static final ResourceLocation MODEL_PNEUMATIC_DYNAMO_ON = new ResourceLocation(
+        MODEL_LOCATION + "pneumaticDynamoOn.png");
+    public static final ResourceLocation MODEL_PNEUMATIC_DYNAMO_OFF = new ResourceLocation(
+        MODEL_LOCATION + "pneumaticDynamoOff.png");
+    public static final ResourceLocation MODEL_PLASTIC_MIXER = new ResourceLocation(
+        MODEL_LOCATION + "plasticMixer.png");
     public static final ResourceLocation MODEL_HEAT_SINK = new ResourceLocation(MODEL_LOCATION + "heatSink.png");
-    public static final ResourceLocation MODEL_THERMOPNEUMATIC_PROCESSING_PLANT = new ResourceLocation(MODEL_LOCATION + "thermopneumaticProcessingPlant.png");
+    public static final ResourceLocation MODEL_THERMOPNEUMATIC_PROCESSING_PLANT = new ResourceLocation(
+        MODEL_LOCATION + "thermopneumaticProcessingPlant.png");
     public static final ResourceLocation MODEL_REFINERY = new ResourceLocation(MODEL_LOCATION + "refinery.png");
     public static final ResourceLocation MODEL_GAS_LIFT = new ResourceLocation(MODEL_LOCATION + "gasLift.png");
-    public static final ResourceLocation MODEL_DRONE_MINIGUN = new ResourceLocation(MODEL_LOCATION + "droneMinigun.png");
+    public static final ResourceLocation MODEL_DRONE_MINIGUN = new ResourceLocation(
+        MODEL_LOCATION + "droneMinigun.png");
     public static final ResourceLocation MODEL_HEAT_FRAME = new ResourceLocation(MODEL_LOCATION + "heatFrame.png");
-    public static final ResourceLocation MODEL_KEROSENE_LAMP = new ResourceLocation(MODEL_LOCATION + "keroseneLamp.png");
-    public static final ResourceLocation MODEL_SENTRY_TURRET = new ResourceLocation(MODEL_LOCATION + "sentryTurret.png");
+    public static final ResourceLocation MODEL_KEROSENE_LAMP = new ResourceLocation(
+        MODEL_LOCATION + "keroseneLamp.png");
+    public static final ResourceLocation MODEL_SENTRY_TURRET = new ResourceLocation(
+        MODEL_LOCATION + "sentryTurret.png");
 
-    public static final ResourceLocation MODEL_FLOW_DETECTOR = new ResourceLocation(TUBE_MODULE_MODEL_LOCATION + "flowDetector.png");
-    public static final ResourceLocation MODEL_GAUGE = new ResourceLocation(TUBE_MODULE_MODEL_LOCATION + "gaugeModule.png");
-    public static final ResourceLocation MODEL_AIR_GRATE = new ResourceLocation(TUBE_MODULE_MODEL_LOCATION + "airGrate.png");
-    public static final ResourceLocation MODEL_CHARGING_MODULE = new ResourceLocation(TUBE_MODULE_MODEL_LOCATION + "chargingModule.png");
-    public static final ResourceLocation MODEL_LOGISTICS = new ResourceLocation(TUBE_MODULE_MODEL_LOCATION + "logisticsModule.png");
+    public static final ResourceLocation MODEL_FLOW_DETECTOR = new ResourceLocation(
+        TUBE_MODULE_MODEL_LOCATION + "flowDetector.png");
+    public static final ResourceLocation MODEL_GAUGE = new ResourceLocation(
+        TUBE_MODULE_MODEL_LOCATION + "gaugeModule.png");
+    public static final ResourceLocation MODEL_AIR_GRATE = new ResourceLocation(
+        TUBE_MODULE_MODEL_LOCATION + "airGrate.png");
+    public static final ResourceLocation MODEL_CHARGING_MODULE = new ResourceLocation(
+        TUBE_MODULE_MODEL_LOCATION + "chargingModule.png");
+    public static final ResourceLocation MODEL_LOGISTICS = new ResourceLocation(
+        TUBE_MODULE_MODEL_LOCATION + "logisticsModule.png");
 
     public static final ResourceLocation MODEL_DRONE = new ResourceLocation(ENTITY_LOCATION + "Drone.png");
 
@@ -97,63 +137,119 @@ public class Textures{
     public static final String ICON_CHOPPER_PLANT_LOCATION = PLANT_LOCATION + "chopperPlant";
 
     public static final String PROG_WIDGET_LOCATION = ICON_LOCATION + "textures/items/progwidgets/";
-    public static final ResourceLocation PROG_WIDGET_COMMENT = new ResourceLocation(PROG_WIDGET_LOCATION + "commentPiece.png");
-    public static final ResourceLocation PROG_WIDGET_AREA = new ResourceLocation(PROG_WIDGET_LOCATION + "areaPiece.png");
-    public static final ResourceLocation PROG_WIDGET_ATTACK = new ResourceLocation(PROG_WIDGET_LOCATION + "attackPiece.png");
-    public static final ResourceLocation PROG_WIDGET_CC = new ResourceLocation(PROG_WIDGET_LOCATION + "computerCraftPiece.png");
+    public static final ResourceLocation PROG_WIDGET_COMMENT = new ResourceLocation(
+        PROG_WIDGET_LOCATION + "commentPiece.png");
+    public static final ResourceLocation PROG_WIDGET_AREA = new ResourceLocation(
+        PROG_WIDGET_LOCATION + "areaPiece.png");
+    public static final ResourceLocation PROG_WIDGET_ATTACK = new ResourceLocation(
+        PROG_WIDGET_LOCATION + "attackPiece.png");
+    public static final ResourceLocation PROG_WIDGET_CC = new ResourceLocation(
+        PROG_WIDGET_LOCATION + "computerCraftPiece.png");
     public static final ResourceLocation PROG_WIDGET_DIG = new ResourceLocation(PROG_WIDGET_LOCATION + "digPiece.png");
-    public static final ResourceLocation PROG_WIDGET_GOTO = new ResourceLocation(PROG_WIDGET_LOCATION + "gotoPiece.png");
-    public static final ResourceLocation PROG_WIDGET_TELEPORT = new ResourceLocation(PROG_WIDGET_LOCATION + "teleportPiece.png");
-    public static final ResourceLocation PROG_WIDGET_INV_EX = new ResourceLocation(PROG_WIDGET_LOCATION + "inventoryExportPiece.png");
-    public static final ResourceLocation PROG_WIDGET_INV_IM = new ResourceLocation(PROG_WIDGET_LOCATION + "inventoryImportPiece.png");
-    public static final ResourceLocation PROG_WIDGET_LIQUID_EX = new ResourceLocation(PROG_WIDGET_LOCATION + "liquidExportPiece.png");
-    public static final ResourceLocation PROG_WIDGET_LIQUID_IM = new ResourceLocation(PROG_WIDGET_LOCATION + "liquidImportPiece.png");
-    public static final ResourceLocation PROG_WIDGET_ENTITY_EX = new ResourceLocation(PROG_WIDGET_LOCATION + "entityExportPiece.png");
-    public static final ResourceLocation PROG_WIDGET_ENTITY_IM = new ResourceLocation(PROG_WIDGET_LOCATION + "entityImportPiece.png");
-    public static final ResourceLocation PROG_WIDGET_RF_EX = new ResourceLocation(PROG_WIDGET_LOCATION + "RFExportPiece.png");
-    public static final ResourceLocation PROG_WIDGET_RF_IM = new ResourceLocation(PROG_WIDGET_LOCATION + "RFImportPiece.png");
-    public static final ResourceLocation PROG_WIDGET_ESSENTIA_EX = new ResourceLocation(PROG_WIDGET_LOCATION + "essentiaExportPiece.png");
-    public static final ResourceLocation PROG_WIDGET_ESSENTIA_IM = new ResourceLocation(PROG_WIDGET_LOCATION + "essentiaImportPiece.png");
-    public static final ResourceLocation PROG_WIDGET_ENTITY_RIGHT_CLICK = new ResourceLocation(PROG_WIDGET_LOCATION + "entityRightClickPiece.png");
-    public static final ResourceLocation PROG_WIDGET_BLOCK_RIGHT_CLICK = new ResourceLocation(PROG_WIDGET_LOCATION + "blockRightClickPiece.png");
-    public static final ResourceLocation PROG_WIDGET_ITEM_FILTER = new ResourceLocation(PROG_WIDGET_LOCATION + "itemFilterPiece.png");
-    public static final ResourceLocation PROG_WIDGET_LIQUID_FILTER = new ResourceLocation(PROG_WIDGET_LOCATION + "liquidFilterPiece.png");
-    public static final ResourceLocation PROG_WIDGET_ESSENTIA_FILTER = new ResourceLocation(PROG_WIDGET_LOCATION + "essentiaFilterPiece.png");
-    public static final ResourceLocation PROG_WIDGET_PICK_ITEM = new ResourceLocation(PROG_WIDGET_LOCATION + "itemPickPiece.png");
-    public static final ResourceLocation PROG_WIDGET_PLACE = new ResourceLocation(PROG_WIDGET_LOCATION + "placePiece.png");
-    public static final ResourceLocation PROG_WIDGET_START = new ResourceLocation(PROG_WIDGET_LOCATION + "startPiece.png");
-    public static final ResourceLocation PROG_WIDGET_TEXT = new ResourceLocation(PROG_WIDGET_LOCATION + "textPiece.png");
-    public static final ResourceLocation PROG_WIDGET_LABEL = new ResourceLocation(PROG_WIDGET_LOCATION + "labelPiece.png");
-    public static final ResourceLocation PROG_WIDGET_JUMP = new ResourceLocation(PROG_WIDGET_LOCATION + "jumpPiece.png");
-    public static final ResourceLocation PROG_WIDGET_WAIT = new ResourceLocation(PROG_WIDGET_LOCATION + "waitPiece.png");
-    public static final ResourceLocation PROG_WIDGET_DROP_ITEM = new ResourceLocation(PROG_WIDGET_LOCATION + "itemDropPiece.png");
-    public static final ResourceLocation PROG_WIDGET_EMIT_REDSTONE = new ResourceLocation(PROG_WIDGET_LOCATION + "emitRedstonePiece.png");
-    public static final ResourceLocation PROG_WIDGET_RENAME = new ResourceLocation(PROG_WIDGET_LOCATION + "renamePiece.png");
-    public static final ResourceLocation PROG_WIDGET_SUICIDE = new ResourceLocation(PROG_WIDGET_LOCATION + "suicidePiece.png");
-    public static final ResourceLocation PROG_WIDGET_EXTERNAL_PROGRAM = new ResourceLocation(PROG_WIDGET_LOCATION + "externalProgramPiece.png");
-    public static final ResourceLocation PROG_WIDGET_CRAFTING = new ResourceLocation(PROG_WIDGET_LOCATION + "craftPiece.png");
-    public static final ResourceLocation PROG_WIDGET_STANDBY = new ResourceLocation(PROG_WIDGET_LOCATION + "standbyPiece.png");
-    public static final ResourceLocation PROG_WIDGET_COORDINATE = new ResourceLocation(PROG_WIDGET_LOCATION + "coordinatePiece.png");
-    public static final ResourceLocation PROG_WIDGET_ITEM_ASSIGN = new ResourceLocation(PROG_WIDGET_LOCATION + "itemAssignPiece.png");
-    public static final ResourceLocation PROG_WIDGET_LOGISTICS = new ResourceLocation(PROG_WIDGET_LOCATION + "logisticsPiece.png");
-    public static final ResourceLocation PROG_WIDGET_FOR_EACH_COORDINATE = new ResourceLocation(PROG_WIDGET_LOCATION + "forEachCoordinate.png");
-    public static final ResourceLocation PROG_WIDGET_FOR_EACH_ITEM = new ResourceLocation(PROG_WIDGET_LOCATION + "forEachItem.png");
-    public static final ResourceLocation PROG_WIDGET_EDIT_SIGN = new ResourceLocation(PROG_WIDGET_LOCATION + "editSignPiece.png");
-    public static final ResourceLocation PROG_WIDGET_CONDITION_REDSTONE = new ResourceLocation(PROG_WIDGET_LOCATION + "conditionRedstonePiece.png");
-    public static final ResourceLocation PROG_WIDGET_CONDITION_ENTITY = new ResourceLocation(PROG_WIDGET_LOCATION + "conditionEntityPiece.png");
-    public static final ResourceLocation PROG_WIDGET_CONDITION_LIQUID_INVENTORY = new ResourceLocation(PROG_WIDGET_LOCATION + "conditionLiquidInventoryPiece.png");
-    public static final ResourceLocation PROG_WIDGET_CONDITION_ITEM_INVENTORY = new ResourceLocation(PROG_WIDGET_LOCATION + "conditionItemInventoryPiece.png");
-    public static final ResourceLocation PROG_WIDGET_CONDITION_BLOCK = new ResourceLocation(PROG_WIDGET_LOCATION + "conditionBlockPiece.png");
-    public static final ResourceLocation PROG_WIDGET_CONDITION_RF = new ResourceLocation(PROG_WIDGET_LOCATION + "conditionRFPiece.png");
-    public static final ResourceLocation PROG_WIDGET_CONDITION_PRESSURE = new ResourceLocation(PROG_WIDGET_LOCATION + "conditionPressurePiece.png");
-    public static final ResourceLocation PROG_WIDGET_CONDITION_COORDINATE = new ResourceLocation(PROG_WIDGET_LOCATION + "conditionCoordinatePiece.png");
-    public static final ResourceLocation PROG_WIDGET_CONDITION_ITEM = new ResourceLocation(PROG_WIDGET_LOCATION + "conditionItem.png");
-    public static final ResourceLocation PROG_WIDGET_CONDITION_LIGHT = new ResourceLocation(PROG_WIDGET_LOCATION + "conditionLightPiece.png");
-    public static final ResourceLocation PROG_WIDGET_CONDITION_DRONE_ENTITY = new ResourceLocation(PROG_WIDGET_LOCATION + "conditionDroneEntityPiece.png");
-    public static final ResourceLocation PROG_WIDGET_CONDITION_DRONE_LIQUID_INVENTORY = new ResourceLocation(PROG_WIDGET_LOCATION + "conditionDroneLiquidPiece.png");
-    public static final ResourceLocation PROG_WIDGET_CONDITION_DRONE_ITEM_INVENTORY = new ResourceLocation(PROG_WIDGET_LOCATION + "conditionDroneInventoryPiece.png");
-    public static final ResourceLocation PROG_WIDGET_CONDITION_DRONE_RF = new ResourceLocation(PROG_WIDGET_LOCATION + "conditionDroneRFPiece.png");
-    public static final ResourceLocation PROG_WIDGET_CONDITION_DRONE_PRESSURE = new ResourceLocation(PROG_WIDGET_LOCATION + "conditionDronePressurePiece.png");
+    public static final ResourceLocation PROG_WIDGET_GOTO = new ResourceLocation(
+        PROG_WIDGET_LOCATION + "gotoPiece.png");
+    public static final ResourceLocation PROG_WIDGET_TELEPORT = new ResourceLocation(
+        PROG_WIDGET_LOCATION + "teleportPiece.png");
+    public static final ResourceLocation PROG_WIDGET_INV_EX = new ResourceLocation(
+        PROG_WIDGET_LOCATION + "inventoryExportPiece.png");
+    public static final ResourceLocation PROG_WIDGET_INV_IM = new ResourceLocation(
+        PROG_WIDGET_LOCATION + "inventoryImportPiece.png");
+    public static final ResourceLocation PROG_WIDGET_LIQUID_EX = new ResourceLocation(
+        PROG_WIDGET_LOCATION + "liquidExportPiece.png");
+    public static final ResourceLocation PROG_WIDGET_LIQUID_IM = new ResourceLocation(
+        PROG_WIDGET_LOCATION + "liquidImportPiece.png");
+    public static final ResourceLocation PROG_WIDGET_ENTITY_EX = new ResourceLocation(
+        PROG_WIDGET_LOCATION + "entityExportPiece.png");
+    public static final ResourceLocation PROG_WIDGET_ENTITY_IM = new ResourceLocation(
+        PROG_WIDGET_LOCATION + "entityImportPiece.png");
+    public static final ResourceLocation PROG_WIDGET_RF_EX = new ResourceLocation(
+        PROG_WIDGET_LOCATION + "RFExportPiece.png");
+    public static final ResourceLocation PROG_WIDGET_RF_IM = new ResourceLocation(
+        PROG_WIDGET_LOCATION + "RFImportPiece.png");
+    public static final ResourceLocation PROG_WIDGET_ESSENTIA_EX = new ResourceLocation(
+        PROG_WIDGET_LOCATION + "essentiaExportPiece.png");
+    public static final ResourceLocation PROG_WIDGET_ESSENTIA_IM = new ResourceLocation(
+        PROG_WIDGET_LOCATION + "essentiaImportPiece.png");
+    public static final ResourceLocation PROG_WIDGET_ENTITY_RIGHT_CLICK = new ResourceLocation(
+        PROG_WIDGET_LOCATION + "entityRightClickPiece.png");
+    public static final ResourceLocation PROG_WIDGET_BLOCK_RIGHT_CLICK = new ResourceLocation(
+        PROG_WIDGET_LOCATION + "blockRightClickPiece.png");
+    public static final ResourceLocation PROG_WIDGET_ITEM_FILTER = new ResourceLocation(
+        PROG_WIDGET_LOCATION + "itemFilterPiece.png");
+    public static final ResourceLocation PROG_WIDGET_LIQUID_FILTER = new ResourceLocation(
+        PROG_WIDGET_LOCATION + "liquidFilterPiece.png");
+    public static final ResourceLocation PROG_WIDGET_ESSENTIA_FILTER = new ResourceLocation(
+        PROG_WIDGET_LOCATION + "essentiaFilterPiece.png");
+    public static final ResourceLocation PROG_WIDGET_PICK_ITEM = new ResourceLocation(
+        PROG_WIDGET_LOCATION + "itemPickPiece.png");
+    public static final ResourceLocation PROG_WIDGET_PLACE = new ResourceLocation(
+        PROG_WIDGET_LOCATION + "placePiece.png");
+    public static final ResourceLocation PROG_WIDGET_START = new ResourceLocation(
+        PROG_WIDGET_LOCATION + "startPiece.png");
+    public static final ResourceLocation PROG_WIDGET_TEXT = new ResourceLocation(
+        PROG_WIDGET_LOCATION + "textPiece.png");
+    public static final ResourceLocation PROG_WIDGET_LABEL = new ResourceLocation(
+        PROG_WIDGET_LOCATION + "labelPiece.png");
+    public static final ResourceLocation PROG_WIDGET_JUMP = new ResourceLocation(
+        PROG_WIDGET_LOCATION + "jumpPiece.png");
+    public static final ResourceLocation PROG_WIDGET_WAIT = new ResourceLocation(
+        PROG_WIDGET_LOCATION + "waitPiece.png");
+    public static final ResourceLocation PROG_WIDGET_DROP_ITEM = new ResourceLocation(
+        PROG_WIDGET_LOCATION + "itemDropPiece.png");
+    public static final ResourceLocation PROG_WIDGET_EMIT_REDSTONE = new ResourceLocation(
+        PROG_WIDGET_LOCATION + "emitRedstonePiece.png");
+    public static final ResourceLocation PROG_WIDGET_RENAME = new ResourceLocation(
+        PROG_WIDGET_LOCATION + "renamePiece.png");
+    public static final ResourceLocation PROG_WIDGET_SUICIDE = new ResourceLocation(
+        PROG_WIDGET_LOCATION + "suicidePiece.png");
+    public static final ResourceLocation PROG_WIDGET_EXTERNAL_PROGRAM = new ResourceLocation(
+        PROG_WIDGET_LOCATION + "externalProgramPiece.png");
+    public static final ResourceLocation PROG_WIDGET_CRAFTING = new ResourceLocation(
+        PROG_WIDGET_LOCATION + "craftPiece.png");
+    public static final ResourceLocation PROG_WIDGET_STANDBY = new ResourceLocation(
+        PROG_WIDGET_LOCATION + "standbyPiece.png");
+    public static final ResourceLocation PROG_WIDGET_COORDINATE = new ResourceLocation(
+        PROG_WIDGET_LOCATION + "coordinatePiece.png");
+    public static final ResourceLocation PROG_WIDGET_ITEM_ASSIGN = new ResourceLocation(
+        PROG_WIDGET_LOCATION + "itemAssignPiece.png");
+    public static final ResourceLocation PROG_WIDGET_LOGISTICS = new ResourceLocation(
+        PROG_WIDGET_LOCATION + "logisticsPiece.png");
+    public static final ResourceLocation PROG_WIDGET_FOR_EACH_COORDINATE = new ResourceLocation(
+        PROG_WIDGET_LOCATION + "forEachCoordinate.png");
+    public static final ResourceLocation PROG_WIDGET_FOR_EACH_ITEM = new ResourceLocation(
+        PROG_WIDGET_LOCATION + "forEachItem.png");
+    public static final ResourceLocation PROG_WIDGET_EDIT_SIGN = new ResourceLocation(
+        PROG_WIDGET_LOCATION + "editSignPiece.png");
+    public static final ResourceLocation PROG_WIDGET_CONDITION_REDSTONE = new ResourceLocation(
+        PROG_WIDGET_LOCATION + "conditionRedstonePiece.png");
+    public static final ResourceLocation PROG_WIDGET_CONDITION_ENTITY = new ResourceLocation(
+        PROG_WIDGET_LOCATION + "conditionEntityPiece.png");
+    public static final ResourceLocation PROG_WIDGET_CONDITION_LIQUID_INVENTORY = new ResourceLocation(
+        PROG_WIDGET_LOCATION + "conditionLiquidInventoryPiece.png");
+    public static final ResourceLocation PROG_WIDGET_CONDITION_ITEM_INVENTORY = new ResourceLocation(
+        PROG_WIDGET_LOCATION + "conditionItemInventoryPiece.png");
+    public static final ResourceLocation PROG_WIDGET_CONDITION_BLOCK = new ResourceLocation(
+        PROG_WIDGET_LOCATION + "conditionBlockPiece.png");
+    public static final ResourceLocation PROG_WIDGET_CONDITION_RF = new ResourceLocation(
+        PROG_WIDGET_LOCATION + "conditionRFPiece.png");
+    public static final ResourceLocation PROG_WIDGET_CONDITION_PRESSURE = new ResourceLocation(
+        PROG_WIDGET_LOCATION + "conditionPressurePiece.png");
+    public static final ResourceLocation PROG_WIDGET_CONDITION_COORDINATE = new ResourceLocation(
+        PROG_WIDGET_LOCATION + "conditionCoordinatePiece.png");
+    public static final ResourceLocation PROG_WIDGET_CONDITION_ITEM = new ResourceLocation(
+        PROG_WIDGET_LOCATION + "conditionItem.png");
+    public static final ResourceLocation PROG_WIDGET_CONDITION_LIGHT = new ResourceLocation(
+        PROG_WIDGET_LOCATION + "conditionLightPiece.png");
+    public static final ResourceLocation PROG_WIDGET_CONDITION_DRONE_ENTITY = new ResourceLocation(
+        PROG_WIDGET_LOCATION + "conditionDroneEntityPiece.png");
+    public static final ResourceLocation PROG_WIDGET_CONDITION_DRONE_LIQUID_INVENTORY = new ResourceLocation(
+        PROG_WIDGET_LOCATION + "conditionDroneLiquidPiece.png");
+    public static final ResourceLocation PROG_WIDGET_CONDITION_DRONE_ITEM_INVENTORY = new ResourceLocation(
+        PROG_WIDGET_LOCATION + "conditionDroneInventoryPiece.png");
+    public static final ResourceLocation PROG_WIDGET_CONDITION_DRONE_RF = new ResourceLocation(
+        PROG_WIDGET_LOCATION + "conditionDroneRFPiece.png");
+    public static final ResourceLocation PROG_WIDGET_CONDITION_DRONE_PRESSURE = new ResourceLocation(
+        PROG_WIDGET_LOCATION + "conditionDronePressurePiece.png");
 
     public static final String BLOCK_PRESSURE_TUBE = ICON_LOCATION + "BlockPressureTube";
     public static final String BLOCK_PNEUMATIC_DOOR = ICON_LOCATION + "PneumaticDoor";
@@ -223,18 +319,23 @@ public class Textures{
     public static final String GUI_PROBLEMS_TEXTURE = GUI_LOCATION + "GuiProblem.png";
     public static final String GUI_INFO_LOCATION = GUI_LOCATION + "GuiInfo.png";
     public static final String GUI_UPGRADES_LOCATION = GUI_LOCATION + "GuiUpgrade.png";
-    public static final ResourceLocation GUI_PASTEBIN_ICON_LOCATION = new ResourceLocation(GUI_LOCATION + "GuiPastebinIcon.png");
-    public static final ResourceLocation GUI_UNDO_ICON_LOCATION = new ResourceLocation(GUI_LOCATION + "GuiUndoIcon.png");
+    public static final ResourceLocation GUI_PASTEBIN_ICON_LOCATION = new ResourceLocation(
+        GUI_LOCATION + "GuiPastebinIcon.png");
+    public static final ResourceLocation GUI_UNDO_ICON_LOCATION = new ResourceLocation(
+        GUI_LOCATION + "GuiUndoIcon.png");
     public static final ResourceLocation GUI_REDO_ICON_LOCATION = new ResourceLocation(GUI_LOCATION + "GuiRedo.png");
     public static final ResourceLocation GUI_COPY_ICON_LOCATION = new ResourceLocation(GUI_LOCATION + "GuiCopy.png");
     public static final ResourceLocation GUI_PASTE_ICON_LOCATION = new ResourceLocation(GUI_LOCATION + "GuiPaste.png");
-    public static final ResourceLocation GUI_DELETE_ICON_LOCATION = new ResourceLocation(GUI_LOCATION + "GuiDelete.png");
+    public static final ResourceLocation GUI_DELETE_ICON_LOCATION = new ResourceLocation(
+        GUI_LOCATION + "GuiDelete.png");
     public static final String GUI_4UPGRADE_SLOTS = GUI_LOCATION + "GuiPressureChamber.png";
     public static final String GUI_NEI_PRESSURE_CHAMBER_LOCATION = GUI_LOCATION + "GuiNEIPressureChamber.png";
     public static final String GUI_CHARGING_STATION_LOCATION = GUI_LOCATION + "GuiChargingStation.png";
     public static final String GUI_PNEUMATIC_ARMOR_LOCATION = GUI_LOCATION + "GuiPneumaticArmor.png";
-    public static final String GUI_PRESSURE_CHAMBER_INTERFACE_LOCATION = GUI_LOCATION + "GuiPressureChamberInterface.png";
-    public static final String GUI_PRESSURE_CHAMBER_INTERFACE_CREATIVE_FILTER_LOCATION = GUI_LOCATION + "GuiPressureChamberInterfaceCreativeFilter.png";
+    public static final String GUI_PRESSURE_CHAMBER_INTERFACE_LOCATION = GUI_LOCATION
+        + "GuiPressureChamberInterface.png";
+    public static final String GUI_PRESSURE_CHAMBER_INTERFACE_CREATIVE_FILTER_LOCATION = GUI_LOCATION
+        + "GuiPressureChamberInterfaceCreativeFilter.png";
     public static final String GUI_VACUUM_PUMP_LOCATION = GUI_LOCATION + "GuiVacuumPump.png";
     public static final String GUI_ITEM_SEARCHER_LOCATION = GUI_LOCATION + "GuiItemSearcher.png";
     public static final String GUI_ASSEMBLY_CONTROLLER = GUI_LOCATION + "GuiAssemblyController.png";
@@ -259,7 +360,8 @@ public class Textures{
     public static final String GUI_PROGRAMMABLE_CONTROLLER = GUI_LOCATION + "GuiProgrammableController.png";
     public static final String GUI_GAS_LIFT = GUI_LOCATION + "GuiGasLift.png";
     public static final String GUI_REFINERY = GUI_LOCATION + "GuiRefinery.png";
-    public static final String GUI_THERMOPNEUMATIC_PROCESSING_PLANT = GUI_LOCATION + "GuiThermopneumaticProcessingPlant.png";
+    public static final String GUI_THERMOPNEUMATIC_PROCESSING_PLANT = GUI_LOCATION
+        + "GuiThermopneumaticProcessingPlant.png";
     public static final String GUI_LOGISTICS_REQUESTER = GUI_LOCATION + "GuiLogisticsRequester.png";
     public static final String GUI_AMADRON = GUI_LOCATION + "GuiAmadron.png";
     public static final String GUI_NEI_MISC_RECIPES = GUI_LOCATION + "GuiNEIMiscRecipes.png";
@@ -269,11 +371,14 @@ public class Textures{
     public static final ResourceLocation GUI_WIDGET_OPTIONS = new ResourceLocation(GUI_WIDGET_OPTIONS_STRING);
     public static final ResourceLocation GUI_WIDGET_AREA = new ResourceLocation(GUI_LOCATION + "GuiWidgetArea.png");
     public static final ResourceLocation GUI_PASTEBIN = new ResourceLocation(GUI_LOCATION + "GuiPastebin.png");
-    public static final ResourceLocation GUI_INVENTORY_SEARCHER = new ResourceLocation(GUI_LOCATION + "GuiInventorySearcher.png");
+    public static final ResourceLocation GUI_INVENTORY_SEARCHER = new ResourceLocation(
+        GUI_LOCATION + "GuiInventorySearcher.png");
     public static final ResourceLocation GUI_TUBE_MODULE = new ResourceLocation(GUI_LOCATION + "GuiTubeModule.png");
     public static final ResourceLocation GUI_TEXT_WIDGET = new ResourceLocation(GUI_LOCATION + "GuiTextWidget.png");
-    public static final ResourceLocation GUI_MODULE_SIMPLE = new ResourceLocation(GUI_LOCATION + "GuiTubeModuleSimple.png");
-    public static final ResourceLocation WIDGET_TEMPERATURE = new ResourceLocation(WIDGET_LOCATION + "WidgetTemperature.png");
+    public static final ResourceLocation GUI_MODULE_SIMPLE = new ResourceLocation(
+        GUI_LOCATION + "GuiTubeModuleSimple.png");
+    public static final ResourceLocation WIDGET_TEMPERATURE = new ResourceLocation(
+        WIDGET_LOCATION + "WidgetTemperature.png");
     public static final ResourceLocation WIDGET_TANK = new ResourceLocation(WIDGET_LOCATION + "WidgetTank.png");
     public static final ResourceLocation WIDGET_AMADRON_OFFER = new ResourceLocation(WIDGET_AMADRON_OFFER_STRING);
 
@@ -283,12 +388,17 @@ public class Textures{
     public static final String RENDER_BLUR = RENDER_LOCATION + "blur.png";
 
     public static final ResourceLocation RENDER_LASER = new ResourceLocation(RENDER_LOCATION + "laser/laser.png");
-    public static final ResourceLocation RENDER_LASER_ANIMATION = new ResourceLocation(RENDER_LOCATION + "laser/laserAnimation.png");
-    public static final ResourceLocation RENDER_LASER_OVERLAY = new ResourceLocation(RENDER_LOCATION + "laser/laserOverlay.png");
-    public static final ResourceLocation RENDER_LASER_START = new ResourceLocation(RENDER_LOCATION + "laser/laserStart.png");
-    public static final ResourceLocation RENDER_LASER_START_OVERLAY = new ResourceLocation(RENDER_LOCATION + "laser/laserStartOverlay.png");
+    public static final ResourceLocation RENDER_LASER_ANIMATION = new ResourceLocation(
+        RENDER_LOCATION + "laser/laserAnimation.png");
+    public static final ResourceLocation RENDER_LASER_OVERLAY = new ResourceLocation(
+        RENDER_LOCATION + "laser/laserOverlay.png");
+    public static final ResourceLocation RENDER_LASER_START = new ResourceLocation(
+        RENDER_LOCATION + "laser/laserStart.png");
+    public static final ResourceLocation RENDER_LASER_START_OVERLAY = new ResourceLocation(
+        RENDER_LOCATION + "laser/laserStartOverlay.png");
 
     public static final ResourceLocation GLOW_RESOURCE = new ResourceLocation(Textures.RENDER_BLUR);
-    public static final ResourceLocation ITEM_SEARCH_OVERLAY = new ResourceLocation(ARMOR_LOCATION + "ItemSearchOverlay.png");
+    public static final ResourceLocation ITEM_SEARCH_OVERLAY = new ResourceLocation(
+        ARMOR_LOCATION + "ItemSearchOverlay.png");
 
 }

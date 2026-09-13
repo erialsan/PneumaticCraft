@@ -1,18 +1,14 @@
 /*
  * The MIT License (MIT)
- *
  * Copyright (c) 2013 AlgorithmX2
- *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
  * the Software without restriction, including without limitation the rights to
  * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
  * the Software, and to permit persons to whom the Software is furnished to do so,
  * subject to the following conditions:
- *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
  * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
@@ -23,10 +19,8 @@
 
 package appeng.api.storage.data;
 
-
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-
 
 /**
  * An alternate version of ItemStack for AE to keep tabs on things easier, and to support larger storage. stackSizes of
@@ -38,71 +32,70 @@ import net.minecraft.item.ItemStack;
  *
  * Construct with Util.createItemStack( ItemStack )
  */
-public interface IAEItemStack extends IAEStack<IAEItemStack>
-{
+public interface IAEItemStack extends IAEStack<IAEItemStack> {
 
-	/**
-	 * creates a standard MC ItemStack for the item.
-	 *
-	 * @return new ItemStack
-	 */
-	ItemStack getItemStack();
+    /**
+     * creates a standard MC ItemStack for the item.
+     *
+     * @return new ItemStack
+     */
+    ItemStack getItemStack();
 
-	/**
-	 * is there NBT Data for this item?
-	 *
-	 * @return if there is
-	 */
-	boolean hasTagCompound();
+    /**
+     * is there NBT Data for this item?
+     *
+     * @return if there is
+     */
+    boolean hasTagCompound();
 
-	/**
-	 * Combines two IAEItemStacks via addition.
-	 *
-	 * @param option to add to the current one.
-	 */
-	@Override
-	void add( IAEItemStack option );
+    /**
+     * Combines two IAEItemStacks via addition.
+     *
+     * @param option to add to the current one.
+     */
+    @Override
+    void add(IAEItemStack option);
 
-	/**
-	 * create a AE Item clone
-	 *
-	 * @return the copy
-	 */
-	@Override
-	IAEItemStack copy();
+    /**
+     * create a AE Item clone
+     *
+     * @return the copy
+     */
+    @Override
+    IAEItemStack copy();
 
-	/**
-	 * quick way to get access to the MC Item Definition.
-	 *
-	 * @return item definition
-	 */
-	Item getItem();
+    /**
+     * quick way to get access to the MC Item Definition.
+     *
+     * @return item definition
+     */
+    Item getItem();
 
-	/**
-	 * @return the items damage value
-	 */
-	int getItemDamage();
+    /**
+     * @return the items damage value
+     */
+    int getItemDamage();
 
-	/**
-	 * Compare the Ore Dictionary ID for this to another item.
-	 */
-	boolean sameOre( IAEItemStack is );
+    /**
+     * Compare the Ore Dictionary ID for this to another item.
+     */
+    boolean sameOre(IAEItemStack is);
 
-	/**
-	 * compare the item/damage/nbt of the stack.
-	 *
-	 * @param otherStack to be compared item
-	 *
-	 * @return true if it is the same type (same item, damage, nbt)
-	 */
-	boolean isSameType( IAEItemStack otherStack );
+    /**
+     * compare the item/damage/nbt of the stack.
+     *
+     * @param otherStack to be compared item
+     *
+     * @return true if it is the same type (same item, damage, nbt)
+     */
+    boolean isSameType(IAEItemStack otherStack);
 
-	/**
-	 * compare the item/damage/nbt of the stack.
-	 *
-	 * @param stored to be compared item
-	 *
-	 * @return true if it is the same type (same item, damage, nbt)
-	 */
-	boolean isSameType( ItemStack stored );
+    /**
+     * compare the item/damage/nbt of the stack.
+     *
+     * @param stored to be compared item
+     *
+     * @return true if it is the same type (same item, damage, nbt)
+     */
+    boolean isSameType(ItemStack stored);
 }

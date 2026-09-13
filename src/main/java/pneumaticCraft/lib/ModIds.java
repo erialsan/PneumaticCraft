@@ -1,6 +1,7 @@
 package pneumaticCraft.lib;
 
-public class ModIds{
+public class ModIds {
+
     public static final String BUILDCRAFT = "BuildCraft|Core";
     public static final String COMPUTERCRAFT = "ComputerCraft";
     public static final String INDUSTRIALCRAFT = "IC2";

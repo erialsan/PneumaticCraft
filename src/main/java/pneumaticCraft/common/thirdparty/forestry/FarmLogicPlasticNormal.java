@@ -5,37 +5,39 @@ import java.util.ArrayList;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
-import pneumaticCraft.common.item.Itemss;
+
 import forestry.api.farming.Farmables;
 import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmLogic;
 import forestry.api.farming.IFarmable;
+import pneumaticCraft.common.item.Itemss;
 
-public abstract class FarmLogicPlasticNormal extends FarmLogicWrapper{
+public abstract class FarmLogicPlasticNormal extends FarmLogicWrapper {
 
     private IIcon icon;
 
-    public FarmLogicPlasticNormal(IFarmHousing housing) throws Throwable{
+    public FarmLogicPlasticNormal(IFarmHousing housing) throws Throwable {
         super(housing);
     }
 
     protected abstract Block getBlock();
 
     @Override
-    protected IFarmLogic getFarmLogic(IFarmHousing housing) throws Throwable{
-        ArrayList<IFarmable> origList = (ArrayList<IFarmable>)Farmables.farmables.get("farmVegetables");
+    protected IFarmLogic getFarmLogic(IFarmHousing housing) throws Throwable {
+        ArrayList<IFarmable> origList = (ArrayList<IFarmable>) Farmables.farmables.get("farmVegetables");
         ArrayList<IFarmable> backup = new ArrayList<IFarmable>(origList);
         origList.clear();
         origList.add(new FarmablePlastic(getBlock()));
-        IFarmLogic logic = getLogicClass("FarmLogicVegetable").getConstructor(IFarmHousing.class).newInstance(housing);
+        IFarmLogic logic = getLogicClass("FarmLogicVegetable").getConstructor(IFarmHousing.class)
+            .newInstance(housing);
         origList.clear();
         origList.addAll(backup);
         return logic;
     }
 
     @Override
-    public IIcon getIcon(){
-        if(icon == null) {
+    public IIcon getIcon() {
+        if (icon == null) {
             ItemStack stack = new ItemStack(Itemss.plasticPlant, 1, FarmablePlastic.getItemMetaForBlock(getBlock()));
             icon = stack.getIconIndex();
         }
@@ -43,7 +45,7 @@ public abstract class FarmLogicPlasticNormal extends FarmLogicWrapper{
     }
 
     @Override
-    public String getName(){
+    public String getName() {
         return new ItemStack(Itemss.plasticPlant, 1, FarmablePlastic.getItemMetaForBlock(getBlock())).getDisplayName();
     }
 }

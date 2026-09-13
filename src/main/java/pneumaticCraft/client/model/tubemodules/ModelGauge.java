@@ -9,26 +9,27 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import org.lwjgl.opengl.GL11;
 
+import cpw.mods.fml.client.FMLClientHandler;
 import pneumaticCraft.api.tileentity.IPneumaticMachine;
 import pneumaticCraft.client.gui.GuiUtils;
 import pneumaticCraft.client.model.IBaseModel;
 import pneumaticCraft.common.block.tubes.ModulePressureGauge;
 import pneumaticCraft.common.tileentity.TileEntityPneumaticBase;
 import pneumaticCraft.lib.Textures;
-import cpw.mods.fml.client.FMLClientHandler;
 
-public class ModelGauge extends ModelBase implements IBaseModel{
-    //fields
+public class ModelGauge extends ModelBase implements IBaseModel {
+
+    // fields
     ModelRenderer Shape1;
     ModelRenderer Shape2;
     ModulePressureGauge gaugeModule;
 
-    public ModelGauge(ModulePressureGauge gaugeModule){
+    public ModelGauge(ModulePressureGauge gaugeModule) {
         this();
         this.gaugeModule = gaugeModule;
     }
 
-    public ModelGauge(){
+    public ModelGauge() {
         textureWidth = 64;
         textureHeight = 32;
 
@@ -47,44 +48,45 @@ public class ModelGauge extends ModelBase implements IBaseModel{
     }
 
     @Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5){
+    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         super.render(entity, f, f1, f2, f3, f4, f5);
         setRotationAngles(f, f1, f2, f3, f4, f5, entity);
         Shape1.render(f5);
         Shape2.render(f5);
     }
 
-    private void setRotation(ModelRenderer model, float x, float y, float z){
+    private void setRotation(ModelRenderer model, float x, float y, float z) {
         model.rotateAngleX = x;
         model.rotateAngleY = y;
         model.rotateAngleZ = z;
     }
 
     @Override
-    public void renderStatic(float size, TileEntity tile){
+    public void renderStatic(float size, TileEntity tile) {
 
     }
 
     @Override
-    public ResourceLocation getModelTexture(TileEntity tile){
+    public ResourceLocation getModelTexture(TileEntity tile) {
         return Textures.MODEL_GAUGE;
     }
 
     @Override
-    public boolean rotateModelBasedOnBlockMeta(){
+    public boolean rotateModelBasedOnBlockMeta() {
         return false;
     }
 
     @Override
-    public void renderDynamic(float size, TileEntity te, float partialTicks){
+    public void renderDynamic(float size, TileEntity te, float partialTicks) {
         Shape1.render(size);
         Shape2.render(size);
 
         float pressure = 0;
         float dangerPressure = 5;
         float critPressure = 7;
-        if(gaugeModule != null && gaugeModule.getTube() != null) {
-            TileEntityPneumaticBase base = (TileEntityPneumaticBase)((IPneumaticMachine)gaugeModule.getTube()).getAirHandler();
+        if (gaugeModule != null && gaugeModule.getTube() != null) {
+            TileEntityPneumaticBase base = (TileEntityPneumaticBase) ((IPneumaticMachine) gaugeModule.getTube())
+                .getAirHandler();
             pressure = base.getPressure(ForgeDirection.UNKNOWN);
             dangerPressure = base.DANGER_PRESSURE;
             critPressure = base.CRITICAL_PRESSURE;
@@ -94,7 +96,17 @@ public class ModelGauge extends ModelBase implements IBaseModel{
         GL11.glScaled(scale, scale, scale);
         GL11.glRotated(180, 0, 1, 0);
         GL11.glDisable(GL11.GL_LIGHTING);
-        GuiUtils.drawPressureGauge(FMLClientHandler.instance().getClient().fontRenderer, -1, critPressure, dangerPressure, -1, pressure, 0, 0, 0);
+        GuiUtils.drawPressureGauge(
+            FMLClientHandler.instance()
+                .getClient().fontRenderer,
+            -1,
+            critPressure,
+            dangerPressure,
+            -1,
+            pressure,
+            0,
+            0,
+            0);
         GL11.glEnable(GL11.GL_LIGHTING);
     }
 }

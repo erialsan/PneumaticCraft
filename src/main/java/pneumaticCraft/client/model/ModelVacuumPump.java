@@ -12,7 +12,8 @@ import org.lwjgl.opengl.GL11;
 import pneumaticCraft.common.tileentity.TileEntityVacuumPump;
 import pneumaticCraft.lib.Textures;
 
-public class ModelVacuumPump extends ModelBase implements IBaseModel{
+public class ModelVacuumPump extends ModelBase implements IBaseModel {
+
     // fields
     ModelRenderer Left1;
     ModelRenderer Left2;
@@ -32,7 +33,7 @@ public class ModelVacuumPump extends ModelBase implements IBaseModel{
     ModelRenderer Top;
     ModelRenderer Blade;
 
-    public ModelVacuumPump(){
+    public ModelVacuumPump() {
         textureWidth = 64;
         textureHeight = 64;
 
@@ -141,7 +142,7 @@ public class ModelVacuumPump extends ModelBase implements IBaseModel{
     }
 
     @Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5){
+    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         super.render(entity, f, f1, f2, f3, f4, f5);
         setRotationAngles(f, f1, f2, f3, f4, f5, entity);
         Left1.render(f5);
@@ -163,7 +164,7 @@ public class ModelVacuumPump extends ModelBase implements IBaseModel{
         Blade.render(f5);
     }
 
-    public void renderModel(float size, float rotation){
+    public void renderModel(float size, float rotation) {
         Left1.render(size);
         Left2.render(size);
         Left3.render(size);
@@ -185,7 +186,7 @@ public class ModelVacuumPump extends ModelBase implements IBaseModel{
         // rotation = 0;
         GL11.glPushMatrix();
         GL11.glTranslated(0, 0, 3D / 16D);
-        for(int i = 0; i < bladeCount; i++) {
+        for (int i = 0; i < bladeCount; i++) {
             GL11.glPushMatrix();
             GL11.glRotated(-rotation * 2 + (i + 0.5D) / bladeCount * 360, 0, 1, 0);
             GL11.glTranslated(0, 0, 1D / 16D);
@@ -198,9 +199,9 @@ public class ModelVacuumPump extends ModelBase implements IBaseModel{
 
         GL11.glPushMatrix();
         GL11.glTranslated(0, 0, 3D / 16D);
-        for(int i = 0; i < bladeCount; i++) {
+        for (int i = 0; i < bladeCount; i++) {
             GL11.glPushMatrix();
-            GL11.glRotated(rotation * 2 + (double)i / (double)bladeCount * 360, 0, 1, 0);
+            GL11.glRotated(rotation * 2 + (double) i / (double) bladeCount * 360, 0, 1, 0);
             GL11.glTranslated(0, 0, 1D / 16D);
             Blade.render(size);
             GL11.glPopMatrix();
@@ -211,19 +212,19 @@ public class ModelVacuumPump extends ModelBase implements IBaseModel{
         GL11.glColor4d(0.5D, 0.5D, 0.5D, 1.0D);
         int casePoints = 20;
         GL11.glPushMatrix();
-        for(int i = 0; i < casePoints; i++) {
+        for (int i = 0; i < casePoints; i++) {
             GL11.glPushMatrix();
             GL11.glTranslated(0, 0, 3F / 16F);
-            GL11.glRotated((double)i / (double)casePoints * 275D - 130, 0, 1, 0);
+            GL11.glRotated((double) i / (double) casePoints * 275D - 130, 0, 1, 0);
             GL11.glTranslated(0, 0, 2.5F / 16F);
             TurbineCase.render(size);
             GL11.glPopMatrix();
         }
         GL11.glRotated(180, 0, 1, 0);
-        for(int i = 0; i < casePoints; i++) {
+        for (int i = 0; i < casePoints; i++) {
             GL11.glPushMatrix();
             GL11.glTranslated(0, 0, 3F / 16F);
-            GL11.glRotated((double)i / (double)casePoints * 275D - 130, 0, 1, 0);
+            GL11.glRotated((double) i / (double) casePoints * 275D - 130, 0, 1, 0);
             GL11.glTranslated(0, 0, 2.5F / 16F);
             TurbineCase.render(size);
             GL11.glPopMatrix();
@@ -240,7 +241,7 @@ public class ModelVacuumPump extends ModelBase implements IBaseModel{
         GL11.glEnable(GL11.GL_TEXTURE_2D);
     }
 
-    private void drawPlusAndMinus(){
+    private void drawPlusAndMinus() {
         double scale = 0.05D;
         GL11.glPushMatrix();
         GL11.glTranslated(0.26D, 13.95D / 16D, 0);
@@ -263,32 +264,32 @@ public class ModelVacuumPump extends ModelBase implements IBaseModel{
         GL11.glPopMatrix();
     }
 
-    private void setRotation(ModelRenderer model, float x, float y, float z){
+    private void setRotation(ModelRenderer model, float x, float y, float z) {
         model.rotateAngleX = x;
         model.rotateAngleY = y;
         model.rotateAngleZ = z;
     }
 
     @Override
-    public void renderStatic(float size, TileEntity te){
+    public void renderStatic(float size, TileEntity te) {
 
     }
 
     @Override
-    public ResourceLocation getModelTexture(TileEntity tile){
+    public ResourceLocation getModelTexture(TileEntity tile) {
         return Textures.MODEL_VACUUM_PUMP;
     }
 
     @Override
-    public boolean rotateModelBasedOnBlockMeta(){
+    public boolean rotateModelBasedOnBlockMeta() {
         return true;
     }
 
     @Override
-    public void renderDynamic(float size, TileEntity te, float partialTicks){
-        if(te instanceof TileEntityVacuumPump) {
+    public void renderDynamic(float size, TileEntity te, float partialTicks) {
+        if (te instanceof TileEntityVacuumPump) {
             GL11.glRotated(-90, 0, 1, 0);
-            TileEntityVacuumPump tile = (TileEntityVacuumPump)te;
+            TileEntityVacuumPump tile = (TileEntityVacuumPump) te;
             renderModel(size, tile.oldRotation + (tile.rotation - tile.oldRotation) * partialTicks);
         } else {
             renderModel(size, 0);

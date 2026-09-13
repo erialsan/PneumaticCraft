@@ -3,10 +3,11 @@ package pneumaticCraft.client.model;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 
-public interface IBaseModel{
+public interface IBaseModel {
 
     /**
      * Main render method
+     * 
      * @param size
      * @param tile TileEntity that is being rendered. Warning: This can be null (in itemrendering for example)
      */

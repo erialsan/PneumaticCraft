@@ -1,18 +1,14 @@
 /*
  * The MIT License (MIT)
- *
  * Copyright (c) 2013 AlgorithmX2
- *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
  * the Software without restriction, including without limitation the rights to
  * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
  * the Software, and to permit persons to whom the Software is furnished to do so,
  * subject to the following conditions:
- *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
  * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
@@ -23,121 +19,119 @@
 
 package appeng.api.definitions;
 
-
 import appeng.api.util.AEItemDefinition;
-
 
 /**
  * @deprecated use {@link IMaterials}
  */
 @Deprecated
-public class Materials
-{
-	public AEItemDefinition materialCell2SpatialPart;
+public class Materials {
 
-	public AEItemDefinition materialCell16SpatialPart;
+    public AEItemDefinition materialCell2SpatialPart;
 
-	public AEItemDefinition materialCell128SpatialPart;
+    public AEItemDefinition materialCell16SpatialPart;
 
-	public AEItemDefinition materialSilicon;
+    public AEItemDefinition materialCell128SpatialPart;
 
-	public AEItemDefinition materialSkyDust;
+    public AEItemDefinition materialSilicon;
 
-	public AEItemDefinition materialCalcProcessorPress;
+    public AEItemDefinition materialSkyDust;
 
-	public AEItemDefinition materialEngProcessorPress;
+    public AEItemDefinition materialCalcProcessorPress;
 
-	public AEItemDefinition materialLogicProcessorPress;
+    public AEItemDefinition materialEngProcessorPress;
 
-	public AEItemDefinition materialCalcProcessorPrint;
+    public AEItemDefinition materialLogicProcessorPress;
 
-	public AEItemDefinition materialEngProcessorPrint;
+    public AEItemDefinition materialCalcProcessorPrint;
 
-	public AEItemDefinition materialLogicProcessorPrint;
+    public AEItemDefinition materialEngProcessorPrint;
 
-	public AEItemDefinition materialSiliconPress;
+    public AEItemDefinition materialLogicProcessorPrint;
 
-	public AEItemDefinition materialSiliconPrint;
+    public AEItemDefinition materialSiliconPress;
 
-	public AEItemDefinition materialNamePress;
+    public AEItemDefinition materialSiliconPrint;
 
-	public AEItemDefinition materialLogicProcessor;
+    public AEItemDefinition materialNamePress;
 
-	public AEItemDefinition materialCalcProcessor;
+    public AEItemDefinition materialLogicProcessor;
 
-	public AEItemDefinition materialEngProcessor;
+    public AEItemDefinition materialCalcProcessor;
 
-	public AEItemDefinition materialBasicCard;
+    public AEItemDefinition materialEngProcessor;
 
-	public AEItemDefinition materialAdvCard;
+    public AEItemDefinition materialBasicCard;
 
-	public AEItemDefinition materialPurifiedCertusQuartzCrystal;
+    public AEItemDefinition materialAdvCard;
 
-	public AEItemDefinition materialPurifiedNetherQuartzCrystal;
+    public AEItemDefinition materialPurifiedCertusQuartzCrystal;
 
-	public AEItemDefinition materialPurifiedFluixCrystal;
+    public AEItemDefinition materialPurifiedNetherQuartzCrystal;
 
-	public AEItemDefinition materialCell1kPart;
+    public AEItemDefinition materialPurifiedFluixCrystal;
 
-	public AEItemDefinition materialCell4kPart;
+    public AEItemDefinition materialCell1kPart;
 
-	public AEItemDefinition materialCell16kPart;
+    public AEItemDefinition materialCell4kPart;
 
-	public AEItemDefinition materialCell64kPart;
+    public AEItemDefinition materialCell16kPart;
 
-	public AEItemDefinition materialEmptyStorageCell;
+    public AEItemDefinition materialCell64kPart;
 
-	public AEItemDefinition materialCardRedstone;
+    public AEItemDefinition materialEmptyStorageCell;
 
-	public AEItemDefinition materialCardSpeed;
+    public AEItemDefinition materialCardRedstone;
 
-	public AEItemDefinition materialCardCapacity;
+    public AEItemDefinition materialCardSpeed;
 
-	public AEItemDefinition materialCardFuzzy;
+    public AEItemDefinition materialCardCapacity;
 
-	public AEItemDefinition materialCardInverter;
+    public AEItemDefinition materialCardFuzzy;
 
-	public AEItemDefinition materialCardCrafting;
+    public AEItemDefinition materialCardInverter;
 
-	public AEItemDefinition materialEnderDust;
+    public AEItemDefinition materialCardCrafting;
 
-	public AEItemDefinition materialFlour;
+    public AEItemDefinition materialEnderDust;
 
-	public AEItemDefinition materialGoldDust;
+    public AEItemDefinition materialFlour;
 
-	public AEItemDefinition materialIronDust;
+    public AEItemDefinition materialGoldDust;
 
-	public AEItemDefinition materialFluixDust;
+    public AEItemDefinition materialIronDust;
 
-	public AEItemDefinition materialCertusQuartzDust;
+    public AEItemDefinition materialFluixDust;
 
-	public AEItemDefinition materialNetherQuartzDust;
+    public AEItemDefinition materialCertusQuartzDust;
 
-	public AEItemDefinition materialMatterBall;
+    public AEItemDefinition materialNetherQuartzDust;
 
-	public AEItemDefinition materialIronNugget;
+    public AEItemDefinition materialMatterBall;
 
-	public AEItemDefinition materialCertusQuartzCrystal;
+    public AEItemDefinition materialIronNugget;
 
-	public AEItemDefinition materialCertusQuartzCrystalCharged;
+    public AEItemDefinition materialCertusQuartzCrystal;
 
-	public AEItemDefinition materialFluixCrystal;
+    public AEItemDefinition materialCertusQuartzCrystalCharged;
 
-	public AEItemDefinition materialFluixPearl;
+    public AEItemDefinition materialFluixCrystal;
 
-	public AEItemDefinition materialWoodenGear;
+    public AEItemDefinition materialFluixPearl;
 
-	public AEItemDefinition materialWireless;
+    public AEItemDefinition materialWoodenGear;
 
-	public AEItemDefinition materialWirelessBooster;
+    public AEItemDefinition materialWireless;
 
-	public AEItemDefinition materialAnnihilationCore;
+    public AEItemDefinition materialWirelessBooster;
 
-	public AEItemDefinition materialFormationCore;
+    public AEItemDefinition materialAnnihilationCore;
 
-	public AEItemDefinition materialSingularity;
+    public AEItemDefinition materialFormationCore;
 
-	public AEItemDefinition materialQESingularity;
+    public AEItemDefinition materialSingularity;
 
-	public AEItemDefinition materialBlankPattern;
+    public AEItemDefinition materialQESingularity;
+
+    public AEItemDefinition materialBlankPattern;
 }

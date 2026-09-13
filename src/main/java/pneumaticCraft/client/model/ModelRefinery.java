@@ -6,20 +6,22 @@ import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidTankInfo;
+
 import pneumaticCraft.client.util.RenderUtils;
 import pneumaticCraft.client.util.RenderUtils.RenderInfo;
 import pneumaticCraft.common.tileentity.TileEntityRefinery;
 import pneumaticCraft.lib.Textures;
 
-public class ModelRefinery extends ModelBase implements IBaseModel{
-    //fields
+public class ModelRefinery extends ModelBase implements IBaseModel {
+
+    // fields
     ModelRenderer outputTank;
     ModelRenderer inputTank;
     ModelRenderer machineLeft;
     ModelRenderer machineRight;
     ModelRenderer machineMiddle;
 
-    public ModelRefinery(){
+    public ModelRefinery() {
         textureWidth = 64;
         textureHeight = 128;
 
@@ -56,7 +58,7 @@ public class ModelRefinery extends ModelBase implements IBaseModel{
     }
 
     @Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5){
+    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         super.render(entity, f, f1, f2, f3, f4, f5);
         setRotationAngles(f, f1, f2, f3, f4, f5, entity);
         outputTank.render(f5);
@@ -66,50 +68,62 @@ public class ModelRefinery extends ModelBase implements IBaseModel{
         machineMiddle.render(f5);
     }
 
-    private void setRotation(ModelRenderer model, float x, float y, float z){
+    private void setRotation(ModelRenderer model, float x, float y, float z) {
         model.rotateAngleX = x;
         model.rotateAngleY = y;
         model.rotateAngleZ = z;
     }
 
     @Override
-    public void renderStatic(float size, TileEntity te){
+    public void renderStatic(float size, TileEntity te) {
         outputTank.render(size);
         inputTank.render(size);
         machineLeft.render(size);
         machineRight.render(size);
         machineMiddle.render(size);
 
-        if(te != null) {
-            TileEntityRefinery refinery = (TileEntityRefinery)te;
+        if (te != null) {
+            TileEntityRefinery refinery = (TileEntityRefinery) te;
             FluidTankInfo info = new FluidTankInfo(refinery.getOilTank());
-            if(info.fluid != null && info.fluid.amount > 10) {
-                float percentageFull = (float)info.fluid.amount / info.capacity;
-                RenderInfo renderInfo = new RenderInfo(-4 / 16F + 0.01F, 22 / 16F - percentageFull * 13.999F / 16F, 3 / 16F + 0.01F, 4 / 16F - 0.01F, 22 / 16F, 8 / 16F - 0.01F);
+            if (info.fluid != null && info.fluid.amount > 10) {
+                float percentageFull = (float) info.fluid.amount / info.capacity;
+                RenderInfo renderInfo = new RenderInfo(
+                    -4 / 16F + 0.01F,
+                    22 / 16F - percentageFull * 13.999F / 16F,
+                    3 / 16F + 0.01F,
+                    4 / 16F - 0.01F,
+                    22 / 16F,
+                    8 / 16F - 0.01F);
                 RenderUtils.INSTANCE.renderLiquid(info, renderInfo, refinery.getWorldObj());
             }
 
             info = refinery.getTankInfo(null)[1];
-            if(info.fluid != null && info.fluid.amount > 10) {
-                float percentageFull = (float)info.fluid.amount / info.capacity;
-                RenderInfo renderInfo = new RenderInfo(-4 / 16F + 0.01F, 24 / 16F - percentageFull * 15.999F / 16F, -8 / 16F + 0.01F, 4 / 16F - 0.01F, 24 / 16F, -3 / 16F - 0.01F);
+            if (info.fluid != null && info.fluid.amount > 10) {
+                float percentageFull = (float) info.fluid.amount / info.capacity;
+                RenderInfo renderInfo = new RenderInfo(
+                    -4 / 16F + 0.01F,
+                    24 / 16F - percentageFull * 15.999F / 16F,
+                    -8 / 16F + 0.01F,
+                    4 / 16F - 0.01F,
+                    24 / 16F,
+                    -3 / 16F - 0.01F);
                 RenderUtils.INSTANCE.renderLiquid(info, renderInfo, refinery.getWorldObj());
             }
         }
     }
 
     @Override
-    public void renderDynamic(float size, TileEntity te, float partialTicks){
+    public void renderDynamic(float size, TileEntity te, float partialTicks) {
 
     }
 
     @Override
-    public ResourceLocation getModelTexture(TileEntity tile){
+    public ResourceLocation getModelTexture(TileEntity tile) {
         return Textures.MODEL_REFINERY;
     }
 
     @Override
-    public boolean rotateModelBasedOnBlockMeta(){
+    public boolean rotateModelBasedOnBlockMeta() {
         return true;
     }
 

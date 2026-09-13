@@ -9,55 +9,57 @@ import pneumaticCraft.common.ai.IDroneBase;
 import pneumaticCraft.common.item.ItemPlasticPlants;
 import pneumaticCraft.lib.Textures;
 
-public class ProgWidgetWait extends ProgWidget{
+public class ProgWidgetWait extends ProgWidget {
 
     @Override
-    public boolean hasStepInput(){
+    public boolean hasStepInput() {
         return true;
     }
 
     @Override
-    public Class<? extends IProgWidget> returnType(){
+    public Class<? extends IProgWidget> returnType() {
         return null;
     }
 
     @Override
-    public Class<? extends IProgWidget>[] getParameters(){
-        return new Class[]{ProgWidgetString.class};
+    public Class<? extends IProgWidget>[] getParameters() {
+        return new Class[] { ProgWidgetString.class };
     }
 
     @Override
-    protected boolean hasBlacklist(){
+    protected boolean hasBlacklist() {
         return false;
     }
 
     @Override
-    public String getWidgetString(){
+    public String getWidgetString() {
         return "wait";
     }
 
     @Override
-    protected ResourceLocation getTexture(){
+    protected ResourceLocation getTexture() {
         return Textures.PROG_WIDGET_WAIT;
     }
 
     @Override
-    public EntityAIBase getWidgetAI(IDroneBase drone, IProgWidget widget){
-        return widget instanceof ProgWidgetWait ? widget.getConnectedParameters()[0] != null ? new DroneAIWait((ProgWidgetString)widget.getConnectedParameters()[0]) : null : null;
+    public EntityAIBase getWidgetAI(IDroneBase drone, IProgWidget widget) {
+        return widget instanceof ProgWidgetWait ? widget.getConnectedParameters()[0] != null
+            ? new DroneAIWait((ProgWidgetString) widget.getConnectedParameters()[0])
+            : null : null;
     }
 
-    private static class DroneAIWait extends EntityAIBase{
+    private static class DroneAIWait extends EntityAIBase {
 
         private final int maxTicks;
         private int ticks;
 
-        private DroneAIWait(ProgWidgetString widget){
+        private DroneAIWait(ProgWidgetString widget) {
             String time = widget.string;
             int multiplier = 1;
-            if(time.endsWith("s") || time.endsWith("S")) {
+            if (time.endsWith("s") || time.endsWith("S")) {
                 multiplier = 20;
                 time = time.substring(0, time.length() - 1);
-            } else if(time.endsWith("m") || time.endsWith("M")) {
+            } else if (time.endsWith("m") || time.endsWith("M")) {
                 multiplier = 1200;
                 time = time.substring(0, time.length() - 1);
             }
@@ -65,12 +67,12 @@ public class ProgWidgetWait extends ProgWidget{
         }
 
         @Override
-        public boolean shouldExecute(){
+        public boolean shouldExecute() {
             return ticks < maxTicks;
         }
 
         @Override
-        public boolean continueExecuting(){
+        public boolean continueExecuting() {
             ticks++;
             return shouldExecute();
         }
@@ -78,12 +80,12 @@ public class ProgWidgetWait extends ProgWidget{
     }
 
     @Override
-    public WidgetDifficulty getDifficulty(){
+    public WidgetDifficulty getDifficulty() {
         return WidgetDifficulty.EASY;
     }
 
     @Override
-    public int getCraftingColorIndex(){
+    public int getCraftingColorIndex() {
         return ItemPlasticPlants.FLYING_FLOWER_DAMAGE;
     }
 }

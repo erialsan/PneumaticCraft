@@ -11,32 +11,34 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 
 import org.lwjgl.util.Rectangle;
 
-import pneumaticCraft.api.universalSensor.PlayerEventSensor;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import pneumaticCraft.api.universalSensor.PlayerEventSensor;
 
-public class PlayerAttackSensor extends PlayerEventSensor{
+public class PlayerAttackSensor extends PlayerEventSensor {
 
     @Override
-    public String getSensorPath(){
+    public String getSensorPath() {
         return super.getSensorPath() + "/Player Attack";
     }
 
     @Override
-    public boolean needsTextBox(){
+    public boolean needsTextBox() {
         return false;
     }
 
     @Override
-    public List<String> getDescription(){
+    public List<String> getDescription() {
         List<String> text = new ArrayList<String>();
-        text.add(EnumChatFormatting.BLACK + "Emits a redstone pulse when a player attacks an entity within range of the sensor.");
+        text.add(
+            EnumChatFormatting.BLACK
+                + "Emits a redstone pulse when a player attacks an entity within range of the sensor.");
         return text;
     }
 
     @Override
-    public int emitRedstoneOnEvent(PlayerEvent event, TileEntity sensor, int range){
-        if(event instanceof AttackEntityEvent) {
+    public int emitRedstoneOnEvent(PlayerEvent event, TileEntity sensor, int range) {
+        if (event instanceof AttackEntityEvent) {
             return 15;
         }
         return 0;
@@ -44,10 +46,10 @@ public class PlayerAttackSensor extends PlayerEventSensor{
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void drawAdditionalInfo(FontRenderer fontRenderer){}
+    public void drawAdditionalInfo(FontRenderer fontRenderer) {}
 
     @Override
-    public Rectangle needsSlot(){
+    public Rectangle needsSlot() {
         return null;
     }
 }

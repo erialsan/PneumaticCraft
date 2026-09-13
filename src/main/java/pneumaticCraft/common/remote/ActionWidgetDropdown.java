@@ -8,34 +8,36 @@ import net.minecraft.util.MathHelper;
 
 import org.apache.commons.lang3.text.WordUtils;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import pneumaticCraft.client.gui.GuiRemoteEditor;
 import pneumaticCraft.client.gui.remote.GuiRemoteDropdown;
 import pneumaticCraft.client.gui.widget.WidgetComboBox;
 import pneumaticCraft.common.network.NetworkHandler;
 import pneumaticCraft.common.network.PacketSetGlobalVariable;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
-public class ActionWidgetDropdown extends ActionWidgetVariable<WidgetComboBox>{
+public class ActionWidgetDropdown extends ActionWidgetVariable<WidgetComboBox> {
 
     private int x, y, width, height;
     private String dropDownElements = "";
     private String selectedElement = "";
 
-    public ActionWidgetDropdown(){
+    public ActionWidgetDropdown() {
         super();
     }
 
-    public ActionWidgetDropdown(WidgetComboBox widget){
+    public ActionWidgetDropdown(WidgetComboBox widget) {
         super(widget);
         width = widget.width;
         height = widget.height;
         widget.setText(I18n.format("remote.dropdown.name"));
-        widget.setTooltip(WordUtils.wrap(I18n.format("remote.dropdown.tooltip"), 50).split(System.getProperty("line.separator")));
+        widget.setTooltip(
+            WordUtils.wrap(I18n.format("remote.dropdown.tooltip"), 50)
+                .split(System.getProperty("line.separator")));
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound tag, int guiLeft, int guiTop){
+    public void readFromNBT(NBTTagCompound tag, int guiLeft, int guiTop) {
         super.readFromNBT(tag, guiLeft, guiTop);
         x = tag.getInteger("x") + guiLeft;
         y = tag.getInteger("y") + guiTop;
@@ -46,7 +48,7 @@ public class ActionWidgetDropdown extends ActionWidgetVariable<WidgetComboBox>{
     }
 
     @Override
-    public NBTTagCompound toNBT(int guiLeft, int guiTop){
+    public NBTTagCompound toNBT(int guiLeft, int guiTop) {
         NBTTagCompound tag = super.toNBT(guiLeft, guiTop);
         tag.setInteger("x", x - guiLeft);
         tag.setInteger("y", y - guiTop);
@@ -58,16 +60,16 @@ public class ActionWidgetDropdown extends ActionWidgetVariable<WidgetComboBox>{
     }
 
     @Override
-    public String getId(){
+    public String getId() {
         return "dropdown";
     }
 
     @Override
-    public void onKeyTyped(){
+    public void onKeyTyped() {
         String[] elements = getDropdownElements();
         selectedElement = getWidget().getText();
-        for(int i = 0; i < elements.length; i++) {
-            if(elements[i].equals(selectedElement)) {
+        for (int i = 0; i < elements.length; i++) {
+            if (elements[i].equals(selectedElement)) {
                 NetworkHandler.sendToServer(new PacketSetGlobalVariable(getVariableName(), i));
                 break;
             }
@@ -75,20 +77,20 @@ public class ActionWidgetDropdown extends ActionWidgetVariable<WidgetComboBox>{
     }
 
     @Override
-    public void onVariableChange(){
+    public void onVariableChange() {
         updateWidget();
     }
 
     @Override
-    public void setWidgetPos(int x, int y){
+    public void setWidgetPos(int x, int y) {
         this.x = x;
         this.y = y;
         updateWidget();
     }
 
     @Override
-    public WidgetComboBox getWidget(){
-        if(widget == null) {
+    public WidgetComboBox getWidget() {
+        if (widget == null) {
             widget = new WidgetComboBox(Minecraft.getMinecraft().fontRenderer, x, y, width, height);
             widget.setElements(getDropdownElements());
             widget.setFixedOptions();
@@ -97,15 +99,19 @@ public class ActionWidgetDropdown extends ActionWidgetVariable<WidgetComboBox>{
         return widget;
     }
 
-    private String[] getDropdownElements(){
+    private String[] getDropdownElements() {
         return dropDownElements.split(",");
     }
 
-    private void updateWidget(){
+    private void updateWidget() {
         String[] elements = getDropdownElements();
-        selectedElement = elements[MathHelper.clamp_int(GlobalVariableManager.getInstance().getInteger(getVariableName()), 0, elements.length - 1)];
+        selectedElement = elements[MathHelper.clamp_int(
+            GlobalVariableManager.getInstance()
+                .getInteger(getVariableName()),
+            0,
+            elements.length - 1)];
 
-        if(widget != null) {
+        if (widget != null) {
             widget.xPosition = x;
             widget.yPosition = y;
             widget.width = width;
@@ -116,29 +122,29 @@ public class ActionWidgetDropdown extends ActionWidgetVariable<WidgetComboBox>{
     }
 
     @Override
-    public void onActionPerformed(){}
+    public void onActionPerformed() {}
 
-    public void setDropDownElements(String dropDownElements){
+    public void setDropDownElements(String dropDownElements) {
         this.dropDownElements = dropDownElements;
         updateWidget();
     }
 
-    public String getDropDownElements(){
+    public String getDropDownElements() {
         return dropDownElements;
     }
 
-    public void setWidth(int width){
+    public void setWidth(int width) {
         this.width = width;
         updateWidget();
     }
 
-    public int getWidth(){
+    public int getWidth() {
         return width;
     }
 
     @Override
     @SideOnly(Side.CLIENT)
-    public GuiScreen getGui(GuiRemoteEditor guiRemote){
+    public GuiScreen getGui(GuiRemoteEditor guiRemote) {
         return new GuiRemoteDropdown(this, guiRemote);
     }
 }

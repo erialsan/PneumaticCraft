@@ -14,6 +14,9 @@ import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.oredict.OreDictionary;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import pneumaticCraft.api.IHeatExchangerLogic;
 import pneumaticCraft.api.PneumaticRegistry;
 import pneumaticCraft.api.tileentity.IHeatExchanger;
@@ -26,19 +29,20 @@ import pneumaticCraft.common.network.GuiSynced;
 import pneumaticCraft.common.thirdparty.computercraft.LuaMethod;
 import pneumaticCraft.lib.Names;
 import pneumaticCraft.lib.PneumaticValues;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityPlasticMixer extends TileEntityBase implements IFluidHandler, ISidedInventory, IHeatExchanger,
-        IRedstoneControlled{
+public class TileEntityPlasticMixer extends TileEntityBase
+    implements IFluidHandler, ISidedInventory, IHeatExchanger, IRedstoneControlled {
+
     private final FluidTank tank = new FluidTank(PneumaticValues.NORMAL_TANK_CAPACITY);
     private final ItemStack[] inventory = new ItemStack[9];
     private int lastTickInventoryStacksize;
     private static int BASE_TEMPERATURE = FluidRegistry.WATER.getTemperature();
     @GuiSynced
-    private final IHeatExchangerLogic hullLogic = PneumaticRegistry.getInstance().getHeatExchangerLogic();
+    private final IHeatExchangerLogic hullLogic = PneumaticRegistry.getInstance()
+        .getHeatExchangerLogic();
     @GuiSynced
-    private final IHeatExchangerLogic itemLogic = PneumaticRegistry.getInstance().getHeatExchangerLogic();
+    private final IHeatExchangerLogic itemLogic = PneumaticRegistry.getInstance()
+        .getHeatExchangerLogic();
     @GuiSynced
     public int selectedPlastic = -1;
     @GuiSynced
@@ -50,19 +54,21 @@ public class TileEntityPlasticMixer extends TileEntityBase implements IFluidHand
     public static final int DYE_PER_DYE = 0xFF * 10;
     public static final int DYE_BUFFER_MAX = 0xFF * 2 * PneumaticValues.NORMAL_TANK_CAPACITY / 1000;
 
-    public static final String[] DYES = {"dyeBlack", "dyeRed", "dyeGreen", "dyeBrown", "dyeBlue", "dyePurple", "dyeCyan", "dyeLightGray", "dyeGray", "dyePink", "dyeLime", "dyeYellow", "dyeLightBlue", "dyeMagenta", "dyeOrange", "dyeWhite"};
-    private static final int[] SLOTS = {0, 1, 2, 3, 4, 5, 6, 7, 8};
+    public static final String[] DYES = { "dyeBlack", "dyeRed", "dyeGreen", "dyeBrown", "dyeBlue", "dyePurple",
+        "dyeCyan", "dyeLightGray", "dyeGray", "dyePink", "dyeLime", "dyeYellow", "dyeLightBlue", "dyeMagenta",
+        "dyeOrange", "dyeWhite" };
+    private static final int[] SLOTS = { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
     public static final int INV_INPUT = 4, INV_OUTPUT = 5, INV_DYE_RED = 6, INV_DYE_GREEN = 7, INV_DYE_BLUE = 8;
 
-    public TileEntityPlasticMixer(){
+    public TileEntityPlasticMixer() {
         super(0, 1, 2, 3);
         hullLogic.addConnectedExchanger(itemLogic);
         hullLogic.setThermalCapacity(100);
     }
 
     @SideOnly(Side.CLIENT)
-    public IHeatExchangerLogic getLogic(int index){
-        switch(index){
+    public IHeatExchangerLogic getLogic(int index) {
+        switch (index) {
             case 0:
                 return hullLogic;
             case 1:
@@ -72,31 +78,33 @@ public class TileEntityPlasticMixer extends TileEntityBase implements IFluidHand
     }
 
     @SideOnly(Side.CLIENT)
-    public IFluidTank getFluidTank(){
+    public IFluidTank getFluidTank() {
         return tank;
     }
 
     @Override
-    public void updateEntity(){
+    public void updateEntity() {
         super.updateEntity();
-        if(!worldObj.isRemote) {
+        if (!worldObj.isRemote) {
             refillDyeBuffers();
             itemLogic.update();
-            if(worldObj.getTotalWorldTime() % 20 == 0) {//We don't need to run _that_ often.
-                if(inventory[INV_INPUT] != null && inventory[INV_INPUT].stackSize > lastTickInventoryStacksize) {
+            if (worldObj.getTotalWorldTime() % 20 == 0) {// We don't need to run _that_ often.
+                if (inventory[INV_INPUT] != null && inventory[INV_INPUT].stackSize > lastTickInventoryStacksize) {
                     int stackIncrease = inventory[INV_INPUT].stackSize - lastTickInventoryStacksize;
-                    double ratio = (double)inventory[INV_INPUT].stackSize / (inventory[INV_INPUT].stackSize + stackIncrease);
-                    itemLogic.setTemperature((int)(ratio * itemLogic.getTemperature() + (1 - ratio) * BASE_TEMPERATURE));
-                } else if(inventory[INV_INPUT] == null) {
+                    double ratio = (double) inventory[INV_INPUT].stackSize
+                        / (inventory[INV_INPUT].stackSize + stackIncrease);
+                    itemLogic
+                        .setTemperature((int) (ratio * itemLogic.getTemperature() + (1 - ratio) * BASE_TEMPERATURE));
+                } else if (inventory[INV_INPUT] == null) {
                     itemLogic.setTemperature(BASE_TEMPERATURE);
                 }
 
-                if(itemLogic.getTemperature() >= PneumaticValues.PLASTIC_MIXER_MELTING_TEMP) {
+                if (itemLogic.getTemperature() >= PneumaticValues.PLASTIC_MIXER_MELTING_TEMP) {
                     FluidStack moltenPlastic = new FluidStack(Fluids.plastic, inventory[INV_INPUT].stackSize * 1000);
                     int maxFill = fill(ForgeDirection.UNKNOWN, moltenPlastic, false) / 1000;
-                    if(maxFill > 0) {
+                    if (maxFill > 0) {
                         inventory[INV_INPUT].stackSize -= maxFill;
-                        if(inventory[INV_INPUT].stackSize <= 0) inventory[INV_INPUT] = null;
+                        if (inventory[INV_INPUT].stackSize <= 0) inventory[INV_INPUT] = null;
                         fill(ForgeDirection.UNKNOWN, new FluidStack(moltenPlastic, maxFill * 1000), true);
                     }
                 }
@@ -105,18 +113,21 @@ public class TileEntityPlasticMixer extends TileEntityBase implements IFluidHand
 
                 itemLogic.setThermalCapacity(inventory[INV_INPUT] == null ? 0 : inventory[INV_INPUT].stackSize);
             }
-            if(tank.getFluid() != null && selectedPlastic >= 0 && redstoneAllows()) {
-                ItemStack solidifiedStack = new ItemStack(Itemss.plastic, tank.getFluid().amount / 1000, selectedPlastic);
-                if(solidifiedStack.stackSize > 0) {
+            if (tank.getFluid() != null && selectedPlastic >= 0 && redstoneAllows()) {
+                ItemStack solidifiedStack = new ItemStack(
+                    Itemss.plastic,
+                    tank.getFluid().amount / 1000,
+                    selectedPlastic);
+                if (solidifiedStack.stackSize > 0) {
                     solidifiedStack.stackSize = 1;
-                    if(inventory[INV_OUTPUT] == null) {
+                    if (inventory[INV_OUTPUT] == null) {
                         solidifiedStack.stackSize = useDye(solidifiedStack.stackSize);
-                        if(solidifiedStack.stackSize > 0) {
+                        if (solidifiedStack.stackSize > 0) {
                             inventory[INV_OUTPUT] = solidifiedStack;
                             tank.drain(inventory[INV_OUTPUT].stackSize * 1000, true);
                             sendDescriptionPacket();
                         }
-                    } else if(solidifiedStack.isItemEqual(inventory[INV_OUTPUT])) {
+                    } else if (solidifiedStack.isItemEqual(inventory[INV_OUTPUT])) {
                         int solidifiedItems = Math.min(64 - inventory[INV_OUTPUT].stackSize, solidifiedStack.stackSize);
                         solidifiedItems = useDye(solidifiedItems);
                         inventory[INV_OUTPUT].stackSize += solidifiedItems;
@@ -125,40 +136,42 @@ public class TileEntityPlasticMixer extends TileEntityBase implements IFluidHand
                     }
                 }
             }
-            if(!lockSelection) selectedPlastic = -1;
-            if(redstoneMode == 3) selectedPlastic = poweredRedstone;
+            if (!lockSelection) selectedPlastic = -1;
+            if (redstoneMode == 3) selectedPlastic = poweredRedstone;
         }
     }
 
-    private void refillDyeBuffers(){
-        for(int i = 0; i < 3; i++) {
-            if(getStackInSlot(INV_DYE_RED + i) != null && dyeBuffers[i] <= DYE_BUFFER_MAX - DYE_PER_DYE) {
+    private void refillDyeBuffers() {
+        for (int i = 0; i < 3; i++) {
+            if (getStackInSlot(INV_DYE_RED + i) != null && dyeBuffers[i] <= DYE_BUFFER_MAX - DYE_PER_DYE) {
                 decrStackSize(INV_DYE_RED + i, 1);
                 dyeBuffers[i] += DYE_PER_DYE;
             }
         }
     }
 
-    private int useDye(int maxItems){
+    private int useDye(int maxItems) {
         int desiredColor = ItemDye.field_150922_c[selectedPlastic];
-        if(selectedPlastic == 15) return maxItems;//Converting to white plastic is free.
-        for(int i = 0; i < 3; i++) {
+        if (selectedPlastic == 15) return maxItems;// Converting to white plastic is free.
+        for (int i = 0; i < 3; i++) {
             int colorComponent = desiredColor >> 8 * i & 0xFF;
-            colorComponent = 0xFF - colorComponent;//Invert, because we start out with white, and we darken the plastic.
-            if(colorComponent > 0) {
+            colorComponent = 0xFF - colorComponent;// Invert, because we start out with white, and we darken the
+                                                   // plastic.
+            if (colorComponent > 0) {
                 maxItems = Math.min(maxItems, dyeBuffers[i] / colorComponent);
             }
         }
-        for(int i = 0; i < 3; i++) {
+        for (int i = 0; i < 3; i++) {
             int colorComponent = desiredColor >> 8 * i & 0xFF;
-            colorComponent = 0xFF - colorComponent;//Invert, because we start out with white, and we darken the plastic.
+            colorComponent = 0xFF - colorComponent;// Invert, because we start out with white, and we darken the
+                                                   // plastic.
             dyeBuffers[i] -= colorComponent * maxItems;
         }
         return maxItems;
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound tag){
+    public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
         readInventoryFromNBT(tag, inventory, "Items");
         lastTickInventoryStacksize = tag.getInteger("lastTickInventoryStacksize");
@@ -173,7 +186,7 @@ public class TileEntityPlasticMixer extends TileEntityBase implements IFluidHand
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound tag){
+    public void writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
         writeInventoryToNBT(tag, inventory, "Items");
         tag.setInteger("lastTickInventoryStacksize", lastTickInventoryStacksize);
@@ -190,14 +203,14 @@ public class TileEntityPlasticMixer extends TileEntityBase implements IFluidHand
     }
 
     @Override
-    public void readFromPacket(NBTTagCompound tag){
+    public void readFromPacket(NBTTagCompound tag) {
         super.readFromPacket(tag);
         tank.setFluid(null);
         tank.readFromNBT(tag.getCompoundTag("fluid"));
     }
 
     @Override
-    public void writeToPacket(NBTTagCompound tag){
+    public void writeToPacket(NBTTagCompound tag) {
         super.writeToPacket(tag);
         NBTTagCompound tankTag = new NBTTagCompound();
         tank.writeToNBT(tankTag);
@@ -207,10 +220,10 @@ public class TileEntityPlasticMixer extends TileEntityBase implements IFluidHand
     /******************* Tank methods *******************/
 
     @Override
-    public int fill(ForgeDirection from, FluidStack resource, boolean doFill){
-        if(resource == null || !Fluids.areFluidsEqual(resource.getFluid(), Fluids.plastic)) return 0;
+    public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
+        if (resource == null || !Fluids.areFluidsEqual(resource.getFluid(), Fluids.plastic)) return 0;
         int fillingAmount = Math.min(tank.getCapacity() - tank.getFluidAmount(), resource.amount);
-        if(doFill && fillingAmount > 0) {
+        if (doFill && fillingAmount > 0) {
             tank.setFluid(FluidPlastic.mixFluid(tank.getFluid(), new FluidStack(resource, fillingAmount)));
             sendDescriptionPacket();
         }
@@ -218,31 +231,32 @@ public class TileEntityPlasticMixer extends TileEntityBase implements IFluidHand
     }
 
     @Override
-    public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain){
-        if(resource == null || Fluids.areFluidsEqual(resource.getFluid(), Fluids.plastic)) return drain(from, PneumaticValues.MAX_DRAIN, doDrain);
+    public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+        if (resource == null || Fluids.areFluidsEqual(resource.getFluid(), Fluids.plastic))
+            return drain(from, PneumaticValues.MAX_DRAIN, doDrain);
         else return null;
     }
 
     @Override
-    public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain){
+    public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
         FluidStack drained = tank.drain(Math.min(PneumaticValues.MAX_DRAIN, maxDrain), doDrain);
-        if(doDrain && drained != null && drained.getFluid() != null) sendDescriptionPacket();
+        if (doDrain && drained != null && drained.getFluid() != null) sendDescriptionPacket();
         return drained;
     }
 
     @Override
-    public boolean canFill(ForgeDirection from, Fluid fluid){
+    public boolean canFill(ForgeDirection from, Fluid fluid) {
         return Fluids.areFluidsEqual(fluid, Fluids.plastic);
     }
 
     @Override
-    public boolean canDrain(ForgeDirection from, Fluid fluid){
+    public boolean canDrain(ForgeDirection from, Fluid fluid) {
         return canFill(from, fluid);
     }
 
     @Override
-    public FluidTankInfo[] getTankInfo(ForgeDirection from){
-        return new FluidTankInfo[]{tank.getInfo()};
+    public FluidTankInfo[] getTankInfo(ForgeDirection from) {
+        return new FluidTankInfo[] { tank.getInfo() };
     }
 
     /****************** End Tank methods *******************/
@@ -250,16 +264,16 @@ public class TileEntityPlasticMixer extends TileEntityBase implements IFluidHand
     /****************** IInventory *********************/
 
     @Override
-    public void openInventory(){}
+    public void openInventory() {}
 
     @Override
-    public void closeInventory(){}
+    public void closeInventory() {}
 
     /**
      * Returns the number of slots in the inventory.
      */
     @Override
-    public int getSizeInventory(){
+    public int getSizeInventory() {
         return inventory.length;
     }
 
@@ -267,19 +281,19 @@ public class TileEntityPlasticMixer extends TileEntityBase implements IFluidHand
      * Returns the stack in slot i
      */
     @Override
-    public ItemStack getStackInSlot(int slot){
+    public ItemStack getStackInSlot(int slot) {
         return inventory[slot];
     }
 
     @Override
-    public ItemStack decrStackSize(int slot, int amount){
+    public ItemStack decrStackSize(int slot, int amount) {
         ItemStack itemStack = getStackInSlot(slot);
-        if(itemStack != null) {
-            if(itemStack.stackSize <= amount) {
+        if (itemStack != null) {
+            if (itemStack.stackSize <= amount) {
                 setInventorySlotContents(slot, null);
             } else {
                 itemStack = itemStack.splitStack(amount);
-                if(itemStack.stackSize == 0) {
+                if (itemStack.stackSize == 0) {
                     setInventorySlotContents(slot, null);
                 }
             }
@@ -289,36 +303,36 @@ public class TileEntityPlasticMixer extends TileEntityBase implements IFluidHand
     }
 
     @Override
-    public ItemStack getStackInSlotOnClosing(int slot){
+    public ItemStack getStackInSlotOnClosing(int slot) {
         ItemStack itemStack = getStackInSlot(slot);
-        if(itemStack != null) {
+        if (itemStack != null) {
             setInventorySlotContents(slot, null);
         }
         return itemStack;
     }
 
     @Override
-    public void setInventorySlotContents(int slot, ItemStack itemStack){
+    public void setInventorySlotContents(int slot, ItemStack itemStack) {
         inventory[slot] = itemStack;
-        if(itemStack != null && itemStack.stackSize > getInventoryStackLimit()) {
+        if (itemStack != null && itemStack.stackSize > getInventoryStackLimit()) {
             itemStack.stackSize = getInventoryStackLimit();
         }
     }
 
     @Override
-    public String getInventoryName(){
+    public String getInventoryName() {
         return Blockss.plasticMixer.getUnlocalizedName();
     }
 
     @Override
-    public int getInventoryStackLimit(){
+    public int getInventoryStackLimit() {
         return 64;
     }
 
     @Override
-    public boolean isItemValidForSlot(int i, ItemStack itemstack){
-        if(itemstack == null) return true;
-        switch(i){
+    public boolean isItemValidForSlot(int i, ItemStack itemstack) {
+        if (itemstack == null) return true;
+        switch (i) {
             case INV_INPUT:
                 return isPlastic(itemstack);
             case INV_OUTPUT:
@@ -346,93 +360,97 @@ public class TileEntityPlasticMixer extends TileEntityBase implements IFluidHand
     }
 
     @Override
-    public boolean hasCustomInventoryName(){
+    public boolean hasCustomInventoryName() {
         return false;
     }
 
     @Override
-    public boolean isUseableByPlayer(EntityPlayer var1){
+    public boolean isUseableByPlayer(EntityPlayer var1) {
         return isGuiUseableByPlayer(var1);
     }
 
     @Override
-    public IHeatExchangerLogic getHeatExchangerLogic(ForgeDirection side){
+    public IHeatExchangerLogic getHeatExchangerLogic(ForgeDirection side) {
         return hullLogic;
     }
 
-    public static int getDyeIndex(ItemStack stack){
+    public static int getDyeIndex(ItemStack stack) {
         int[] ids = OreDictionary.getOreIDs(stack);
-        for(int id : ids) {
+        for (int id : ids) {
             String name = OreDictionary.getOreName(id);
-            for(int i = 0; i < DYES.length; i++) {
-                if(DYES[i].equals(name)) return i;
+            for (int i = 0; i < DYES.length; i++) {
+                if (DYES[i].equals(name)) return i;
             }
         }
         return -1;
     }
 
     @Override
-    public int[] getAccessibleSlotsFromSide(int side){
+    public int[] getAccessibleSlotsFromSide(int side) {
         return SLOTS;
     }
 
     @Override
-    public boolean canInsertItem(int slot, ItemStack stack, int side){
+    public boolean canInsertItem(int slot, ItemStack stack, int side) {
         return isItemValidForSlot(slot, stack);
     }
 
     @Override
-    public boolean canExtractItem(int slot, ItemStack stack, int side){
+    public boolean canExtractItem(int slot, ItemStack stack, int side) {
         return slot == INV_OUTPUT;
     }
 
     @Override
-    public void handleGUIButtonPress(int guiID, EntityPlayer player){
+    public void handleGUIButtonPress(int guiID, EntityPlayer player) {
         super.handleGUIButtonPress(guiID, player);
-        if(guiID == 0) {
-            if(++redstoneMode > 3) {
+        if (guiID == 0) {
+            if (++redstoneMode > 3) {
                 redstoneMode = 0;
             }
-        } else if(guiID >= 1 && guiID < 17) {
-            if(selectedPlastic != guiID) {
+        } else if (guiID >= 1 && guiID < 17) {
+            if (selectedPlastic != guiID) {
                 selectedPlastic = guiID - 1;
-                if(tank.getFluidAmount() >= 1000) {
+                if (tank.getFluidAmount() >= 1000) {
                     AchievementHandler.giveAchievement(player, new ItemStack(Itemss.plastic));
                 }
             } else {
                 selectedPlastic = -1;
             }
-        } else if(guiID == 17) {
+        } else if (guiID == 17) {
             lockSelection = !lockSelection;
         }
     }
 
     @Override
-    public int getRedstoneMode(){
+    public int getRedstoneMode() {
         return redstoneMode;
     }
 
     @Override
-    public boolean redstoneAllows(){
+    public boolean redstoneAllows() {
         return redstoneMode == 3 ? true : super.redstoneAllows();
     }
 
     @Override
-    protected void addLuaMethods(){
+    protected void addLuaMethods() {
         super.addLuaMethods();
-        luaMethods.add(new LuaMethod("selectColor"){
+        luaMethods.add(new LuaMethod("selectColor") {
+
             @Override
-            public Object[] call(Object[] args) throws Exception{
-                if(args.length == 1) {
-                    int selection = ((Double)args[0]).intValue();
-                    if(selection >= 0 && selection <= 16) {
+            public Object[] call(Object[] args) throws Exception {
+                if (args.length == 1) {
+                    int selection = ((Double) args[0]).intValue();
+                    if (selection >= 0 && selection <= 16) {
                         selectedPlastic = selection - 1;
                         return null;
                     } else {
-                        throw new IllegalArgumentException("selectColor method only accepts a value ranging from 0-16. The value passed was: " + selection);
+                        throw new IllegalArgumentException(
+                            "selectColor method only accepts a value ranging from 0-16. The value passed was: "
+                                + selection);
                     }
                 } else {
-                    throw new IllegalArgumentException("selectColor method requires 1 argument (int color index, with 0 being no color");
+                    throw new IllegalArgumentException(
+                        "selectColor method requires 1 argument (int color index, with 0 being no color");
                 }
             }
         });

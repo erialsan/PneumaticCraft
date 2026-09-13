@@ -1,14 +1,15 @@
 package pneumaticCraft.common.thirdparty.igwmod;
 
-import igwmod.gui.GuiWiki;
-import igwmod.gui.tabs.BaseWikiTab;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
+
+import igwmod.gui.GuiWiki;
+import igwmod.gui.tabs.BaseWikiTab;
 import pneumaticCraft.common.block.Blockss;
 
-public class PneumaticCraftWikiTab extends BaseWikiTab{
+public class PneumaticCraftWikiTab extends BaseWikiTab {
 
-    public PneumaticCraftWikiTab(){
+    public PneumaticCraftWikiTab() {
         pageEntries.add("baseConcepts");
         pageEntries.add("machineUpgrades");
         pageEntries.add("generatingPressure");
@@ -46,27 +47,29 @@ public class PneumaticCraftWikiTab extends BaseWikiTab{
     }
 
     @Override
-    public String getName(){
+    public String getName() {
         return "PneumaticCraft";
     }
 
     @Override
-    public ItemStack renderTabIcon(GuiWiki gui){
+    public ItemStack renderTabIcon(GuiWiki gui) {
         return new ItemStack(Blockss.airCannon);
     }
 
     @Override
-    protected String getPageName(String pageEntry){
-        if(pageEntry.startsWith("item") || pageEntry.startsWith("block")) {
-            return I18n.format(pageEntry.replace("/", ".").replace("block", "tile") + ".name");
+    protected String getPageName(String pageEntry) {
+        if (pageEntry.startsWith("item") || pageEntry.startsWith("block")) {
+            return I18n.format(
+                pageEntry.replace("/", ".")
+                    .replace("block", "tile") + ".name");
         } else {
             return I18n.format("igwtab.entry." + pageEntry);
         }
     }
 
     @Override
-    protected String getPageLocation(String pageEntry){
-        if(pageEntry.startsWith("item") || pageEntry.startsWith("block")) return "pneumaticcraft:" + pageEntry;
+    protected String getPageLocation(String pageEntry) {
+        if (pageEntry.startsWith("item") || pageEntry.startsWith("block")) return "pneumaticcraft:" + pageEntry;
         return "pneumaticcraft:menu/" + pageEntry;
     }
 

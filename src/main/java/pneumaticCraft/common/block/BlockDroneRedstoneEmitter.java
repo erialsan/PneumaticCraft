@@ -10,18 +10,19 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+
 import pneumaticCraft.common.entity.living.EntityDrone;
 import pneumaticCraft.common.tileentity.TileEntityDroneRedstoneEmitter;
 
-public class BlockDroneRedstoneEmitter extends BlockAir implements ITileEntityProvider{
+public class BlockDroneRedstoneEmitter extends BlockAir implements ITileEntityProvider {
 
     @Override
-    public boolean canProvidePower(){
+    public boolean canProvidePower() {
         return true;
     }
 
     @Override
-    public int isProvidingStrongPower(IBlockAccess par1IBlockAccess, int par2, int par3, int par4, int par5){
+    public int isProvidingStrongPower(IBlockAccess par1IBlockAccess, int par2, int par3, int par4, int par5) {
         return 0;
     }
 
@@ -33,13 +34,18 @@ public class BlockDroneRedstoneEmitter extends BlockAir implements ITileEntityPr
      * when checking the bottom of the block.
      */
     @Override
-    public int isProvidingWeakPower(IBlockAccess blockAccess, int x, int y, int z, int side){
-        if(blockAccess instanceof World) {
-            World world = (World)blockAccess;
-            List<EntityDrone> drones = world.getEntitiesWithinAABB(EntityDrone.class, AxisAlignedBB.getBoundingBox(x, y, z, x + 1, y + 1, z + 1));
+    public int isProvidingWeakPower(IBlockAccess blockAccess, int x, int y, int z, int side) {
+        if (blockAccess instanceof World) {
+            World world = (World) blockAccess;
+            List<EntityDrone> drones = world
+                .getEntitiesWithinAABB(EntityDrone.class, AxisAlignedBB.getBoundingBox(x, y, z, x + 1, y + 1, z + 1));
             int signal = 0;
-            for(EntityDrone drone : drones) {
-                signal = Math.max(signal, drone.getEmittingRedstone(ForgeDirection.getOrientation(side).getOpposite()));
+            for (EntityDrone drone : drones) {
+                signal = Math.max(
+                    signal,
+                    drone.getEmittingRedstone(
+                        ForgeDirection.getOrientation(side)
+                            .getOpposite()));
             }
             return signal;
 
@@ -49,12 +55,12 @@ public class BlockDroneRedstoneEmitter extends BlockAir implements ITileEntityPr
     }
 
     @Override
-    public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_){
+    public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_) {
         return new TileEntityDroneRedstoneEmitter();
     }
 
     @Override
-    public void breakBlock(World world, int x, int y, int z, Block block, int meta){
+    public void breakBlock(World world, int x, int y, int z, Block block, int meta) {
         super.breakBlock(world, x, y, z, block, meta);
         world.removeTileEntity(x, y, z);
     }

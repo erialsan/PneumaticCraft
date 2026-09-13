@@ -6,35 +6,35 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import org.lwjgl.opengl.GL11;
 
-import pneumaticCraft.common.block.tubes.TubeModule;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import pneumaticCraft.common.block.tubes.TubeModule;
 
 @SideOnly(Side.CLIENT)
-public class RenderItemTubeModule implements IItemRenderer{
+public class RenderItemTubeModule implements IItemRenderer {
 
     private final TubeModule module;
 
-    public RenderItemTubeModule(TubeModule module){
+    public RenderItemTubeModule(TubeModule module) {
         this.module = module;
     }
 
     @Override
-    public boolean handleRenderType(ItemStack item, ItemRenderType type){
+    public boolean handleRenderType(ItemStack item, ItemRenderType type) {
 
         return true;
     }
 
     @Override
-    public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper){
+    public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper) {
 
         return true;
     }
 
     @Override
-    public void renderItem(ItemRenderType type, ItemStack item, Object... data){
+    public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
         int itemDamage = item.getItemDamage();
-        switch(type){
+        switch (type) {
             case ENTITY: {
                 render(-0.6F, -0.8F, -0.5F, 1.0F, itemDamage);
                 return;
@@ -59,7 +59,7 @@ public class RenderItemTubeModule implements IItemRenderer{
         }
     }
 
-    private void render(float x, float y, float z, float scale, int itemDamage){
+    private void render(float x, float y, float z, float scale, int itemDamage) {
         module.setDirection(ForgeDirection.UP);
         GL11.glPushMatrix();
         scale *= 0.2 * (1 / module.getWidth());

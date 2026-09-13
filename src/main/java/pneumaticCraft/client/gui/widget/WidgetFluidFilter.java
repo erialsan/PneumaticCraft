@@ -11,22 +11,25 @@ import net.minecraftforge.fluids.FluidStack;
 
 import org.lwjgl.opengl.GL11;
 
-public class WidgetFluidFilter extends WidgetBase{
+public class WidgetFluidFilter extends WidgetBase {
+
     protected Fluid fluid;
 
-    public WidgetFluidFilter(int id, int x, int y){
+    public WidgetFluidFilter(int id, int x, int y) {
         super(id, x, y, 16, 16);
     }
 
     @Override
-    public void render(int mouseX, int mouseY, float partialTick){
-        if(fluid != null) {
+    public void render(int mouseX, int mouseY, float partialTick) {
+        if (fluid != null) {
             IIcon icon = fluid.getIcon();
-            if(icon != null) {
+            if (icon != null) {
                 GL11.glColor4d(1, 1, 1, 1);
                 GL11.glPushMatrix();
                 GL11.glTranslated(x, y, 0);
-                Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.locationBlocksTexture);
+                Minecraft.getMinecraft()
+                    .getTextureManager()
+                    .bindTexture(TextureMap.locationBlocksTexture);
                 Tessellator t = Tessellator.instance;
                 t.startDrawingQuads();
                 t.addVertexWithUV(0, 0, 0, icon.getMinU(), icon.getMinV());
@@ -40,16 +43,16 @@ public class WidgetFluidFilter extends WidgetBase{
     }
 
     @Override
-    public void addTooltip(int mouseX, int mouseY, List<String> curTip, boolean shiftPressed){
-        if(fluid != null) curTip.add(fluid.getLocalizedName(new FluidStack(fluid, 1)));
+    public void addTooltip(int mouseX, int mouseY, List<String> curTip, boolean shiftPressed) {
+        if (fluid != null) curTip.add(fluid.getLocalizedName(new FluidStack(fluid, 1)));
     }
 
-    public WidgetFluidFilter setFluid(Fluid fluid){
+    public WidgetFluidFilter setFluid(Fluid fluid) {
         this.fluid = fluid;
         return this;
     }
 
-    public Fluid getFluid(){
+    public Fluid getFluid() {
         return fluid;
     }
 }

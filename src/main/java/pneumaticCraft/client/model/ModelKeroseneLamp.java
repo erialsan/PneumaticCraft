@@ -7,13 +7,15 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidTankInfo;
+
 import pneumaticCraft.client.util.RenderUtils;
 import pneumaticCraft.client.util.RenderUtils.RenderInfo;
 import pneumaticCraft.common.tileentity.TileEntityKeroseneLamp;
 import pneumaticCraft.lib.Textures;
 
-public class ModelKeroseneLamp extends ModelBase implements IBaseModel{
-    //fields
+public class ModelKeroseneLamp extends ModelBase implements IBaseModel {
+
+    // fields
     ModelRenderer Tank;
     ModelRenderer Holder1;
     ModelRenderer Holder2;
@@ -23,7 +25,7 @@ public class ModelKeroseneLamp extends ModelBase implements IBaseModel{
     ModelRenderer SupportSide;
     ModelRenderer SupportSide2;
 
-    public ModelKeroseneLamp(){
+    public ModelKeroseneLamp() {
         textureWidth = 64;
         textureHeight = 64;
 
@@ -78,7 +80,7 @@ public class ModelKeroseneLamp extends ModelBase implements IBaseModel{
     }
 
     @Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5){
+    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         super.render(entity, f, f1, f2, f3, f4, f5);
         setRotationAngles(f, f1, f2, f3, f4, f5, entity);
         Tank.render(f5);
@@ -91,17 +93,17 @@ public class ModelKeroseneLamp extends ModelBase implements IBaseModel{
         SupportSide2.render(f5);
     }
 
-    private void setRotation(ModelRenderer model, float x, float y, float z){
+    private void setRotation(ModelRenderer model, float x, float y, float z) {
         model.rotateAngleX = x;
         model.rotateAngleY = y;
         model.rotateAngleZ = z;
     }
 
     @Override
-    public void renderStatic(float size, TileEntity te){
+    public void renderStatic(float size, TileEntity te) {
         ForgeDirection sideConnected = ForgeDirection.DOWN;
-        if(te != null) {
-            sideConnected = ((TileEntityKeroseneLamp)te).getSideConnected();
+        if (te != null) {
+            sideConnected = ((TileEntityKeroseneLamp) te).getSideConnected();
         }
 
         Tank.render(size);
@@ -109,13 +111,13 @@ public class ModelKeroseneLamp extends ModelBase implements IBaseModel{
         Holder2.render(size);
         Base.render(size);
         Top.render(size);
-        if(sideConnected != ForgeDirection.DOWN) {
+        if (sideConnected != ForgeDirection.DOWN) {
             Support1.render(size);
-            if(sideConnected != ForgeDirection.UP) {
+            if (sideConnected != ForgeDirection.UP) {
                 SupportSide.rotateAngleY = 0;
-                ForgeDirection rotation = ((TileEntityKeroseneLamp)te).getRotation();
-                if(rotation != ForgeDirection.UP && rotation != ForgeDirection.DOWN) {
-                    while(sideConnected != rotation.getOpposite()) {
+                ForgeDirection rotation = ((TileEntityKeroseneLamp) te).getRotation();
+                if (rotation != ForgeDirection.UP && rotation != ForgeDirection.DOWN) {
+                    while (sideConnected != rotation.getOpposite()) {
                         sideConnected = sideConnected.getRotation(ForgeDirection.DOWN);
                         SupportSide.rotateAngleY += Math.toRadians(90);
                     }
@@ -125,28 +127,34 @@ public class ModelKeroseneLamp extends ModelBase implements IBaseModel{
                 SupportSide2.render(size);
             }
         }
-        if(te != null) {
-            FluidTankInfo info = ((TileEntityKeroseneLamp)te).getTankInfo(null)[0];
-            if(info.fluid != null && info.fluid.amount > 10) {
-                float percentageFull = (float)info.fluid.amount / info.capacity;
-                RenderInfo renderInfo = new RenderInfo(-3 / 16F + 0.01F, 23 / 16F - percentageFull * 2.999F / 16F, -3 / 16F + 0.01F, 3 / 16F - 0.01F, 22.99F / 16F, 3 / 16F - 0.01F);
+        if (te != null) {
+            FluidTankInfo info = ((TileEntityKeroseneLamp) te).getTankInfo(null)[0];
+            if (info.fluid != null && info.fluid.amount > 10) {
+                float percentageFull = (float) info.fluid.amount / info.capacity;
+                RenderInfo renderInfo = new RenderInfo(
+                    -3 / 16F + 0.01F,
+                    23 / 16F - percentageFull * 2.999F / 16F,
+                    -3 / 16F + 0.01F,
+                    3 / 16F - 0.01F,
+                    22.99F / 16F,
+                    3 / 16F - 0.01F);
                 RenderUtils.INSTANCE.renderLiquid(info, renderInfo, te.getWorldObj());
             }
         }
     }
 
     @Override
-    public void renderDynamic(float size, TileEntity te, float partialTicks){
+    public void renderDynamic(float size, TileEntity te, float partialTicks) {
 
     }
 
     @Override
-    public ResourceLocation getModelTexture(TileEntity tile){
+    public ResourceLocation getModelTexture(TileEntity tile) {
         return Textures.MODEL_KEROSENE_LAMP;
     }
 
     @Override
-    public boolean rotateModelBasedOnBlockMeta(){
+    public boolean rotateModelBasedOnBlockMeta() {
         return true;
     }
 

@@ -4,5 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BlockPlants {
-	public static List<BlockPneumaticPlantBase> allPlants = new ArrayList<BlockPneumaticPlantBase>();
+
+    public static List<BlockPneumaticPlantBase> allPlants = new ArrayList<BlockPneumaticPlantBase>();
 }

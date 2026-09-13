@@ -15,6 +15,8 @@ import net.minecraft.world.World;
 
 import org.lwjgl.opengl.GL11;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import pneumaticCraft.api.item.IPressurizable;
 import pneumaticCraft.client.render.RenderProgressingLine;
 import pneumaticCraft.client.util.RenderUtils;
@@ -22,10 +24,9 @@ import pneumaticCraft.common.config.Config;
 import pneumaticCraft.common.item.ItemGunAmmo;
 import pneumaticCraft.common.util.PneumaticCraftUtils;
 import pneumaticCraft.lib.Sounds;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
-public abstract class Minigun{
+public abstract class Minigun {
+
     private final boolean requiresTarget;
     private final double raytraceRange = 50;
 
@@ -40,7 +41,7 @@ public abstract class Minigun{
     public double minigunYaw, oldMinigunYaw;
     public double minigunPitch, oldMinigunPitch;
     private final RenderProgressingLine minigunFire = new RenderProgressingLine().setProgress(1);
-    private boolean sweeping; //When true, the yaw of the minigun will sweep with a sinus pattern when not targeting.
+    private boolean sweeping; // When true, the yaw of the minigun will sweep with a sinus pattern when not targeting.
     private double sweepingProgress;
 
     private boolean gunAimedAtTarget;
@@ -52,37 +53,37 @@ public abstract class Minigun{
     protected World world;
     protected EntityLivingBase attackTarget;
 
-    public Minigun(boolean requiresTarget){
+    public Minigun(boolean requiresTarget) {
         this.requiresTarget = requiresTarget;
     }
 
-    public Minigun setPressurizable(IPressurizable pressurizable, int airUsage){
+    public Minigun setPressurizable(IPressurizable pressurizable, int airUsage) {
         this.pressurizable = pressurizable;
         this.airUsage = airUsage;
         return this;
     }
 
-    public Minigun setItemStack(ItemStack stack){
+    public Minigun setItemStack(ItemStack stack) {
         this.stack = stack;
         return this;
     }
 
-    public Minigun setAmmo(ItemStack ammo){
+    public Minigun setAmmo(ItemStack ammo) {
         this.ammo = ammo;
         return this;
     }
 
-    public Minigun setPlayer(EntityPlayer player){
+    public Minigun setPlayer(EntityPlayer player) {
         this.player = player;
         return this;
     }
 
-    public Minigun setWorld(World world){
+    public Minigun setWorld(World world) {
         this.world = world;
         return this;
     }
 
-    public Minigun setAttackTarget(EntityLivingBase entity){
+    public Minigun setAttackTarget(EntityLivingBase entity) {
         attackTarget = entity;
         return this;
     }
@@ -97,77 +98,78 @@ public abstract class Minigun{
 
     public abstract void playSound(String soundName, float volume, float pitch);
 
-    protected int getAmmoColor(ItemStack stack){
-        return stack != null ? stack.getItem().getColorFromItemStack(stack, 1) : 0xFF313131;
+    protected int getAmmoColor(ItemStack stack) {
+        return stack != null ? stack.getItem()
+            .getColorFromItemStack(stack, 1) : 0xFF313131;
     }
 
-    public double getMinigunSpeed(){
+    public double getMinigunSpeed() {
         return minigunSpeed;
     }
 
-    public void setMinigunSpeed(double minigunSpeed){
+    public void setMinigunSpeed(double minigunSpeed) {
         this.minigunSpeed = minigunSpeed;
     }
 
-    public int getMinigunTriggerTimeOut(){
+    public int getMinigunTriggerTimeOut() {
         return minigunTriggerTimeOut;
     }
 
-    public void setMinigunTriggerTimeOut(int minigunTriggerTimeOut){
+    public void setMinigunTriggerTimeOut(int minigunTriggerTimeOut) {
         this.minigunTriggerTimeOut = minigunTriggerTimeOut;
     }
 
-    public int getMinigunSoundCounter(){
+    public int getMinigunSoundCounter() {
         return minigunSoundCounter;
     }
 
-    public void setMinigunSoundCounter(int minigunSoundCounter){
+    public void setMinigunSoundCounter(int minigunSoundCounter) {
         this.minigunSoundCounter = minigunSoundCounter;
     }
 
-    public double getMinigunRotation(){
+    public double getMinigunRotation() {
         return minigunRotation;
     }
 
-    public void setMinigunRotation(double minigunRotation){
+    public void setMinigunRotation(double minigunRotation) {
         this.minigunRotation = minigunRotation;
     }
 
-    public double getOldMinigunRotation(){
+    public double getOldMinigunRotation() {
         return oldMinigunRotation;
     }
 
-    public void setOldMinigunRotation(double oldMinigunRotation){
+    public void setOldMinigunRotation(double oldMinigunRotation) {
         this.oldMinigunRotation = oldMinigunRotation;
     }
 
-    public EntityLivingBase getAttackTarget(){
+    public EntityLivingBase getAttackTarget() {
         return attackTarget;
     }
 
-    public void setSweeping(boolean sweeping){
+    public void setSweeping(boolean sweeping) {
         this.sweeping = sweeping;
     }
 
-    public boolean isSweeping(){
+    public boolean isSweeping() {
         return sweeping;
     }
 
-    public boolean tryFireMinigun(EntityLivingBase target){
+    public boolean tryFireMinigun(EntityLivingBase target) {
         boolean lastShotOfAmmo = false;
-        if(ammo != null && (pressurizable == null || pressurizable.getPressure(stack) > 0)) {
+        if (ammo != null && (pressurizable == null || pressurizable.getPressure(stack) > 0)) {
             setMinigunTriggerTimeOut(Math.max(10, getMinigunSoundCounter()));
-            if(getMinigunSpeed() == MAX_GUN_SPEED && (!requiresTarget || gunAimedAtTarget)) {
-                if(!requiresTarget) target = raytraceTarget();
+            if (getMinigunSpeed() == MAX_GUN_SPEED && (!requiresTarget || gunAimedAtTarget)) {
+                if (!requiresTarget) target = raytraceTarget();
                 lastShotOfAmmo = ammo.attemptDamageItem(1, rand);
-                if(pressurizable != null) pressurizable.addAir(stack, -airUsage);
-                if(target != null) {
+                if (pressurizable != null) pressurizable.addAir(stack, -airUsage);
+                if (target != null) {
                     ItemStack potion = ItemGunAmmo.getPotion(ammo);
-                    if(potion != null) {
-                        if(rand.nextInt(20) == 0) {
+                    if (potion != null) {
+                        if (rand.nextInt(20) == 0) {
                             List<PotionEffect> effects = Items.potionitem.getEffects(potion);
-                            if(effects != null) {
-                                for(PotionEffect effect : effects) {
+                            if (effects != null) {
+                                for (PotionEffect effect : effects) {
                                     target.addPotionEffect(new PotionEffect(effect));
                                 }
                             }
@@ -181,33 +183,33 @@ public abstract class Minigun{
         return lastShotOfAmmo;
     }
 
-    private EntityLivingBase raytraceTarget(){
+    private EntityLivingBase raytraceTarget() {
         MovingObjectPosition mop = PneumaticCraftUtils.getMouseOverServer(player, raytraceRange);
-        return mop != null && mop.entityHit instanceof EntityLivingBase ? (EntityLivingBase)mop.entityHit : null;
+        return mop != null && mop.entityHit instanceof EntityLivingBase ? (EntityLivingBase) mop.entityHit : null;
     }
 
-    public void update(double posX, double posY, double posZ){
+    public void update(double posX, double posY, double posZ) {
         setOldMinigunRotation(getMinigunRotation());
         oldMinigunYaw = minigunYaw;
         oldMinigunPitch = minigunPitch;
-        if(attackTarget != null && attackTarget.isDead) attackTarget = null;
-        if(!world.isRemote) {
+        if (attackTarget != null && attackTarget.isDead) attackTarget = null;
+        if (!world.isRemote) {
             setMinigunActivated(getMinigunTriggerTimeOut() > 0);
 
             setAmmoColorStack(ammo);
 
-            if(getMinigunTriggerTimeOut() > 0) {
+            if (getMinigunTriggerTimeOut() > 0) {
                 setMinigunTriggerTimeOut(getMinigunTriggerTimeOut() - 1);
-                if(getMinigunSpeed() == 0) {
+                if (getMinigunSpeed() == 0) {
                     playSound(Sounds.HUD_INIT, 2, 0.9F);
                 }
             }
-            if(getMinigunSoundCounter() == 0 && getMinigunTriggerTimeOut() == 0) {
+            if (getMinigunSoundCounter() == 0 && getMinigunTriggerTimeOut() == 0) {
                 playSound(Sounds.MINIGUN_STOP, 3, 0.5F);
                 setMinigunSoundCounter(-1);
             }
         }
-        if(isMinigunActivated()) {
+        if (isMinigunActivated()) {
             setMinigunSpeed(Math.min(getMinigunSpeed() + 0.01D, MAX_GUN_SPEED));
         } else {
             setMinigunSpeed(Math.max(0, getMinigunSpeed() - 0.003D));
@@ -217,51 +219,54 @@ public abstract class Minigun{
 
         double targetYaw = 0;
         double targetPitch = 0;
-        if(attackTarget != null) {
+        if (attackTarget != null) {
             double deltaX = posX - attackTarget.posX;
             double deltaZ = posZ - attackTarget.posZ;
 
-            if(deltaX >= 0 && deltaZ < 0) {
+            if (deltaX >= 0 && deltaZ < 0) {
                 targetYaw = Math.atan(Math.abs(deltaX / deltaZ)) / Math.PI * 180D;
-            } else if(deltaX >= 0 && deltaZ >= 0) {
+            } else if (deltaX >= 0 && deltaZ >= 0) {
                 targetYaw = Math.atan(Math.abs(deltaZ / deltaX)) / Math.PI * 180D + 90;
-            } else if(deltaX < 0 && deltaZ >= 0) {
+            } else if (deltaX < 0 && deltaZ >= 0) {
                 targetYaw = Math.atan(Math.abs(deltaX / deltaZ)) / Math.PI * 180D + 180;
             } else {
                 targetYaw = Math.atan(Math.abs(deltaZ / deltaX)) / Math.PI * 180D + 270;
             }
-            if(targetYaw - minigunYaw > 180) {
+            if (targetYaw - minigunYaw > 180) {
                 targetYaw -= 360;
-            } else if(minigunYaw - targetYaw > 180) {
+            } else if (minigunYaw - targetYaw > 180) {
                 targetYaw += 360;
             }
-            targetPitch = Math.toDegrees(Math.atan((posY - attackTarget.posY - attackTarget.height / 2) / PneumaticCraftUtils.distBetween(posX, posZ, attackTarget.posX, attackTarget.posZ)));
+            targetPitch = Math.toDegrees(
+                Math.atan(
+                    (posY - attackTarget.posY - attackTarget.height / 2)
+                        / PneumaticCraftUtils.distBetween(posX, posZ, attackTarget.posX, attackTarget.posZ)));
 
-            if(minigunPitch > targetPitch) {
-                if(minigunPitch - MAX_GUN_PITCH_CHANGE > targetPitch) {
+            if (minigunPitch > targetPitch) {
+                if (minigunPitch - MAX_GUN_PITCH_CHANGE > targetPitch) {
                     minigunPitch -= MAX_GUN_PITCH_CHANGE;
                 } else {
                     minigunPitch = targetPitch;
                 }
             } else {
-                if(minigunPitch + MAX_GUN_PITCH_CHANGE < targetPitch) {
+                if (minigunPitch + MAX_GUN_PITCH_CHANGE < targetPitch) {
                     minigunPitch += MAX_GUN_PITCH_CHANGE;
                 } else {
                     minigunPitch = targetPitch;
                 }
             }
 
-            if(minigunPitch < -80 || minigunPitch > 80) {
+            if (minigunPitch < -80 || minigunPitch > 80) {
                 minigunYaw = targetYaw;
             } else {
-                if(minigunYaw > targetYaw) {
-                    if(minigunYaw - MAX_GUN_YAW_CHANGE > targetYaw) {
+                if (minigunYaw > targetYaw) {
+                    if (minigunYaw - MAX_GUN_YAW_CHANGE > targetYaw) {
                         minigunYaw -= MAX_GUN_YAW_CHANGE;
                     } else {
                         minigunYaw = targetYaw;
                     }
                 } else {
-                    if(minigunYaw + MAX_GUN_YAW_CHANGE < targetYaw) {
+                    if (minigunYaw + MAX_GUN_YAW_CHANGE < targetYaw) {
                         minigunYaw += MAX_GUN_YAW_CHANGE;
                     } else {
                         minigunYaw = targetYaw;
@@ -269,19 +274,19 @@ public abstract class Minigun{
                 }
             }
             gunAimedAtTarget = minigunYaw == targetYaw && minigunPitch == targetPitch;
-        } else if(isSweeping()) {
+        } else if (isSweeping()) {
             minigunYaw -= Math.cos(sweepingProgress) * 22;
             sweepingProgress += 0.05D;
             minigunYaw += Math.cos(sweepingProgress) * 22;
 
-            if(minigunPitch > targetPitch) {
-                if(minigunPitch - MAX_GUN_PITCH_CHANGE > targetPitch) {
+            if (minigunPitch > targetPitch) {
+                if (minigunPitch - MAX_GUN_PITCH_CHANGE > targetPitch) {
                     minigunPitch -= MAX_GUN_PITCH_CHANGE;
                 } else {
                     minigunPitch = targetPitch;
                 }
             } else {
-                if(minigunPitch + MAX_GUN_PITCH_CHANGE < targetPitch) {
+                if (minigunPitch + MAX_GUN_PITCH_CHANGE < targetPitch) {
                     minigunPitch += MAX_GUN_PITCH_CHANGE;
                 } else {
                     minigunPitch = targetPitch;
@@ -289,27 +294,30 @@ public abstract class Minigun{
             }
         }
 
-        if(!world.isRemote && isMinigunActivated() && getMinigunSpeed() == MAX_GUN_SPEED && (!requiresTarget || gunAimedAtTarget && attackTarget != null)) {
-            if(getMinigunSoundCounter() <= 0) {
+        if (!world.isRemote && isMinigunActivated()
+            && getMinigunSpeed() == MAX_GUN_SPEED
+            && (!requiresTarget || gunAimedAtTarget && attackTarget != null)) {
+            if (getMinigunSoundCounter() <= 0) {
                 playSound(Sounds.MINIGUN, 0.3F, 1);
                 setMinigunSoundCounter(20);
             }
         }
-        if(getMinigunSoundCounter() > 0) setMinigunSoundCounter(getMinigunSoundCounter() - 1);
+        if (getMinigunSoundCounter() > 0) setMinigunSoundCounter(getMinigunSoundCounter() - 1);
     }
 
     @SideOnly(Side.CLIENT)
-    public void render(double x, double y, double z, double gunRadius){
-        if(isMinigunActivated() && getMinigunSpeed() == MAX_GUN_SPEED && gunAimedAtTarget && attackTarget != null) {
+    public void render(double x, double y, double z, double gunRadius) {
+        if (isMinigunActivated() && getMinigunSpeed() == MAX_GUN_SPEED && gunAimedAtTarget && attackTarget != null) {
             GL11.glPushMatrix();
             GL11.glScaled(1, 1, 1);
             GL11.glTranslated(-x, -y, -z);
             GL11.glDisable(GL11.GL_TEXTURE_2D);
-            //GL11.glDisable(GL11.GL_LIGHTING);
+            // GL11.glDisable(GL11.GL_LIGHTING);
             RenderUtils.glColorHex(0xFF000000 | getAmmoColor());
-            for(int i = 0; i < 5; i++) {
+            for (int i = 0; i < 5; i++) {
 
-                Vec3 vec = Vec3.createVectorHelper(attackTarget.posX - x, attackTarget.posY - y, attackTarget.posZ - z).normalize();
+                Vec3 vec = Vec3.createVectorHelper(attackTarget.posX - x, attackTarget.posY - y, attackTarget.posZ - z)
+                    .normalize();
                 minigunFire.startX = x + vec.xCoord * gunRadius;
                 minigunFire.startY = y + vec.yCoord * gunRadius;
                 minigunFire.startZ = z + vec.zCoord * gunRadius;

@@ -1,6 +1,7 @@
 package pneumaticCraft.common.progwidgets;
 
-public interface IMaxActions{
+public interface IMaxActions {
+
     public void setMaxActions(int maxActions);
 
     public int getMaxActions();

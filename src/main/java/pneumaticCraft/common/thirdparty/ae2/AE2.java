@@ -3,23 +3,24 @@ package pneumaticCraft.common.thirdparty.ae2;
 import pneumaticCraft.api.PneumaticRegistry;
 import pneumaticCraft.common.thirdparty.IThirdParty;
 
-public class AE2 implements IThirdParty{
+public class AE2 implements IThirdParty {
 
     @Override
-    public void preInit(){}
+    public void preInit() {}
 
     @Override
-    public void init(){
-        PneumaticRegistry.getInstance().registerInventoryItem(new AE2DiskInventoryItemHandler());
+    public void init() {
+        PneumaticRegistry.getInstance()
+            .registerInventoryItem(new AE2DiskInventoryItemHandler());
     }
 
     @Override
-    public void postInit(){}
+    public void postInit() {}
 
     @Override
-    public void clientSide(){}
+    public void clientSide() {}
 
     @Override
-    public void clientInit(){}
+    public void clientInit() {}
 
 }

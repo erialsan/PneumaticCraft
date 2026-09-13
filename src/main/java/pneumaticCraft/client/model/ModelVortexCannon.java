@@ -5,9 +5,11 @@ import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
+
 import pneumaticCraft.lib.Textures;
 
-public class ModelVortexCannon extends ModelBase implements IBaseModel{
+public class ModelVortexCannon extends ModelBase implements IBaseModel {
+
     // fields
     ModelRenderer Shape1;
     ModelRenderer Shape2;
@@ -21,7 +23,7 @@ public class ModelVortexCannon extends ModelBase implements IBaseModel{
     ModelRenderer Shape10;
     ModelRenderer Shape11;
 
-    public ModelVortexCannon(){
+    public ModelVortexCannon() {
         textureWidth = 64;
         textureHeight = 32;
 
@@ -94,7 +96,7 @@ public class ModelVortexCannon extends ModelBase implements IBaseModel{
     }
 
     @Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5){
+    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         super.render(entity, f, f1, f2, f3, f4, f5);
         setRotationAngles(f, f1, f2, f3, f4, f5, entity);
         Shape1.render(f5);
@@ -110,7 +112,7 @@ public class ModelVortexCannon extends ModelBase implements IBaseModel{
         Shape11.render(f5);
     }
 
-    public void renderModel(float size){
+    public void renderModel(float size) {
         Shape1.render(size);
         Shape2.render(size);
         Shape3.render(size);
@@ -124,29 +126,29 @@ public class ModelVortexCannon extends ModelBase implements IBaseModel{
         Shape11.render(size);
     }
 
-    private void setRotation(ModelRenderer model, float x, float y, float z){
+    private void setRotation(ModelRenderer model, float x, float y, float z) {
         model.rotateAngleX = x;
         model.rotateAngleY = y;
         model.rotateAngleZ = z;
     }
 
     @Override
-    public void renderStatic(float size, TileEntity tile){
+    public void renderStatic(float size, TileEntity tile) {
         renderModel(size);
     }
 
     @Override
-    public ResourceLocation getModelTexture(TileEntity tile){
+    public ResourceLocation getModelTexture(TileEntity tile) {
         return Textures.MODEL_VORTEX_CANNON;
     }
 
     @Override
-    public boolean rotateModelBasedOnBlockMeta(){
+    public boolean rotateModelBasedOnBlockMeta() {
         return false;
     }
 
     @Override
-    public void renderDynamic(float size, TileEntity te, float partialTicks){
+    public void renderDynamic(float size, TileEntity te, float partialTicks) {
         // TODO Auto-generated method stub
 
     }

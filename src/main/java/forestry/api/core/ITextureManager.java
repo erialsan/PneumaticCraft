@@ -13,9 +13,9 @@ import cpw.mods.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public interface ITextureManager {
 
-	void registerIconProvider(IIconProvider provider);
+    void registerIconProvider(IIconProvider provider);
 
-	IIcon getIcon(short texUID);
+    IIcon getIcon(short texUID);
 
-	IIcon getDefault(String ident);
+    IIcon getDefault(String ident);
 }

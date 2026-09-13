@@ -4,20 +4,21 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+
 import pneumaticCraft.common.item.Itemss;
 
-public class EntityLogisticsDrone extends EntityDrone{
+public class EntityLogisticsDrone extends EntityDrone {
 
-    public EntityLogisticsDrone(World world){
+    public EntityLogisticsDrone(World world) {
         super(world);
     }
 
-    public EntityLogisticsDrone(World world, EntityPlayer player){
+    public EntityLogisticsDrone(World world, EntityPlayer player) {
         super(world, player);
     }
 
     @Override
-    protected ItemStack getDroppedStack(){
+    protected ItemStack getDroppedStack() {
         NBTTagCompound tag = new NBTTagCompound();
         tag.setFloat("currentAir", currentAir);
         tag.setInteger("color", getDroneColor());

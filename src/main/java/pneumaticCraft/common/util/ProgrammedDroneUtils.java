@@ -9,6 +9,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
+
 import pneumaticCraft.common.entity.living.EntityDrone;
 import pneumaticCraft.common.item.ItemMachineUpgrade;
 import pneumaticCraft.common.item.Itemss;
@@ -26,8 +27,9 @@ import pneumaticCraft.common.progwidgets.ProgWidgetStart;
 import pneumaticCraft.common.progwidgets.ProgWidgetSuicide;
 import pneumaticCraft.common.tileentity.TileEntityProgrammer;
 
-public class ProgrammedDroneUtils{
-    private static EntityDrone getChargedDispenserUpgradeDrone(World world){
+public class ProgrammedDroneUtils {
+
+    private static EntityDrone getChargedDispenserUpgradeDrone(World world) {
         EntityDrone drone = new EntityDrone(world);
 
         NBTTagCompound tag = new NBTTagCompound();
@@ -35,12 +37,12 @@ public class ProgrammedDroneUtils{
 
         NBTTagList upgradeList = new NBTTagList();
         NBTTagCompound slotEntry = new NBTTagCompound();
-        slotEntry.setByte("Slot", (byte)0);
+        slotEntry.setByte("Slot", (byte) 0);
         new ItemStack(Itemss.machineUpgrade, 64, ItemMachineUpgrade.UPGRADE_DISPENSER_DAMAGE).writeToNBT(slotEntry);
         upgradeList.appendTag(slotEntry);
 
         slotEntry = new NBTTagCompound();
-        slotEntry.setByte("Slot", (byte)1);
+        slotEntry.setByte("Slot", (byte) 1);
         new ItemStack(Itemss.machineUpgrade, 10, ItemMachineUpgrade.UPGRADE_SPEED_DAMAGE).writeToNBT(slotEntry);
         upgradeList.appendTag(slotEntry);
 
@@ -53,23 +55,26 @@ public class ProgrammedDroneUtils{
         drone.readEntityFromNBT(tag);
         drone.setCustomNameTag(StatCollector.translateToLocal("drone.amadronDeliveryDrone"));
 
-        drone.naturallySpawned = true;//Don't let the drone be dropped when wrenching it.
+        drone.naturallySpawned = true;// Don't let the drone be dropped when wrenching it.
 
         return drone;
     }
 
-    public static EntityCreature deliverItemsAmazonStyle(World world, int x, int y, int z, ItemStack... deliveredStacks){
-        if(world.isRemote) return null;
-        if(deliveredStacks.length == 0) throw new IllegalArgumentException("You need to deliver at least 1 stack!");
-        if(deliveredStacks.length > 65) throw new IllegalArgumentException("You can only deliver up to 65 stacks at once!");
-        for(ItemStack stack : deliveredStacks) {
-            if(stack == null) throw new IllegalArgumentException("You can't supply a null stack to be delivered!");
-            if(stack.getItem() == null) throw new IllegalArgumentException("You can't supply a stack with a null item to be delivered!");
+    public static EntityCreature deliverItemsAmazonStyle(World world, int x, int y, int z,
+        ItemStack... deliveredStacks) {
+        if (world.isRemote) return null;
+        if (deliveredStacks.length == 0) throw new IllegalArgumentException("You need to deliver at least 1 stack!");
+        if (deliveredStacks.length > 65)
+            throw new IllegalArgumentException("You can only deliver up to 65 stacks at once!");
+        for (ItemStack stack : deliveredStacks) {
+            if (stack == null) throw new IllegalArgumentException("You can't supply a null stack to be delivered!");
+            if (stack.getItem() == null)
+                throw new IllegalArgumentException("You can't supply a stack with a null item to be delivered!");
         }
 
         EntityDrone drone = getChargedDispenserUpgradeDrone(world);
 
-        //Program the drone
+        // Program the drone
         int startY = world.getHeightValue(x + 30, z) + 30;
         drone.setPosition(x + 30, startY, z);
         List<IProgWidget> widgets = drone.progWidgets;
@@ -112,13 +117,15 @@ public class ProgrammedDroneUtils{
         area.setY(74);
         area.x1 = x;
         area.z1 = z;
-        if(drone.isBlockValidPathfindBlock(x, y, z)) {
-            for(int i = 0; i < 5 && drone.isBlockValidPathfindBlock(area.x1, i + y + 1, area.z1); i++) {
+        if (drone.isBlockValidPathfindBlock(x, y, z)) {
+            for (int i = 0; i < 5 && drone.isBlockValidPathfindBlock(area.x1, i + y + 1, area.z1); i++) {
                 area.y1 = y + i;
             }
         } else {
             area.y1 = world.getHeightValue(x, z) + 10;
-            if(!drone.isBlockValidPathfindBlock(area.x1, area.y1, area.z1)) area.y1 = 260;//Worst case scenario, there are definately no blocks here.
+            if (!drone.isBlockValidPathfindBlock(area.x1, area.y1, area.z1)) area.y1 = 260;// Worst case scenario, there
+                                                                                           // are definately no blocks
+                                                                                           // here.
         }
         widgets.add(area);
 
@@ -132,21 +139,23 @@ public class ProgrammedDroneUtils{
 
         TileEntityProgrammer.updatePuzzleConnections(widgets);
 
-        for(int i = 0; i < deliveredStacks.length; i++) {
-            drone.getInventory().setInventorySlotContents(i, deliveredStacks[i].copy());
+        for (int i = 0; i < deliveredStacks.length; i++) {
+            drone.getInventory()
+                .setInventorySlotContents(i, deliveredStacks[i].copy());
         }
         world.spawnEntityInWorld(drone);
         return drone;
     }
 
-    public static EntityCreature deliverFluidAmazonStyle(World world, int x, int y, int z, FluidStack deliveredFluid){
-        if(world.isRemote) return null;
-        if(deliveredFluid == null) throw new IllegalArgumentException("Can't deliver a null FluidStack");
-        if(deliveredFluid.amount <= 0) throw new IllegalArgumentException("Can't deliver a FluidStack with an amount of <= 0");
+    public static EntityCreature deliverFluidAmazonStyle(World world, int x, int y, int z, FluidStack deliveredFluid) {
+        if (world.isRemote) return null;
+        if (deliveredFluid == null) throw new IllegalArgumentException("Can't deliver a null FluidStack");
+        if (deliveredFluid.amount <= 0)
+            throw new IllegalArgumentException("Can't deliver a FluidStack with an amount of <= 0");
 
         EntityDrone drone = getChargedDispenserUpgradeDrone(world);
 
-        //Program the drone
+        // Program the drone
         int startY = world.getHeightValue(x + 30, z) + 30;
         drone.setPosition(x + 30, startY, z);
         List<IProgWidget> widgets = drone.progWidgets;
@@ -189,23 +198,27 @@ public class ProgrammedDroneUtils{
 
         TileEntityProgrammer.updatePuzzleConnections(widgets);
 
-        drone.getTank().fill(deliveredFluid, true);
+        drone.getTank()
+            .fill(deliveredFluid, true);
         world.spawnEntityInWorld(drone);
         return drone;
     }
 
-    public static EntityCreature retrieveItemsAmazonStyle(World world, int x, int y, int z, ItemStack... queriedStacks){
-        if(world.isRemote) return null;
-        if(queriedStacks.length == 0) throw new IllegalArgumentException("You need to query at least 1 stack!");
-        if(queriedStacks.length > 65) throw new IllegalArgumentException("You can only query up to 65 stacks at once!");
-        for(ItemStack stack : queriedStacks) {
-            if(stack == null) throw new IllegalArgumentException("You can't query a null stack!");
-            if(stack.getItem() == null) throw new IllegalArgumentException("You can't query a stack with a null item!");
+    public static EntityCreature retrieveItemsAmazonStyle(World world, int x, int y, int z,
+        ItemStack... queriedStacks) {
+        if (world.isRemote) return null;
+        if (queriedStacks.length == 0) throw new IllegalArgumentException("You need to query at least 1 stack!");
+        if (queriedStacks.length > 65)
+            throw new IllegalArgumentException("You can only query up to 65 stacks at once!");
+        for (ItemStack stack : queriedStacks) {
+            if (stack == null) throw new IllegalArgumentException("You can't query a null stack!");
+            if (stack.getItem() == null)
+                throw new IllegalArgumentException("You can't query a stack with a null item!");
         }
 
         EntityDrone drone = getChargedDispenserUpgradeDrone(world);
 
-        //Program the drone
+        // Program the drone
         int startY = world.getHeightValue(x + 30, z) + 30;
         drone.setPosition(x + 30, startY, z);
         List<IProgWidget> widgets = drone.progWidgets;
@@ -217,7 +230,7 @@ public class ProgrammedDroneUtils{
 
         int yBase = 52;
 
-        for(ItemStack stack : queriedStacks) {
+        for (ItemStack stack : queriedStacks) {
             ProgWidgetInventoryImport im = new ProgWidgetInventoryImport();
             im.setX(92);
             im.setY(yBase);
@@ -268,14 +281,15 @@ public class ProgrammedDroneUtils{
         return drone;
     }
 
-    public static EntityCreature retrieveFluidAmazonStyle(World world, int x, int y, int z, FluidStack queriedFluid){
-        if(world.isRemote) return null;
-        if(queriedFluid == null) throw new IllegalArgumentException("Can't query a null FluidStack");
-        if(queriedFluid.amount <= 0) throw new IllegalArgumentException("Can't query a FluidStack with an amount of <= 0");
+    public static EntityCreature retrieveFluidAmazonStyle(World world, int x, int y, int z, FluidStack queriedFluid) {
+        if (world.isRemote) return null;
+        if (queriedFluid == null) throw new IllegalArgumentException("Can't query a null FluidStack");
+        if (queriedFluid.amount <= 0)
+            throw new IllegalArgumentException("Can't query a FluidStack with an amount of <= 0");
 
         EntityDrone drone = getChargedDispenserUpgradeDrone(world);
 
-        //Program the drone
+        // Program the drone
         int startY = world.getHeightValue(x + 30, z) + 30;
         drone.setPosition(x + 30, startY, z);
         List<IProgWidget> widgets = drone.progWidgets;

@@ -1,5 +1,5 @@
 package pneumaticCraft.common.progwidgets;
 
-public interface ITextWidget{
-    // public boolean 
+public interface ITextWidget {
+    // public boolean
 }

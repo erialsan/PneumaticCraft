@@ -22,8 +22,9 @@ import pneumaticCraft.common.tileentity.TileEntityElevatorBase;
 import pneumaticCraft.common.util.PneumaticCraftUtils;
 import pneumaticCraft.lib.Textures;
 
-public class ModelElevatorBase extends ModelBase implements IBaseModel{
-    //fields
+public class ModelElevatorBase extends ModelBase implements IBaseModel {
+
+    // fields
     ModelRenderer Base;
     ModelRenderer Pole1;
     ModelRenderer Pole2;
@@ -60,7 +61,7 @@ public class ModelElevatorBase extends ModelBase implements IBaseModel{
     ModelRenderer PipeBack3;
     ModelRenderer PipeBack4;
 
-    public ModelElevatorBase(){
+    public ModelElevatorBase() {
         textureWidth = 64;
         textureHeight = 64;
 
@@ -277,7 +278,7 @@ public class ModelElevatorBase extends ModelBase implements IBaseModel{
     }
 
     @Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5){
+    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         super.render(entity, f, f1, f2, f3, f4, f5);
         setRotationAngles(f, f1, f2, f3, f4, f5, entity);
         Base.render(f5);
@@ -317,7 +318,7 @@ public class ModelElevatorBase extends ModelBase implements IBaseModel{
         PipeBack4.render(f5);
     }
 
-    public void renderModel(float size, float extension, boolean[] sidesConnected, TileEntityElevatorBase te){
+    public void renderModel(float size, float extension, boolean[] sidesConnected, TileEntityElevatorBase te) {
         Base.render(size);
         Pole5.render(size);
         TopSupport1.render(size);
@@ -332,25 +333,25 @@ public class ModelElevatorBase extends ModelBase implements IBaseModel{
         Support6.render(size);
         Support7.render(size);
         Support8.render(size);
-        if(sidesConnected[ForgeDirection.EAST.ordinal()]) {
+        if (sidesConnected[ForgeDirection.EAST.ordinal()]) {
             PipeLeft1.render(size);
             PipeLeft2.render(size);
             PipeLeft3.render(size);
             PipeLeft4.render(size);
         }
-        if(sidesConnected[ForgeDirection.WEST.ordinal()]) {
+        if (sidesConnected[ForgeDirection.WEST.ordinal()]) {
             PipeRight1.render(size);
             PipeRight2.render(size);
             PipeRight3.render(size);
             PipeRight4.render(size);
         }
-        if(sidesConnected[ForgeDirection.SOUTH.ordinal()]) {
+        if (sidesConnected[ForgeDirection.SOUTH.ordinal()]) {
             PipeFront1.render(size);
             PipeFront2.render(size);
             PipeFront3.render(size);
             PipeFront4.render(size);
         }
-        if(sidesConnected[ForgeDirection.NORTH.ordinal()]) {
+        if (sidesConnected[ForgeDirection.NORTH.ordinal()]) {
             PipeBack1.render(size);
             PipeBack2.render(size);
             PipeBack3.render(size);
@@ -394,47 +395,68 @@ public class ModelElevatorBase extends ModelBase implements IBaseModel{
         Pole1.render(size);
         GL11.glPopMatrix();
         Floor.render(size);
-        if(te != null && te.isCoreElevator() && te.baseCamo != null && te.getStackInSlot(4) != null && PneumaticCraftUtils.isRenderIDCamo(te.baseCamo.getRenderType())) {
-            Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.locationBlocksTexture);
+        if (te != null && te.isCoreElevator()
+            && te.baseCamo != null
+            && te.getStackInSlot(4) != null
+            && PneumaticCraftUtils.isRenderIDCamo(te.baseCamo.getRenderType())) {
+            Minecraft.getMinecraft()
+                .getTextureManager()
+                .bindTexture(TextureMap.locationBlocksTexture);
             GL11.glRotated(180, 0, 0, 1);
             GL11.glTranslated(0.5, -8 / 16D + 0.0001, 0.5);
             GL11.glScaled(-1, 0, -1);
             RenderUtils.RenderInfo renderInfo = new RenderUtils.RenderInfo(0, 0, 0, 1, 1 / 16F, 1);
             renderInfo.setRenderSingleSide(1);
             renderInfo.baseBlock = te.baseCamo;
-            renderInfo.setMeta(te.getStackInSlot(4).getItemDamage());
-            RenderUtils.INSTANCE.renderBlock(renderInfo, Minecraft.getMinecraft().theWorld, 0, 0, 0, te.xCoord, (int)Math.floor(te.yCoord + te.extension), te.zCoord, false, true);
+            renderInfo.setMeta(
+                te.getStackInSlot(4)
+                    .getItemDamage());
+            RenderUtils.INSTANCE.renderBlock(
+                renderInfo,
+                Minecraft.getMinecraft().theWorld,
+                0,
+                0,
+                0,
+                te.xCoord,
+                (int) Math.floor(te.yCoord + te.extension),
+                te.zCoord,
+                false,
+                true);
         }
     }
 
-    private void setRotation(ModelRenderer model, float x, float y, float z){
+    private void setRotation(ModelRenderer model, float x, float y, float z) {
         model.rotateAngleX = x;
         model.rotateAngleY = y;
         model.rotateAngleZ = z;
     }
 
     @Override
-    public void renderStatic(float size, TileEntity te){
+    public void renderStatic(float size, TileEntity te) {
 
     }
 
     @Override
-    public ResourceLocation getModelTexture(TileEntity tile){
+    public ResourceLocation getModelTexture(TileEntity tile) {
         return Textures.MODEL_ELEVATOR;
     }
 
     @Override
-    public boolean rotateModelBasedOnBlockMeta(){
+    public boolean rotateModelBasedOnBlockMeta() {
         return false;
     }
 
     @Override
-    public void renderDynamic(float size, TileEntity te, float partialTicks){
-        if(te instanceof TileEntityElevatorBase) {
-            TileEntityElevatorBase tile = (TileEntityElevatorBase)te;
-            renderModel(1 / 16F, tile.oldExtension + (tile.extension - tile.oldExtension) * partialTicks, tile.sidesConnected, tile);
+    public void renderDynamic(float size, TileEntity te, float partialTicks) {
+        if (te instanceof TileEntityElevatorBase) {
+            TileEntityElevatorBase tile = (TileEntityElevatorBase) te;
+            renderModel(
+                1 / 16F,
+                tile.oldExtension + (tile.extension - tile.oldExtension) * partialTicks,
+                tile.sidesConnected,
+                tile);
         } else {
-            renderModel(1 / 16F, 0, new boolean[]{false, false, false, false, false, false}, null);
+            renderModel(1 / 16F, 0, new boolean[] { false, false, false, false, false, false }, null);
         }
     }
 

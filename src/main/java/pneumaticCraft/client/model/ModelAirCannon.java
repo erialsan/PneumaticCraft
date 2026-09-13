@@ -10,7 +10,8 @@ import org.lwjgl.opengl.GL11;
 
 import pneumaticCraft.lib.Textures;
 
-public class ModelAirCannon extends ModelBase implements IBaseModel{
+public class ModelAirCannon extends ModelBase implements IBaseModel {
+
     // fields
     ModelRenderer Input1;
     ModelRenderer Input2;
@@ -33,7 +34,7 @@ public class ModelAirCannon extends ModelBase implements IBaseModel{
     ModelRenderer BaseFrame5;
     ModelRenderer BaseFrame6;
 
-    public ModelAirCannon(){
+    public ModelAirCannon() {
         textureWidth = 64;
         textureHeight = 32;
 
@@ -160,7 +161,7 @@ public class ModelAirCannon extends ModelBase implements IBaseModel{
     }
 
     @Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5){
+    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         super.render(entity, f, f1, f2, f3, f4, f5);
         setRotationAngles(f, f1, f2, f3, f4, f5, entity);
         Input1.render(f5);
@@ -186,17 +187,18 @@ public class ModelAirCannon extends ModelBase implements IBaseModel{
     }
 
     @Override
-    public void renderStatic(float size, TileEntity tile){
+    public void renderStatic(float size, TileEntity tile) {
         renderModel(size, 0, 0, false, false);
     }
 
     @Override
-    public void renderDynamic(float size, TileEntity te, float partialTicks){
+    public void renderDynamic(float size, TileEntity te, float partialTicks) {
 
     }
 
-    public void renderModel(float size, float rotationAngle, float heightAngle, boolean onlyRenderCannon, boolean onlyRenderBase){
-        if(!onlyRenderCannon && !onlyRenderBase) {
+    public void renderModel(float size, float rotationAngle, float heightAngle, boolean onlyRenderCannon,
+        boolean onlyRenderBase) {
+        if (!onlyRenderCannon && !onlyRenderBase) {
             Input1.render(size);
             Input2.render(size);
             Input3.render(size);
@@ -207,7 +209,7 @@ public class ModelAirCannon extends ModelBase implements IBaseModel{
             Input7.render(size);
         }
         GL11.glPushMatrix();
-        if(!onlyRenderCannon) {
+        if (!onlyRenderCannon) {
             GL11.glTranslated(0.0, 0.0, -0.09375D);
             GL11.glRotatef(rotationAngle, 0.0F, 1.0F, 0.0F);
             GL11.glTranslated(0.0, 0.0, 0.09375D);
@@ -219,7 +221,7 @@ public class ModelAirCannon extends ModelBase implements IBaseModel{
             BaseFrame5.render(size);
             BaseFrame6.render(size);
         }
-        if(!onlyRenderBase) {
+        if (!onlyRenderBase) {
             GL11.glPushMatrix();
             GL11.glTranslated(0.0D, 1.0D, -0.09375D);
             GL11.glRotatef(heightAngle, 1.0F, 0.0F, 0.0F);
@@ -234,19 +236,19 @@ public class ModelAirCannon extends ModelBase implements IBaseModel{
         GL11.glPopMatrix();
     }
 
-    private void setRotation(ModelRenderer model, float x, float y, float z){
+    private void setRotation(ModelRenderer model, float x, float y, float z) {
         model.rotateAngleX = x;
         model.rotateAngleY = y;
         model.rotateAngleZ = z;
     }
 
     @Override
-    public ResourceLocation getModelTexture(TileEntity tile){
+    public ResourceLocation getModelTexture(TileEntity tile) {
         return Textures.MODEL_AIR_CANNON;
     }
 
     @Override
-    public boolean rotateModelBasedOnBlockMeta(){
+    public boolean rotateModelBasedOnBlockMeta() {
         return true;
     }
 

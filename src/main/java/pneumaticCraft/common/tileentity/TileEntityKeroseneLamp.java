@@ -22,16 +22,18 @@ import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidContainerItem;
 import net.minecraftforge.fluids.IFluidHandler;
 import net.minecraftforge.fluids.IFluidTank;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import pneumaticCraft.common.block.Blockss;
 import pneumaticCraft.common.fluid.Fluids;
 import pneumaticCraft.common.network.DescSynced;
 import pneumaticCraft.common.network.GuiSynced;
 import pneumaticCraft.common.util.PneumaticCraftUtils;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityKeroseneLamp extends TileEntityBase implements IFluidHandler, IRedstoneControlled,
-        ISidedInventory{
+public class TileEntityKeroseneLamp extends TileEntityBase
+    implements IFluidHandler, IRedstoneControlled, ISidedInventory {
+
     private final Set<ChunkPosition> managingLights = new HashSet<ChunkPosition>();
     @DescSynced
     private boolean isOn;
@@ -55,34 +57,41 @@ public class TileEntityKeroseneLamp extends TileEntityBase implements IFluidHand
     private final ItemStack[] inventory = new ItemStack[2];
 
     @Override
-    public void updateEntity(){
+    public void updateEntity() {
         super.updateEntity();
-        if(!worldObj.isRemote) {
+        if (!worldObj.isRemote) {
             processFluidItem(0, 1);
-            if(worldObj.getTotalWorldTime() % 5 == 0) {
+            if (worldObj.getTotalWorldTime() % 5 == 0) {
                 int realTargetRange = redstoneAllows() ? targetRange : 0;
-                if(redstoneMode == 3) realTargetRange = (int)(poweredRedstone / 15D * targetRange);
-                updateRange(Math.min(realTargetRange, tank.getFluidAmount())); //Fade out the lamp when almost empty.
+                if (redstoneMode == 3) realTargetRange = (int) (poweredRedstone / 15D * targetRange);
+                updateRange(Math.min(realTargetRange, tank.getFluidAmount())); // Fade out the lamp when almost empty.
                 updateLights();
                 useFuel();
             }
         } else {
-            if(isOn && worldObj.getTotalWorldTime() % 5 == 0) {
-                worldObj.spawnParticle("flame", xCoord + 0.4 + 0.2 * worldObj.rand.nextDouble(), yCoord + 0.2 + tank.getFluidAmount() / 1000D * 3 / 16D, zCoord + 0.4 + 0.2 * worldObj.rand.nextDouble(), 0, 0, 0);
+            if (isOn && worldObj.getTotalWorldTime() % 5 == 0) {
+                worldObj.spawnParticle(
+                    "flame",
+                    xCoord + 0.4 + 0.2 * worldObj.rand.nextDouble(),
+                    yCoord + 0.2 + tank.getFluidAmount() / 1000D * 3 / 16D,
+                    zCoord + 0.4 + 0.2 * worldObj.rand.nextDouble(),
+                    0,
+                    0,
+                    0);
             }
         }
     }
 
-    private void useFuel(){
+    private void useFuel() {
         fuel -= Math.pow(range, 3);
-        if(fuel < 0 && tank.drain(1, true) != null) {
+        if (fuel < 0 && tank.drain(1, true) != null) {
             fuel += FUEL_PER_MB;
         }
-        if(fuel < 0) fuel = 0;
+        if (fuel < 0) fuel = 0;
     }
 
     @Override
-    public void validate(){
+    public void validate() {
         super.validate();
         checkingX = xCoord;
         checkingY = yCoord;
@@ -90,36 +99,36 @@ public class TileEntityKeroseneLamp extends TileEntityBase implements IFluidHand
     }
 
     @Override
-    public void invalidate(){
+    public void invalidate() {
         super.invalidate();
-        for(ChunkPosition pos : managingLights) {
-            if(isLampLight(pos)) {
+        for (ChunkPosition pos : managingLights) {
+            if (isLampLight(pos)) {
                 worldObj.setBlockToAir(pos.chunkPosX, pos.chunkPosY, pos.chunkPosZ);
             }
         }
     }
 
-    private boolean isLampLight(ChunkPosition pos){
+    private boolean isLampLight(ChunkPosition pos) {
         return worldObj.getBlock(pos.chunkPosX, pos.chunkPosY, pos.chunkPosZ) == Blockss.keroseneLampLight;
     }
 
-    private void updateLights(){
+    private void updateLights() {
         int roundedRange = range / LIGHT_SPACING * LIGHT_SPACING;
         checkingX += LIGHT_SPACING;
-        if(checkingX > xCoord + roundedRange) {
+        if (checkingX > xCoord + roundedRange) {
             checkingX = xCoord - roundedRange;
             checkingY += LIGHT_SPACING;
-            if(checkingY > yCoord + roundedRange) {
+            if (checkingY > yCoord + roundedRange) {
                 checkingY = yCoord - roundedRange;
                 checkingZ += LIGHT_SPACING;
-                if(checkingZ > zCoord + roundedRange) checkingZ = zCoord - roundedRange;
+                if (checkingZ > zCoord + roundedRange) checkingZ = zCoord - roundedRange;
             }
         }
         ChunkPosition pos = new ChunkPosition(checkingX, checkingY, checkingZ);
         ChunkPosition lampPos = new ChunkPosition(xCoord, yCoord, zCoord);
-        if(managingLights.contains(pos)) {
-            if(isLampLight(pos)) {
-                if(!passesRaytraceTest(pos, lampPos)) {
+        if (managingLights.contains(pos)) {
+            if (isLampLight(pos)) {
+                if (!passesRaytraceTest(pos, lampPos)) {
                     worldObj.setBlockToAir(pos.chunkPosX, pos.chunkPosY, pos.chunkPosZ);
                     managingLights.remove(pos);
                 }
@@ -131,30 +140,30 @@ public class TileEntityKeroseneLamp extends TileEntityBase implements IFluidHand
         }
     }
 
-    private void updateRange(int targetRange){
-        if(targetRange > range) {
+    private void updateRange(int targetRange) {
+        if (targetRange > range) {
             range++;
             ChunkPosition lampPos = new ChunkPosition(xCoord, yCoord, zCoord);
             int roundedRange = range / LIGHT_SPACING * LIGHT_SPACING;
-            for(int x = -roundedRange; x <= roundedRange; x += LIGHT_SPACING) {
-                for(int y = -roundedRange; y <= roundedRange; y += LIGHT_SPACING) {
-                    for(int z = -roundedRange; z <= roundedRange; z += LIGHT_SPACING) {
+            for (int x = -roundedRange; x <= roundedRange; x += LIGHT_SPACING) {
+                for (int y = -roundedRange; y <= roundedRange; y += LIGHT_SPACING) {
+                    for (int z = -roundedRange; z <= roundedRange; z += LIGHT_SPACING) {
                         ChunkPosition pos = new ChunkPosition(x + xCoord, y + yCoord, z + zCoord);
-                        if(!managingLights.contains(pos)) {
+                        if (!managingLights.contains(pos)) {
                             tryAddLight(pos, lampPos);
                         }
                     }
                 }
             }
-        } else if(targetRange < range) {
+        } else if (targetRange < range) {
             range--;
             Iterator<ChunkPosition> iterator = managingLights.iterator();
             ChunkPosition lampPos = new ChunkPosition(xCoord, yCoord, zCoord);
-            while(iterator.hasNext()) {
+            while (iterator.hasNext()) {
                 ChunkPosition pos = iterator.next();
-                if(!isLampLight(pos)) {
+                if (!isLampLight(pos)) {
                     iterator.remove();
-                } else if(PneumaticCraftUtils.distBetween(pos, lampPos) > range) {
+                } else if (PneumaticCraftUtils.distBetween(pos, lampPos) > range) {
                     worldObj.setBlockToAir(pos.chunkPosX, pos.chunkPosY, pos.chunkPosZ);
                     iterator.remove();
                 }
@@ -163,15 +172,17 @@ public class TileEntityKeroseneLamp extends TileEntityBase implements IFluidHand
         isOn = range > 0;
     }
 
-    private boolean passesRaytraceTest(ChunkPosition pos, ChunkPosition lampPos){
-        MovingObjectPosition mop = worldObj.rayTraceBlocks(Vec3.createVectorHelper(pos.chunkPosX + 0.5, pos.chunkPosY + 0.5, pos.chunkPosZ + 0.5), Vec3.createVectorHelper(lampPos.chunkPosX + 0.5, lampPos.chunkPosY + 0.5, lampPos.chunkPosZ + 0.5));
+    private boolean passesRaytraceTest(ChunkPosition pos, ChunkPosition lampPos) {
+        MovingObjectPosition mop = worldObj.rayTraceBlocks(
+            Vec3.createVectorHelper(pos.chunkPosX + 0.5, pos.chunkPosY + 0.5, pos.chunkPosZ + 0.5),
+            Vec3.createVectorHelper(lampPos.chunkPosX + 0.5, lampPos.chunkPosY + 0.5, lampPos.chunkPosZ + 0.5));
         return mop != null && lampPos.equals(new ChunkPosition(mop.blockX, mop.blockY, mop.blockZ));
     }
 
-    private boolean tryAddLight(ChunkPosition pos, ChunkPosition lampPos){
-        if(PneumaticCraftUtils.distBetween(pos, lampPos) <= range) {
-            if(worldObj.isAirBlock(pos.chunkPosX, pos.chunkPosY, pos.chunkPosZ) && !isLampLight(pos)) {
-                if(passesRaytraceTest(pos, lampPos)) {
+    private boolean tryAddLight(ChunkPosition pos, ChunkPosition lampPos) {
+        if (PneumaticCraftUtils.distBetween(pos, lampPos) <= range) {
+            if (worldObj.isAirBlock(pos.chunkPosX, pos.chunkPosY, pos.chunkPosZ) && !isLampLight(pos)) {
+                if (passesRaytraceTest(pos, lampPos)) {
                     worldObj.setBlock(pos.chunkPosX, pos.chunkPosY, pos.chunkPosZ, Blockss.keroseneLampLight);
                     managingLights.add(pos);
                     return true;
@@ -182,15 +193,15 @@ public class TileEntityKeroseneLamp extends TileEntityBase implements IFluidHand
     }
 
     @Override
-    public void onNeighborBlockUpdate(){
+    public void onNeighborBlockUpdate() {
         super.onNeighborBlockUpdate();
         sideConnected = ForgeDirection.DOWN;
-        for(ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
+        for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
             int x = xCoord + d.offsetX;
             int y = yCoord + d.offsetY;
             int z = zCoord + d.offsetZ;
             Block block = worldObj.getBlock(x, y, z);
-            if(block.isSideSolid(worldObj, x, y, z, d.getOpposite())) {
+            if (block.isSideSolid(worldObj, x, y, z, d.getOpposite())) {
                 sideConnected = d;
                 break;
             }
@@ -198,40 +209,41 @@ public class TileEntityKeroseneLamp extends TileEntityBase implements IFluidHand
     }
 
     @Override
-    public int fill(ForgeDirection from, FluidStack resource, boolean doFill){
+    public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
         return canFill(from, resource.getFluid()) ? tank.fill(resource, doFill) : 0;
     }
 
     @Override
-    public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain){
-        return tank.getFluid() != null && tank.getFluid().isFluidEqual(resource) ? drain(ForgeDirection.UNKNOWN, resource.amount, doDrain) : null;
+    public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+        return tank.getFluid() != null && tank.getFluid()
+            .isFluidEqual(resource) ? drain(ForgeDirection.UNKNOWN, resource.amount, doDrain) : null;
     }
 
     @Override
-    public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain){
+    public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
         return tank.drain(maxDrain, doDrain);
     }
 
     @Override
-    public boolean canFill(ForgeDirection from, Fluid fluid){
+    public boolean canFill(ForgeDirection from, Fluid fluid) {
         return Fluids.areFluidsEqual(fluid, Fluids.kerosene);
     }
 
     @Override
-    public boolean canDrain(ForgeDirection from, Fluid fluid){
+    public boolean canDrain(ForgeDirection from, Fluid fluid) {
         return true;
     }
 
     @Override
-    public FluidTankInfo[] getTankInfo(ForgeDirection from){
-        return new FluidTankInfo[]{new FluidTankInfo(tank)};
+    public FluidTankInfo[] getTankInfo(ForgeDirection from) {
+        return new FluidTankInfo[] { new FluidTankInfo(tank) };
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound tag){
+    public void writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
         NBTTagList lights = new NBTTagList();
-        for(ChunkPosition pos : managingLights) {
+        for (ChunkPosition pos : managingLights) {
             NBTTagCompound t = new NBTTagCompound();
             t.setInteger("x", pos.chunkPosX);
             t.setInteger("y", pos.chunkPosY);
@@ -243,19 +255,19 @@ public class TileEntityKeroseneLamp extends TileEntityBase implements IFluidHand
         NBTTagCompound tankTag = new NBTTagCompound();
         tank.writeToNBT(tankTag);
         tag.setTag("tank", tankTag);
-        tag.setByte("redstoneMode", (byte)redstoneMode);
-        tag.setByte("targetRange", (byte)targetRange);
-        tag.setByte("range", (byte)range);
-        tag.setByte("sideConnected", (byte)sideConnected.ordinal());
+        tag.setByte("redstoneMode", (byte) redstoneMode);
+        tag.setByte("targetRange", (byte) targetRange);
+        tag.setByte("range", (byte) range);
+        tag.setByte("sideConnected", (byte) sideConnected.ordinal());
         writeInventoryToNBT(tag, inventory);
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound tag){
+    public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
         managingLights.clear();
         NBTTagList lights = tag.getTagList("lights", 10);
-        for(int i = 0; i < lights.tagCount(); i++) {
+        for (int i = 0; i < lights.tagCount(); i++) {
             NBTTagCompound t = lights.getCompoundTagAt(i);
             managingLights.add(new ChunkPosition(t.getInteger("x"), t.getInteger("y"), t.getInteger("z")));
         }
@@ -268,44 +280,44 @@ public class TileEntityKeroseneLamp extends TileEntityBase implements IFluidHand
     }
 
     @Override
-    public boolean redstoneAllows(){
-        if(redstoneMode == 3) return true;
+    public boolean redstoneAllows() {
+        if (redstoneMode == 3) return true;
         return super.redstoneAllows();
     }
 
     @Override
-    public int getRedstoneMode(){
+    public int getRedstoneMode() {
         return redstoneMode;
     }
 
     @Override
-    public void handleGUIButtonPress(int buttonID, EntityPlayer player){
-        if(buttonID == 0) {
+    public void handleGUIButtonPress(int buttonID, EntityPlayer player) {
+        if (buttonID == 0) {
             redstoneMode++;
-            if(redstoneMode > 3) redstoneMode = 0;
-        } else if(buttonID > 0 && buttonID <= 30) {
+            if (redstoneMode > 3) redstoneMode = 0;
+        } else if (buttonID > 0 && buttonID <= 30) {
             targetRange = buttonID;
         }
     }
 
     @SideOnly(Side.CLIENT)
-    public IFluidTank getTank(){
+    public IFluidTank getTank() {
         return tank;
     }
 
-    public int getRange(){
+    public int getRange() {
         return range;
     }
 
-    public int getTargetRange(){
+    public int getTargetRange() {
         return targetRange;
     }
 
-    public int getFuel(){
+    public int getFuel() {
         return fuel;
     }
 
-    public ForgeDirection getSideConnected(){
+    public ForgeDirection getSideConnected() {
         return sideConnected;
     }
 
@@ -317,7 +329,7 @@ public class TileEntityKeroseneLamp extends TileEntityBase implements IFluidHand
      * Returns the name of the inventory.
      */
     @Override
-    public String getInventoryName(){
+    public String getInventoryName() {
         return Blockss.keroseneLamp.getUnlocalizedName();
     }
 
@@ -325,7 +337,7 @@ public class TileEntityKeroseneLamp extends TileEntityBase implements IFluidHand
      * Returns the number of slots in the inventory.
      */
     @Override
-    public int getSizeInventory(){
+    public int getSizeInventory() {
         return inventory.length;
     }
 
@@ -333,19 +345,19 @@ public class TileEntityKeroseneLamp extends TileEntityBase implements IFluidHand
      * Returns the stack in slot i
      */
     @Override
-    public ItemStack getStackInSlot(int par1){
+    public ItemStack getStackInSlot(int par1) {
         return inventory[par1];
     }
 
     @Override
-    public ItemStack decrStackSize(int slot, int amount){
+    public ItemStack decrStackSize(int slot, int amount) {
         ItemStack itemStack = getStackInSlot(slot);
-        if(itemStack != null) {
-            if(itemStack.stackSize <= amount) {
+        if (itemStack != null) {
+            if (itemStack.stackSize <= amount) {
                 setInventorySlotContents(slot, null);
             } else {
                 itemStack = itemStack.splitStack(amount);
-                if(itemStack.stackSize == 0) {
+                if (itemStack.stackSize == 0) {
                     setInventorySlotContents(slot, null);
                 }
             }
@@ -354,60 +366,63 @@ public class TileEntityKeroseneLamp extends TileEntityBase implements IFluidHand
     }
 
     @Override
-    public ItemStack getStackInSlotOnClosing(int slot){
+    public ItemStack getStackInSlotOnClosing(int slot) {
         ItemStack itemStack = getStackInSlot(slot);
-        if(itemStack != null) {
+        if (itemStack != null) {
             setInventorySlotContents(slot, null);
         }
         return itemStack;
     }
 
     @Override
-    public void setInventorySlotContents(int slot, ItemStack itemStack){
+    public void setInventorySlotContents(int slot, ItemStack itemStack) {
         inventory[slot] = itemStack;
-        if(itemStack != null && itemStack.stackSize > getInventoryStackLimit()) {
+        if (itemStack != null && itemStack.stackSize > getInventoryStackLimit()) {
             itemStack.stackSize = getInventoryStackLimit();
         }
     }
 
     @Override
-    public boolean isItemValidForSlot(int slot, ItemStack stack){
-        return slot == 1 ? false : stack != null && (FluidContainerRegistry.getFluidForFilledItem(stack) != null || stack.getItem() instanceof IFluidContainerItem && ((IFluidContainerItem)stack.getItem()).getFluid(stack) != null);
+    public boolean isItemValidForSlot(int slot, ItemStack stack) {
+        return slot == 1 ? false
+            : stack != null && (FluidContainerRegistry.getFluidForFilledItem(stack) != null
+                || stack.getItem() instanceof IFluidContainerItem
+                    && ((IFluidContainerItem) stack.getItem()).getFluid(stack) != null);
     }
 
     @Override
-    public boolean hasCustomInventoryName(){
+    public boolean hasCustomInventoryName() {
         return false;
     }
 
     @Override
-    public int getInventoryStackLimit(){
+    public int getInventoryStackLimit() {
         return 64;
     }
 
     @Override
-    public boolean isUseableByPlayer(EntityPlayer p_70300_1_){
+    public boolean isUseableByPlayer(EntityPlayer p_70300_1_) {
         return isGuiUseableByPlayer(p_70300_1_);
     }
 
     @Override
-    public void openInventory(){}
+    public void openInventory() {}
 
     @Override
-    public void closeInventory(){}
+    public void closeInventory() {}
 
     @Override
-    public int[] getAccessibleSlotsFromSide(int p_94128_1_){
-        return new int[]{0, 1};
+    public int[] getAccessibleSlotsFromSide(int p_94128_1_) {
+        return new int[] { 0, 1 };
     }
 
     @Override
-    public boolean canInsertItem(int slot, ItemStack stack, int side){
+    public boolean canInsertItem(int slot, ItemStack stack, int side) {
         return isItemValidForSlot(slot, stack);
     }
 
     @Override
-    public boolean canExtractItem(int slot, ItemStack stack, int side){
+    public boolean canExtractItem(int slot, ItemStack stack, int side) {
         return slot == 1;
     }
 }

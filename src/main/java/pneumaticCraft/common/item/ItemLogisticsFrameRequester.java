@@ -2,9 +2,9 @@ package pneumaticCraft.common.item;
 
 import pneumaticCraft.common.semiblock.SemiBlockRequester;
 
-public class ItemLogisticsFrameRequester extends ItemLogisticsFrame{
+public class ItemLogisticsFrameRequester extends ItemLogisticsFrame {
 
-    public ItemLogisticsFrameRequester(){
+    public ItemLogisticsFrameRequester() {
         super(SemiBlockRequester.ID);
     }
 

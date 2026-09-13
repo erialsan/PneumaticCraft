@@ -1,7 +1,7 @@
 package WayofTime.alchemicalWizardry.api.rituals;
 
-public class RitualComponent
-{
+public class RitualComponent {
+
     private int x;
     private int y;
     private int z;
@@ -13,31 +13,26 @@ public class RitualComponent
     public static final int AIR = 4;
     public static final int DUSK = 5;
 
-    public RitualComponent(int x, int y, int z, int stoneType)
-    {
+    public RitualComponent(int x, int y, int z, int stoneType) {
         this.x = x;
         this.y = y;
         this.z = z;
         this.stoneType = stoneType;
     }
 
-    public int getX()
-    {
+    public int getX() {
         return this.x;
     }
 
-    public int getY()
-    {
+    public int getY() {
         return this.y;
     }
 
-    public int getZ()
-    {
+    public int getZ() {
         return this.z;
     }
 
-    public int getStoneType()
-    {
+    public int getStoneType() {
         return this.stoneType;
     }
 }

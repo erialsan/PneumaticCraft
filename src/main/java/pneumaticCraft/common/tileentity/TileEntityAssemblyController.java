@@ -12,6 +12,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.util.ForgeDirection;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import pneumaticCraft.api.tileentity.IPneumaticMachine;
 import pneumaticCraft.common.block.Blockss;
 import pneumaticCraft.common.item.ItemAssemblyProgram;
@@ -23,11 +26,10 @@ import pneumaticCraft.common.recipes.programs.AssemblyProgram.EnumMachine;
 import pneumaticCraft.common.util.PneumaticCraftUtils;
 import pneumaticCraft.lib.GuiConstants;
 import pneumaticCraft.lib.PneumaticValues;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityAssemblyController extends TileEntityPneumaticBase implements ISidedInventory, IAssemblyMachine,
-        IMinWorkingPressure{
+public class TileEntityAssemblyController extends TileEntityPneumaticBase
+    implements ISidedInventory, IAssemblyMachine, IMinWorkingPressure {
+
     private ItemStack[] inventory;
     @DescSynced
     public boolean[] sidesConnected = new boolean[6];
@@ -46,32 +48,41 @@ public class TileEntityAssemblyController extends TileEntityPneumaticBase implem
     @DescSynced
     public boolean hasProblem;
 
-    public TileEntityAssemblyController(){
-        super(PneumaticValues.DANGER_PRESSURE_ASSEMBLY_CONTROLLER, PneumaticValues.MAX_PRESSURE_ASSEMBLY_CONTROLLER, PneumaticValues.VOLUME_ASSEMBLY_CONTROLLER);
+    public TileEntityAssemblyController() {
+        super(
+            PneumaticValues.DANGER_PRESSURE_ASSEMBLY_CONTROLLER,
+            PneumaticValues.MAX_PRESSURE_ASSEMBLY_CONTROLLER,
+            PneumaticValues.VOLUME_ASSEMBLY_CONTROLLER);
         inventory = new ItemStack[INVENTORY_SIZE];
-        setUpgradeSlots(new int[]{UPGRADE_SLOT_START, 2, 3, UPGRADE_SLOT_END});
+        setUpgradeSlots(new int[] { UPGRADE_SLOT_START, 2, 3, UPGRADE_SLOT_END });
     }
 
     @Override
-    public void updateEntity(){
+    public void updateEntity() {
 
-        if(!worldObj.isRemote && firstRun) updateConnections();
+        if (!worldObj.isRemote && firstRun) updateConnections();
 
         // curProgram must be available on the client, or we can't show program-problems in the GUI
-        if(curProgram == null && !goingToHomePosition && inventory[PROGRAM_INVENTORY_INDEX] != null && inventory[PROGRAM_INVENTORY_INDEX].getItem() == Itemss.assemblyProgram) {
-            AssemblyProgram program = ItemAssemblyProgram.getProgramFromItem(inventory[PROGRAM_INVENTORY_INDEX].getItemDamage());
+        if (curProgram == null && !goingToHomePosition
+            && inventory[PROGRAM_INVENTORY_INDEX] != null
+            && inventory[PROGRAM_INVENTORY_INDEX].getItem() == Itemss.assemblyProgram) {
+            AssemblyProgram program = ItemAssemblyProgram
+                .getProgramFromItem(inventory[PROGRAM_INVENTORY_INDEX].getItemDamage());
             curProgram = program;
-        } else if(curProgram != null && (inventory[PROGRAM_INVENTORY_INDEX] == null || curProgram.getClass() != ItemAssemblyProgram.getProgramFromItem(inventory[PROGRAM_INVENTORY_INDEX].getItemDamage()).getClass())) {
-            curProgram = null;
-            if(!worldObj.isRemote) goingToHomePosition = true;
-        }
+        } else if (curProgram != null && (inventory[PROGRAM_INVENTORY_INDEX] == null || curProgram.getClass()
+            != ItemAssemblyProgram.getProgramFromItem(inventory[PROGRAM_INVENTORY_INDEX].getItemDamage())
+                .getClass())) {
+                    curProgram = null;
+                    if (!worldObj.isRemote) goingToHomePosition = true;
+                }
 
-        if(!worldObj.isRemote) {
+        if (!worldObj.isRemote) {
             displayedText = "Standby";
-            if(getPressure(ForgeDirection.UNKNOWN) >= PneumaticValues.MIN_PRESSURE_ASSEMBLY_CONTROLLER) {
-                if(curProgram != null || goingToHomePosition) {
+            if (getPressure(ForgeDirection.UNKNOWN) >= PneumaticValues.MIN_PRESSURE_ASSEMBLY_CONTROLLER) {
+                if (curProgram != null || goingToHomePosition) {
                     List<IAssemblyMachine> machineList = getMachines();
-                    EnumMachine[] requiredMachines = curProgram != null ? curProgram.getRequiredMachines() : EnumMachine.values();
+                    EnumMachine[] requiredMachines = curProgram != null ? curProgram.getRequiredMachines()
+                        : EnumMachine.values();
                     TileEntityAssemblyDrill drill = null;
                     TileEntityAssemblyLaser laser = null;
                     TileEntityAssemblyIOUnit ioUnitImport = null;
@@ -79,42 +90,45 @@ public class TileEntityAssemblyController extends TileEntityPneumaticBase implem
                     TileEntityAssemblyPlatform platform = null;
                     foundDuplicateMachine = false;
                     boolean foundMachines[] = new boolean[requiredMachines.length];
-                    for(IAssemblyMachine machine : machineList) {
-                        if(machine != this && machine instanceof TileEntityAssemblyController) foundDuplicateMachine = true;
-                        for(int i = 0; i < requiredMachines.length; i++) {
-                            switch(requiredMachines[i]){
+                    for (IAssemblyMachine machine : machineList) {
+                        if (machine != this && machine instanceof TileEntityAssemblyController)
+                            foundDuplicateMachine = true;
+                        for (int i = 0; i < requiredMachines.length; i++) {
+                            switch (requiredMachines[i]) {
                                 case DRILL:
-                                    if(machine instanceof TileEntityAssemblyDrill) {
-                                        if(drill != null) foundDuplicateMachine = true;
-                                        drill = (TileEntityAssemblyDrill)machine;
+                                    if (machine instanceof TileEntityAssemblyDrill) {
+                                        if (drill != null) foundDuplicateMachine = true;
+                                        drill = (TileEntityAssemblyDrill) machine;
                                         foundMachines[i] = true;
                                     }
                                     break;
                                 case LASER:
-                                    if(machine instanceof TileEntityAssemblyLaser) {
-                                        if(laser != null) foundDuplicateMachine = true;
-                                        laser = (TileEntityAssemblyLaser)machine;
+                                    if (machine instanceof TileEntityAssemblyLaser) {
+                                        if (laser != null) foundDuplicateMachine = true;
+                                        laser = (TileEntityAssemblyLaser) machine;
                                         foundMachines[i] = true;
                                     }
                                     break;
                                 case IO_UNIT_IMPORT:
-                                    if(machine instanceof TileEntityAssemblyIOUnit && ((TileEntityAssemblyIOUnit)machine).getBlockMetadata() == 0) {
-                                        if(ioUnitImport != null) foundDuplicateMachine = true;
-                                        ioUnitImport = (TileEntityAssemblyIOUnit)machine;
+                                    if (machine instanceof TileEntityAssemblyIOUnit
+                                        && ((TileEntityAssemblyIOUnit) machine).getBlockMetadata() == 0) {
+                                        if (ioUnitImport != null) foundDuplicateMachine = true;
+                                        ioUnitImport = (TileEntityAssemblyIOUnit) machine;
                                         foundMachines[i] = true;
                                     }
                                     break;
                                 case IO_UNIT_EXPORT:
-                                    if(machine instanceof TileEntityAssemblyIOUnit && ((TileEntityAssemblyIOUnit)machine).getBlockMetadata() == 1) {
-                                        if(ioUnitExport != null) foundDuplicateMachine = true;
-                                        ioUnitExport = (TileEntityAssemblyIOUnit)machine;
+                                    if (machine instanceof TileEntityAssemblyIOUnit
+                                        && ((TileEntityAssemblyIOUnit) machine).getBlockMetadata() == 1) {
+                                        if (ioUnitExport != null) foundDuplicateMachine = true;
+                                        ioUnitExport = (TileEntityAssemblyIOUnit) machine;
                                         foundMachines[i] = true;
                                     }
                                     break;
                                 case PLATFORM:
-                                    if(machine instanceof TileEntityAssemblyPlatform) {
-                                        if(platform != null) foundDuplicateMachine = true;
-                                        platform = (TileEntityAssemblyPlatform)machine;
+                                    if (machine instanceof TileEntityAssemblyPlatform) {
+                                        if (platform != null) foundDuplicateMachine = true;
+                                        platform = (TileEntityAssemblyPlatform) machine;
                                         foundMachines[i] = true;
                                     }
                                     break;
@@ -123,27 +137,30 @@ public class TileEntityAssemblyController extends TileEntityPneumaticBase implem
                     }
 
                     foundAllMachines = true;
-                    for(boolean foundMachine : foundMachines) {
-                        if(!foundMachine) {
+                    for (boolean foundMachine : foundMachines) {
+                        if (!foundMachine) {
                             foundAllMachines = false;
                             break;
                         }
                     }
 
-                    if((foundAllMachines || curProgram == null) && !foundDuplicateMachine) {
+                    if ((foundAllMachines || curProgram == null) && !foundDuplicateMachine) {
                         // if(firstRun || areAllMachinesDone(machineList)) {
                         boolean useAir;
-                        if(curProgram != null) {
+                        if (curProgram != null) {
                             useAir = curProgram.executeStep(this, platform, ioUnitImport, ioUnitExport, drill, laser);
-                            if(useAir) displayedText = "Running...";
+                            if (useAir) displayedText = "Running...";
                         } else {
                             useAir = true;
                             goToHomePosition(platform, ioUnitImport, ioUnitExport, drill, laser);
                             displayedText = "Resetting...";
                         }
-                        if(useAir) addAir(-(int)(PneumaticValues.USAGE_ASSEMBLING * getSpeedUsageMultiplierFromUpgrades(getUpgradeSlots())), ForgeDirection.UNKNOWN);
+                        if (useAir) addAir(
+                            -(int) (PneumaticValues.USAGE_ASSEMBLING
+                                * getSpeedUsageMultiplierFromUpgrades(getUpgradeSlots())),
+                            ForgeDirection.UNKNOWN);
                         float speedMultiplier = getSpeedMultiplierFromUpgrades(getUpgradeSlots());
-                        for(IAssemblyMachine machine : machineList) {
+                        for (IAssemblyMachine machine : machineList) {
                             machine.setSpeed(speedMultiplier);
                         }
                     }
@@ -155,16 +172,17 @@ public class TileEntityAssemblyController extends TileEntityPneumaticBase implem
 
     }
 
-    private void goToHomePosition(TileEntityAssemblyPlatform platform, TileEntityAssemblyIOUnit ioUnitImport, TileEntityAssemblyIOUnit ioUnitExport, TileEntityAssemblyDrill drill, TileEntityAssemblyLaser laser){
+    private void goToHomePosition(TileEntityAssemblyPlatform platform, TileEntityAssemblyIOUnit ioUnitImport,
+        TileEntityAssemblyIOUnit ioUnitExport, TileEntityAssemblyDrill drill, TileEntityAssemblyLaser laser) {
 
         boolean resetDone = true;
 
-        for(IResettable machine : new IResettable[]{drill, laser, ioUnitImport, platform, ioUnitExport}) {
-            if(machine != null && !machine.reset()) {
+        for (IResettable machine : new IResettable[] { drill, laser, ioUnitImport, platform, ioUnitExport }) {
+            if (machine != null && !machine.reset()) {
                 resetDone = false;
 
-                if(machine == platform) {
-                    if(ioUnitExport != null) ioUnitExport.pickupItem(null);
+                if (machine == platform) {
+                    if (ioUnitExport != null) ioUnitExport.pickupItem(null);
                 }
 
                 break;
@@ -174,65 +192,81 @@ public class TileEntityAssemblyController extends TileEntityPneumaticBase implem
         goingToHomePosition = !(foundAllMachines && resetDone);
     }
 
-    public void addProblems(List<String> problemList){
-        if(getPressure(ForgeDirection.UNKNOWN) < PneumaticValues.MIN_PRESSURE_ASSEMBLY_CONTROLLER) {
+    public void addProblems(List<String> problemList) {
+        if (getPressure(ForgeDirection.UNKNOWN) < PneumaticValues.MIN_PRESSURE_ASSEMBLY_CONTROLLER) {
             problemList.add(EnumChatFormatting.GRAY + "No sufficient pressure.");
             problemList.add(EnumChatFormatting.BLACK + "Add pressure.");
         }
-        if(curProgram == null) {
+        if (curProgram == null) {
             problemList.add(EnumChatFormatting.GRAY + "There's no program to run.");
             problemList.add(EnumChatFormatting.BLACK + "Insert an Assembly Program.");
         } else {
-            if(foundDuplicateMachine) {
-                problemList.addAll(PneumaticCraftUtils.convertStringIntoList(EnumChatFormatting.GRAY + "Controller found a duplicate machine!", GuiConstants.maxCharPerLineLeft));
-                problemList.addAll(PneumaticCraftUtils.convertStringIntoList(EnumChatFormatting.BLACK + "Remove it so there is one machine of each type.", GuiConstants.maxCharPerLineLeft));
-            } else if(foundAllMachines) {
+            if (foundDuplicateMachine) {
+                problemList.addAll(
+                    PneumaticCraftUtils.convertStringIntoList(
+                        EnumChatFormatting.GRAY + "Controller found a duplicate machine!",
+                        GuiConstants.maxCharPerLineLeft));
+                problemList.addAll(
+                    PneumaticCraftUtils.convertStringIntoList(
+                        EnumChatFormatting.BLACK + "Remove it so there is one machine of each type.",
+                        GuiConstants.maxCharPerLineLeft));
+            } else if (foundAllMachines) {
                 curProgram.addProgramProblem(problemList);
             } else {
-                problemList.addAll(PneumaticCraftUtils.convertStringIntoList(EnumChatFormatting.GRAY + "Not all machines required for this program are available.", GuiConstants.maxCharPerLineLeft));
-                problemList.addAll(PneumaticCraftUtils.convertStringIntoList(EnumChatFormatting.BLACK + "Connect up the other required machines.", GuiConstants.maxCharPerLineLeft));
+                problemList.addAll(
+                    PneumaticCraftUtils.convertStringIntoList(
+                        EnumChatFormatting.GRAY + "Not all machines required for this program are available.",
+                        GuiConstants.maxCharPerLineLeft));
+                problemList.addAll(
+                    PneumaticCraftUtils.convertStringIntoList(
+                        EnumChatFormatting.BLACK + "Connect up the other required machines.",
+                        GuiConstants.maxCharPerLineLeft));
             }
         }
     }
 
-    public boolean hasProblem(){
+    public boolean hasProblem() {
         List<String> textList = null;
-        if(curProgram != null) {
+        if (curProgram != null) {
             textList = new ArrayList<String>();
             curProgram.addProgramProblem(textList);
         }
-        return !foundAllMachines || foundDuplicateMachine || getPressure(ForgeDirection.UNKNOWN) < PneumaticValues.MIN_PRESSURE_ASSEMBLY_CONTROLLER || curProgram == null || textList.size() > 0;
+        return !foundAllMachines || foundDuplicateMachine
+            || getPressure(ForgeDirection.UNKNOWN) < PneumaticValues.MIN_PRESSURE_ASSEMBLY_CONTROLLER
+            || curProgram == null
+            || textList.size() > 0;
     }
 
-    public List<IAssemblyMachine> getMachines(){
+    public List<IAssemblyMachine> getMachines() {
         List<IAssemblyMachine> machineList = new ArrayList<IAssemblyMachine>();
         getMachines(machineList, xCoord, yCoord, zCoord);
         return machineList;
     }
 
-    public boolean areAllMachinesDone(List<IAssemblyMachine> machineList){
-        for(IAssemblyMachine machine : machineList) {
-            if(!machine.isIdle()) return false;
+    public boolean areAllMachinesDone(List<IAssemblyMachine> machineList) {
+        for (IAssemblyMachine machine : machineList) {
+            if (!machine.isIdle()) return false;
         }
         return true;
     }
 
-    private void getMachines(List<IAssemblyMachine> machineList, int x, int y, int z){
-        for(ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
-            if(dir == ForgeDirection.UP || dir == ForgeDirection.DOWN) continue;
+    private void getMachines(List<IAssemblyMachine> machineList, int x, int y, int z) {
+        for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
+            if (dir == ForgeDirection.UP || dir == ForgeDirection.DOWN) continue;
             TileEntity te = worldObj.getTileEntity(x + dir.offsetX, y, z + dir.offsetZ);
-            if(te instanceof IAssemblyMachine && !machineList.contains(te)) {
-                machineList.add((IAssemblyMachine)te);
+            if (te instanceof IAssemblyMachine && !machineList.contains(te)) {
+                machineList.add((IAssemblyMachine) te);
                 getMachines(machineList, te.xCoord, te.yCoord, te.zCoord);
             }
         }
     }
 
-    public void updateConnections(){
-        for(ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS) {
-            TileEntity te = worldObj.getTileEntity(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ);
-            if(te instanceof IPneumaticMachine) {
-                sidesConnected[direction.ordinal()] = ((IPneumaticMachine)te).isConnectedTo(direction.getOpposite());
+    public void updateConnections() {
+        for (ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS) {
+            TileEntity te = worldObj
+                .getTileEntity(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ);
+            if (te instanceof IPneumaticMachine) {
+                sidesConnected[direction.ordinal()] = ((IPneumaticMachine) te).isConnectedTo(direction.getOpposite());
             } else {
                 sidesConnected[direction.ordinal()] = false;
             }
@@ -240,13 +274,13 @@ public class TileEntityAssemblyController extends TileEntityPneumaticBase implem
     }
 
     @Override
-    public boolean isConnectedTo(ForgeDirection side){
+    public boolean isConnectedTo(ForgeDirection side) {
         return side != ForgeDirection.UP;
     }
 
     @Override
     @SideOnly(Side.CLIENT)
-    public AxisAlignedBB getRenderBoundingBox(){
+    public AxisAlignedBB getRenderBoundingBox() {
         return AxisAlignedBB.getBoundingBox(xCoord, yCoord, zCoord, xCoord + 1, yCoord + 1, zCoord + 1);
     }
 
@@ -254,7 +288,7 @@ public class TileEntityAssemblyController extends TileEntityPneumaticBase implem
      * Returns the number of slots in the inventory.
      */
     @Override
-    public int getSizeInventory(){
+    public int getSizeInventory() {
 
         return inventory.length;
     }
@@ -263,21 +297,21 @@ public class TileEntityAssemblyController extends TileEntityPneumaticBase implem
      * Returns the stack in slot i
      */
     @Override
-    public ItemStack getStackInSlot(int slot){
+    public ItemStack getStackInSlot(int slot) {
 
         return inventory[slot];
     }
 
     @Override
-    public ItemStack decrStackSize(int slot, int amount){
+    public ItemStack decrStackSize(int slot, int amount) {
 
         ItemStack itemStack = getStackInSlot(slot);
-        if(itemStack != null) {
-            if(itemStack.stackSize <= amount) {
+        if (itemStack != null) {
+            if (itemStack.stackSize <= amount) {
                 setInventorySlotContents(slot, null);
             } else {
                 itemStack = itemStack.splitStack(amount);
-                if(itemStack.stackSize == 0) {
+                if (itemStack.stackSize == 0) {
                     setInventorySlotContents(slot, null);
                 }
             }
@@ -287,92 +321,92 @@ public class TileEntityAssemblyController extends TileEntityPneumaticBase implem
     }
 
     @Override
-    public ItemStack getStackInSlotOnClosing(int slot){
+    public ItemStack getStackInSlotOnClosing(int slot) {
 
         ItemStack itemStack = getStackInSlot(slot);
-        if(itemStack != null) {
+        if (itemStack != null) {
             setInventorySlotContents(slot, null);
         }
         return itemStack;
     }
 
     @Override
-    public void setInventorySlotContents(int slot, ItemStack itemStack){
+    public void setInventorySlotContents(int slot, ItemStack itemStack) {
 
         inventory[slot] = itemStack;
-        if(itemStack != null && itemStack.stackSize > getInventoryStackLimit()) {
+        if (itemStack != null && itemStack.stackSize > getInventoryStackLimit()) {
             itemStack.stackSize = getInventoryStackLimit();
         }
     }
 
     @Override
-    public String getInventoryName(){
+    public String getInventoryName() {
 
         return Blockss.assemblyController.getUnlocalizedName();
     }
 
     @Override
-    public int getInventoryStackLimit(){
+    public int getInventoryStackLimit() {
 
         return 64;
     }
 
     @Override
-    public boolean isUseableByPlayer(EntityPlayer var1){
+    public boolean isUseableByPlayer(EntityPlayer var1) {
         return isGuiUseableByPlayer(var1);
     }
 
     @Override
-    public void openInventory(){}
+    public void openInventory() {}
 
     @Override
-    public void closeInventory(){}
+    public void closeInventory() {}
 
     @Override
-    public void readFromNBT(NBTTagCompound tag){
+    public void readFromNBT(NBTTagCompound tag) {
 
         super.readFromNBT(tag);
         goingToHomePosition = tag.getBoolean("goingToHomePosition");
         foundAllMachines = tag.getBoolean("foundAllMachines");
         foundDuplicateMachine = tag.getBoolean("foundDuplicate");
         displayedText = tag.getString("displayedText");
-        for(int i = 0; i < 6; i++) {
+        for (int i = 0; i < 6; i++) {
             sidesConnected[i] = tag.getBoolean("sideConnected" + i);
         }
         // Read in the ItemStacks in the inventory from NBT
         NBTTagList tagList = tag.getTagList("Items", 10);
         inventory = new ItemStack[getSizeInventory()];
-        for(int i = 0; i < tagList.tagCount(); ++i) {
+        for (int i = 0; i < tagList.tagCount(); ++i) {
             NBTTagCompound tagCompound = tagList.getCompoundTagAt(i);
             byte slot = tagCompound.getByte("Slot");
-            if(slot >= 0 && slot < inventory.length) {
+            if (slot >= 0 && slot < inventory.length) {
                 inventory[slot] = ItemStack.loadItemStackFromNBT(tagCompound);
             }
         }
-        if(inventory[PROGRAM_INVENTORY_INDEX] != null) {
+        if (inventory[PROGRAM_INVENTORY_INDEX] != null) {
             curProgram = ItemAssemblyProgram.getProgramFromItem(inventory[PROGRAM_INVENTORY_INDEX].getItemDamage());
-            if(curProgram != null) curProgram.readFromNBT(tag);
+            if (curProgram != null) curProgram.readFromNBT(tag);
         }
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound tag){
+    public void writeToNBT(NBTTagCompound tag) {
 
         super.writeToNBT(tag);
         tag.setBoolean("goingToHomePosition", goingToHomePosition);
         tag.setBoolean("foundAllMachines", foundAllMachines);
         tag.setBoolean("foundDuplicate", foundDuplicateMachine);
         tag.setString("displayedText", displayedText);
-        if(curProgram != null) curProgram.writeToNBT(tag);
-        for(int i = 0; i < 6; i++) {
+        if (curProgram != null) curProgram.writeToNBT(tag);
+        for (int i = 0; i < 6; i++) {
             tag.setBoolean("sideConnected" + i, sidesConnected[i]);
         }
         // Write the ItemStacks in the inventory to NBT
         NBTTagList tagList = new NBTTagList();
-        for(int currentIndex = 0; currentIndex < inventory.length; ++currentIndex) {
-            if(inventory[currentIndex] != null) {
+        for (int currentIndex = 0; currentIndex < inventory.length; ++currentIndex) {
+            if (inventory[currentIndex] != null) {
                 NBTTagCompound tagCompound = new NBTTagCompound();
-                tagCompound.setByte("Slot", (byte)currentIndex);
+                tagCompound.setByte("Slot", (byte) currentIndex);
                 inventory[currentIndex].writeToNBT(tagCompound);
                 tagList.appendTag(tagCompound);
             }
@@ -381,8 +415,8 @@ public class TileEntityAssemblyController extends TileEntityPneumaticBase implem
     }
 
     @Override
-    public boolean isItemValidForSlot(int i, ItemStack itemstack){
-        if(i > 0) {
+    public boolean isItemValidForSlot(int i, ItemStack itemstack) {
+        if (i > 0) {
             return itemstack != null && itemstack.getItem() == Itemss.machineUpgrade;
         } else {
             return itemstack != null && itemstack.getItem() == Itemss.assemblyProgram;
@@ -391,36 +425,36 @@ public class TileEntityAssemblyController extends TileEntityPneumaticBase implem
 
     @Override
     // upgrades in bottom, fuel in the rest.
-    public int[] getAccessibleSlotsFromSide(int var1){
-        if(var1 == 0) return new int[]{1, 2, 3, 4};
-        return new int[]{0};
+    public int[] getAccessibleSlotsFromSide(int var1) {
+        if (var1 == 0) return new int[] { 1, 2, 3, 4 };
+        return new int[] { 0 };
     }
 
     @Override
-    public boolean canInsertItem(int i, ItemStack itemstack, int j){
+    public boolean canInsertItem(int i, ItemStack itemstack, int j) {
         return true;
     }
 
     @Override
-    public boolean canExtractItem(int i, ItemStack itemstack, int j){
+    public boolean canExtractItem(int i, ItemStack itemstack, int j) {
         return true;
     }
 
     @Override
-    public boolean isIdle(){
+    public boolean isIdle() {
         return true;
     }
 
     @Override
-    public void setSpeed(float speed){}
+    public void setSpeed(float speed) {}
 
     @Override
-    public boolean hasCustomInventoryName(){
+    public boolean hasCustomInventoryName() {
         return false;
     }
 
     @Override
-    public float getMinWorkingPressure(){
+    public float getMinWorkingPressure() {
         return PneumaticValues.MIN_PRESSURE_ASSEMBLY_CONTROLLER;
     }
 }

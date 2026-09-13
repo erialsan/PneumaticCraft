@@ -4,15 +4,16 @@ import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+
 import pneumaticCraft.client.render.RenderRing;
 
-public class EntityRing extends Entity{
+public class EntityRing extends Entity {
 
     public RenderRing ring, oldRing;
     private final Entity targetEntity;
     public final int color;
 
-    public EntityRing(World par1World, double startX, double startY, double startZ, Entity targetEntity, int color){
+    public EntityRing(World par1World, double startX, double startY, double startZ, Entity targetEntity, int color) {
         super(par1World);
         posX = lastTickPosX = startX;
         posY = lastTickPosY = startY;
@@ -24,24 +25,24 @@ public class EntityRing extends Entity{
         double dy = targetEntity.posY - posY;
         double dz = targetEntity.posZ - posZ;
         float f = MathHelper.sqrt_double(dx * dx + dz * dz);
-        prevRotationYaw = rotationYaw = (float)(Math.atan2(dx, dz) * 180.0D / Math.PI);
-        prevRotationPitch = rotationPitch = (float)(Math.atan2(dy, f) * 180.0D / Math.PI);
+        prevRotationYaw = rotationYaw = (float) (Math.atan2(dx, dz) * 180.0D / Math.PI);
+        prevRotationPitch = rotationPitch = (float) (Math.atan2(dy, f) * 180.0D / Math.PI);
         renderDistanceWeight = 10.0D;
         ignoreFrustumCheck = true;
     }
 
     @Override
-    public void onUpdate(){
+    public void onUpdate() {
         double endX = targetEntity.posX;
         double endY = targetEntity.posY;
         double endZ = targetEntity.posZ;
         prevRotationYaw = rotationYaw;
         prevRotationPitch = rotationPitch;
 
-        if(ring == null) {
+        if (ring == null) {
             ring = new RenderRing(posX, posY, posZ, endX, endY, endZ, color);
         } else {
-            if(oldRing == null) {
+            if (oldRing == null) {
                 oldRing = new RenderRing(ring.startX, ring.startY, ring.startZ, ring.endX, ring.endY, ring.endZ, color);
             } else {
                 oldRing.endX = ring.endX;
@@ -56,23 +57,23 @@ public class EntityRing extends Entity{
             double dy = endY - posY;
             double dz = endZ - posZ;
             float f = MathHelper.sqrt_double(dx * dx + dz * dz);
-            rotationYaw = (float)(Math.atan2(dx, dz) * 180.0D / Math.PI);
-            rotationPitch = (float)(Math.atan2(dy, f) * 180.0D / Math.PI);
+            rotationYaw = (float) (Math.atan2(dx, dz) * 180.0D / Math.PI);
+            rotationPitch = (float) (Math.atan2(dy, f) * 180.0D / Math.PI);
 
             oldRing.setProgress(ring.getProgress());
-            if(ring.incProgress(0.05F)) {
+            if (ring.incProgress(0.05F)) {
                 setDead();
             }
         }
     }
 
     @Override
-    protected void entityInit(){}
+    protected void entityInit() {}
 
     @Override
-    protected void readEntityFromNBT(NBTTagCompound var1){}
+    protected void readEntityFromNBT(NBTTagCompound var1) {}
 
     @Override
-    protected void writeEntityToNBT(NBTTagCompound var1){}
+    protected void writeEntityToNBT(NBTTagCompound var1) {}
 
 }

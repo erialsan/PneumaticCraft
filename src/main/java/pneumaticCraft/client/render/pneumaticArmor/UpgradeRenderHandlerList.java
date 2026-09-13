@@ -4,24 +4,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
+
 import pneumaticCraft.api.client.pneumaticHelmet.IUpgradeRenderHandler;
 import pneumaticCraft.api.client.pneumaticHelmet.RenderHandlerRegistry;
 import pneumaticCraft.common.CommonHUDHandler;
 
-public class UpgradeRenderHandlerList{
+public class UpgradeRenderHandlerList {
+
     private static UpgradeRenderHandlerList INSTANCE;
 
     public final List<IUpgradeRenderHandler> upgradeRenderers = new ArrayList<IUpgradeRenderHandler>();
 
-    public static UpgradeRenderHandlerList instance(){
+    public static UpgradeRenderHandlerList instance() {
         return INSTANCE;
     }
 
-    public static void init(){
+    public static void init() {
         INSTANCE = new UpgradeRenderHandlerList();
     }
 
-    private UpgradeRenderHandlerList(){
+    private UpgradeRenderHandlerList() {
         RenderHandlerRegistry.renderHandlers = upgradeRenderers;
         upgradeRenderers.add(new MainHelmetHandler());
         upgradeRenderers.add(new BlockTrackUpgradeHandler());
@@ -31,10 +33,13 @@ public class UpgradeRenderHandlerList{
         upgradeRenderers.add(new DroneDebugUpgradeHandler());
     }
 
-    public float getAirUsage(EntityPlayer player, boolean countDisabled){
+    public float getAirUsage(EntityPlayer player, boolean countDisabled) {
         float totalUsage = 0;
-        for(int i = 0; i < upgradeRenderers.size(); i++) {
-            if(CommonHUDHandler.getHandlerForPlayer(player).upgradeRenderersInserted[i] && (countDisabled || CommonHUDHandler.getHandlerForPlayer(player).upgradeRenderersEnabled[i])) totalUsage += upgradeRenderers.get(i).getEnergyUsage(CommonHUDHandler.getHandlerForPlayer(player).rangeUpgradesInstalled, player);
+        for (int i = 0; i < upgradeRenderers.size(); i++) {
+            if (CommonHUDHandler.getHandlerForPlayer(player).upgradeRenderersInserted[i]
+                && (countDisabled || CommonHUDHandler.getHandlerForPlayer(player).upgradeRenderersEnabled[i]))
+                totalUsage += upgradeRenderers.get(i)
+                    .getEnergyUsage(CommonHUDHandler.getHandlerForPlayer(player).rangeUpgradesInstalled, player);
         }
         return totalUsage;
     }

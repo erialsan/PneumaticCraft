@@ -13,8 +13,9 @@ import pneumaticCraft.client.model.entity.ModelDroneMinigun;
 import pneumaticCraft.common.tileentity.TileEntitySentryTurret;
 import pneumaticCraft.lib.Textures;
 
-public class ModelSentryTurret extends ModelBase implements IBaseModel{
-    //fields
+public class ModelSentryTurret extends ModelBase implements IBaseModel {
+
+    // fields
     ModelRenderer tripot1;
     ModelRenderer tripot2;
     ModelRenderer tripot3;
@@ -23,7 +24,7 @@ public class ModelSentryTurret extends ModelBase implements IBaseModel{
     private final ModelDroneMinigun model = new ModelDroneMinigun();
     private final TileEntitySentryTurret fakeTurret = new TileEntitySentryTurret();
 
-    public ModelSentryTurret(){
+    public ModelSentryTurret() {
         textureWidth = 64;
         textureHeight = 32;
 
@@ -60,7 +61,7 @@ public class ModelSentryTurret extends ModelBase implements IBaseModel{
     }
 
     @Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5){
+    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         super.render(entity, f, f1, f2, f3, f4, f5);
         setRotationAngles(f, f1, f2, f3, f4, f5, entity);
         tripot1.render(f5);
@@ -70,14 +71,14 @@ public class ModelSentryTurret extends ModelBase implements IBaseModel{
         main2.render(f5);
     }
 
-    private void setRotation(ModelRenderer model, float x, float y, float z){
+    private void setRotation(ModelRenderer model, float x, float y, float z) {
         model.rotateAngleX = x;
         model.rotateAngleY = y;
         model.rotateAngleZ = z;
     }
 
     @Override
-    public void renderStatic(float size, TileEntity te){
+    public void renderStatic(float size, TileEntity te) {
         tripot1.render(size);
         tripot2.render(size);
         tripot3.render(size);
@@ -86,33 +87,36 @@ public class ModelSentryTurret extends ModelBase implements IBaseModel{
     }
 
     @Override
-    public void renderDynamic(float size, TileEntity te, float partialTicks){
+    public void renderDynamic(float size, TileEntity te, float partialTicks) {
 
         GL11.glPushMatrix();
         GL11.glTranslated(0, -13 / 16D, 0);
-        if(te == null) {
+        if (te == null) {
             model.renderMinigun(fakeTurret.getMinigun(), 1 / 16F, partialTicks, false);
         } else {
-            TileEntitySentryTurret tile = (TileEntitySentryTurret)te;
+            TileEntitySentryTurret tile = (TileEntitySentryTurret) te;
             model.renderMinigun(tile.getMinigun(), 1 / 16F, partialTicks, false);
 
             GL11.glPushMatrix();
             GL11.glScalef(1.0F, -1, -1F);
             GL11.glTranslated(0, -1.45F, 0);
-            tile.getMinigun().render(tile.xCoord + 0.5, tile.yCoord + 0.5, tile.zCoord + 0.5, 1.2);
+            tile.getMinigun()
+                .render(tile.xCoord + 0.5, tile.yCoord + 0.5, tile.zCoord + 0.5, 1.2);
             GL11.glPopMatrix();
         }
         GL11.glPopMatrix();
-        Minecraft.getMinecraft().getTextureManager().bindTexture(getModelTexture(te));
+        Minecraft.getMinecraft()
+            .getTextureManager()
+            .bindTexture(getModelTexture(te));
     }
 
     @Override
-    public ResourceLocation getModelTexture(TileEntity tile){
+    public ResourceLocation getModelTexture(TileEntity tile) {
         return Textures.MODEL_SENTRY_TURRET;
     }
 
     @Override
-    public boolean rotateModelBasedOnBlockMeta(){
+    public boolean rotateModelBasedOnBlockMeta() {
         return false;
     }
 

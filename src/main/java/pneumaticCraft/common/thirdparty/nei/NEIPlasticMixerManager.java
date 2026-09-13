@@ -14,47 +14,47 @@ import net.minecraftforge.fluids.FluidStack;
 
 import org.lwjgl.opengl.GL11;
 
+import codechicken.nei.PositionedStack;
 import pneumaticCraft.common.block.Blockss;
 import pneumaticCraft.common.fluid.Fluids;
 import pneumaticCraft.common.item.Itemss;
 import pneumaticCraft.lib.PneumaticValues;
 import pneumaticCraft.lib.Textures;
-import codechicken.nei.PositionedStack;
 
-public class NEIPlasticMixerManager extends PneumaticCraftPlugins{
+public class NEIPlasticMixerManager extends PneumaticCraftPlugins {
 
     @Override
-    public String getRecipeName(){
+    public String getRecipeName() {
         return StatCollector.translateToLocal(Blockss.plasticMixer.getUnlocalizedName() + ".name");
     }
 
     @Override
-    public String getGuiTexture(){
+    public String getGuiTexture() {
         return Textures.GUI_PLASTIC_MIXER;
     }
 
     @Override
-    public void drawBackground(int recipe){
+    public void drawBackground(int recipe) {
         GL11.glColor4f(1, 1, 1, 1);
         changeTexture(getGuiTexture());
         drawTexturedModalRect(0, 0, 6, 3, 166, 79);
     }
 
     @Override
-    public Class<? extends GuiContainer> getGuiClass(){
+    public Class<? extends GuiContainer> getGuiClass() {
         return null;
     }
 
-    private class PlasticMixerNEIRecipe extends MultipleInputOutputRecipe{
+    private class PlasticMixerNEIRecipe extends MultipleInputOutputRecipe {
 
-        private PlasticMixerNEIRecipe(ItemStack input, FluidStack output){
+        private PlasticMixerNEIRecipe(ItemStack input, FluidStack output) {
 
             addOutputLiquid(output, 146, 11);
             addIngredient(new PositionedStack(input, 92, 23));
             setUsedTemperature(76, 22, PneumaticValues.PLASTIC_MIXER_MELTING_TEMP);
         }
 
-        private PlasticMixerNEIRecipe(FluidStack input, ItemStack output){
+        private PlasticMixerNEIRecipe(FluidStack input, ItemStack output) {
             addInputLiquid(input, 146, 11);
             addIngredient(new PositionedStack(new ItemStack(Items.dye, 1, 1), 121, 19));
             addIngredient(new PositionedStack(new ItemStack(Items.dye, 1, 2), 121, 37));
@@ -65,12 +65,12 @@ public class NEIPlasticMixerManager extends PneumaticCraftPlugins{
     }
 
     @Override
-    protected List<MultipleInputOutputRecipe> getAllRecipes(){
+    protected List<MultipleInputOutputRecipe> getAllRecipes() {
         List<MultipleInputOutputRecipe> recipes = new ArrayList<MultipleInputOutputRecipe>();
-        for(int i = 0; i < 16; i++)
-            recipes.add(new PlasticMixerNEIRecipe(new ItemStack(Itemss.plastic, 1, i), new FluidStack(Fluids.plastic, 1000)));
-        for(int i = 0; i < 16; i++)
-            recipes.add(new PlasticMixerNEIRecipe(new FluidStack(Fluids.plastic, 1000), new ItemStack(Itemss.plastic, 1, i)));
+        for (int i = 0; i < 16; i++) recipes
+            .add(new PlasticMixerNEIRecipe(new ItemStack(Itemss.plastic, 1, i), new FluidStack(Fluids.plastic, 1000)));
+        for (int i = 0; i < 16; i++) recipes
+            .add(new PlasticMixerNEIRecipe(new FluidStack(Fluids.plastic, 1000), new ItemStack(Itemss.plastic, 1, i)));
         return recipes;
     }
 }

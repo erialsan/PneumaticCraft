@@ -10,7 +10,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-public class TwitchStream extends Thread{
+public class TwitchStream extends Thread {
+
     private static Map<String, TwitchStream> trackedTwitchers = new HashMap<String, TwitchStream>();
 
     public String channel;
@@ -21,57 +22,59 @@ public class TwitchStream extends Thread{
 
     private boolean online = false;
 
-    private TwitchStream(String name){
+    private TwitchStream(String name) {
         channel = name;
         start();
     }
 
     @Override
-    public void run(){
+    public void run() {
         try {
-            while(keptAlive) {
+            while (keptAlive) {
                 keptAlive = false;
                 refresh();
                 Thread.sleep(5000);
             }
             trackedTwitchers.remove(this);
-        } catch(InterruptedException e) {
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
     }
 
-    public void refresh(){
+    public void refresh() {
         try {
             url = new URL("https://api.twitch.tv/kraken/streams/" + channel);
             reader = new BufferedReader(new InputStreamReader(url.openStream()));
 
             // while((s = reader.readLine()) != null) {
-            //   Log.info(s);
+            // Log.info(s);
             JsonElement json = new JsonParser().parse(reader);
             JsonObject obj = json.getAsJsonObject();
-            //   String title = obj.get("status").getAsString();
+            // String title = obj.get("status").getAsString();
             JsonElement streaming = obj.get("stream");
             online = !streaming.isJsonNull();
-            /* JsonArray array = json.getAsJsonArray();
-             for(int i = 0; i < array.size(); i++) {
-                 Log.info(array.get(i).getAsString());
-             }*/
+            /*
+             * JsonArray array = json.getAsJsonArray();
+             * for(int i = 0; i < array.size(); i++) {
+             * Log.info(array.get(i).getAsString());
+             * }
+             */
             // Log.info(json.toString());
             // }
 
-        } catch(Throwable e) {
+        } catch (Throwable e) {
             // e.printStackTrace();
         }
     }
 
-    public URL getUrl(){
+    public URL getUrl() {
         return url;
     }
 
-    public static boolean isOnline(String name){
+    public static boolean isOnline(String name) {
         TwitchStream stream = trackedTwitchers.get(name);
-        if(stream == null) {
+        if (stream == null) {
             stream = new TwitchStream(name);
             trackedTwitchers.put(name, stream);
         }

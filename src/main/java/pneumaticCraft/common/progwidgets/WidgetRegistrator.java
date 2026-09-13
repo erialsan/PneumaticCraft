@@ -8,12 +8,12 @@ import java.util.Set;
 
 import pneumaticCraft.common.config.ProgWidgetConfig;
 
-public class WidgetRegistrator{
+public class WidgetRegistrator {
 
     public static List<IProgWidget> registeredWidgets = new ArrayList<IProgWidget>();
     private static Map<String, IProgWidget> allRegisteredWidgets = new LinkedHashMap<String, IProgWidget>();
 
-    public static void init(){
+    public static void init() {
         register(new ProgWidgetComment());
         register(new ProgWidgetStart());
         register(new ProgWidgetArea());
@@ -66,18 +66,18 @@ public class WidgetRegistrator{
         register(new ProgWidgetDroneConditionPressure());
     }
 
-    public static void register(IProgWidget widget){
+    public static void register(IProgWidget widget) {
         allRegisteredWidgets.put(widget.getWidgetString(), widget);
     }
 
-    public static Set<String> getAllWidgetNames(){
+    public static Set<String> getAllWidgetNames() {
         return allRegisteredWidgets.keySet();
     }
 
-    public static void compileBlacklist(){
+    public static void compileBlacklist() {
         registeredWidgets.clear();
-        for(Map.Entry<String, IProgWidget> entry : allRegisteredWidgets.entrySet()) {
-            if(!ProgWidgetConfig.blacklistedPieces.contains(entry.getKey())) {
+        for (Map.Entry<String, IProgWidget> entry : allRegisteredWidgets.entrySet()) {
+            if (!ProgWidgetConfig.blacklistedPieces.contains(entry.getKey())) {
                 registeredWidgets.add(entry.getValue());
             }
         }

@@ -5,81 +5,83 @@ import java.util.List;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import pneumaticCraft.client.gui.GuiProgrammer;
 import pneumaticCraft.client.gui.programmer.GuiProgWidgetString;
 import pneumaticCraft.common.item.ItemPlasticPlants;
 import pneumaticCraft.lib.Textures;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
-public class ProgWidgetString extends ProgWidget{
+public class ProgWidgetString extends ProgWidget {
+
     public String string = "";
 
     @Override
-    public void getTooltip(List<String> curTooltip){
+    public void getTooltip(List<String> curTooltip) {
         super.getTooltip(curTooltip);
-        if(addToTooltip()) curTooltip.add("Value: \"" + string + "\"");
+        if (addToTooltip()) curTooltip.add("Value: \"" + string + "\"");
     }
 
-    protected boolean addToTooltip(){
+    protected boolean addToTooltip() {
         return true;
     }
 
     @Override
-    public String getExtraStringInfo(){
+    public String getExtraStringInfo() {
         return "\"" + string + "\"";
     }
 
     @Override
-    public boolean hasStepInput(){
+    public boolean hasStepInput() {
         return false;
     }
 
     @Override
-    public Class<? extends IProgWidget> returnType(){
+    public Class<? extends IProgWidget> returnType() {
         return ProgWidgetString.class;
     }
 
     @Override
-    public Class<? extends IProgWidget>[] getParameters(){
-        return new Class[]{ProgWidgetString.class};
+    public Class<? extends IProgWidget>[] getParameters() {
+        return new Class[] { ProgWidgetString.class };
     }
 
     @Override
-    protected ResourceLocation getTexture(){
+    protected ResourceLocation getTexture() {
         return Textures.PROG_WIDGET_TEXT;
     }
 
     @Override
-    public String getWidgetString(){
+    public String getWidgetString() {
         return "text";
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound tag){
+    public void writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
         tag.setString("string", string);
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound tag){
+    public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
         string = tag.getString("string");
     }
 
     @Override
     @SideOnly(Side.CLIENT)
-    public GuiScreen getOptionWindow(GuiProgrammer guiProgrammer){
+    public GuiScreen getOptionWindow(GuiProgrammer guiProgrammer) {
         return new GuiProgWidgetString(this, guiProgrammer);
     }
 
     @Override
-    public WidgetDifficulty getDifficulty(){
+    public WidgetDifficulty getDifficulty() {
         return WidgetDifficulty.EASY;
     }
 
     @Override
-    public int getCraftingColorIndex(){
+    public int getCraftingColorIndex() {
         return ItemPlasticPlants.CHOPPER_PLANT_DAMAGE;
     }
 

@@ -1,18 +1,14 @@
 /*
  * The MIT License (MIT)
- *
  * Copyright (c) 2013 AlgorithmX2
- *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
  * the Software without restriction, including without limitation the rights to
  * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
  * the Software, and to permit persons to whom the Software is furnished to do so,
  * subject to the following conditions:
- *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
  * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
@@ -23,87 +19,85 @@
 
 package appeng.api.definitions;
 
-
 import appeng.api.util.AEColoredItemDefinition;
-
 
 /**
  * A list of all items in AE
  */
-public interface IItems
-{
-	IItemDefinition certusQuartzAxe();
+public interface IItems {
 
-	IItemDefinition certusQuartzHoe();
+    IItemDefinition certusQuartzAxe();
 
-	IItemDefinition certusQuartzShovel();
+    IItemDefinition certusQuartzHoe();
 
-	IItemDefinition certusQuartzPick();
+    IItemDefinition certusQuartzShovel();
 
-	IItemDefinition certusQuartzSword();
+    IItemDefinition certusQuartzPick();
 
-	IItemDefinition certusQuartzWrench();
+    IItemDefinition certusQuartzSword();
 
-	IItemDefinition certusQuartzKnife();
+    IItemDefinition certusQuartzWrench();
 
-	IItemDefinition netherQuartzAxe();
+    IItemDefinition certusQuartzKnife();
 
-	IItemDefinition netherQuartzHoe();
+    IItemDefinition netherQuartzAxe();
 
-	IItemDefinition netherQuartzShovel();
+    IItemDefinition netherQuartzHoe();
 
-	IItemDefinition netherQuartzPick();
+    IItemDefinition netherQuartzShovel();
 
-	IItemDefinition netherQuartzSword();
+    IItemDefinition netherQuartzPick();
 
-	IItemDefinition netherQuartzWrench();
+    IItemDefinition netherQuartzSword();
 
-	IItemDefinition netherQuartzKnife();
+    IItemDefinition netherQuartzWrench();
 
-	IItemDefinition entropyManipulator();
+    IItemDefinition netherQuartzKnife();
 
-	IItemDefinition wirelessTerminal();
+    IItemDefinition entropyManipulator();
 
-	IItemDefinition biometricCard();
+    IItemDefinition wirelessTerminal();
 
-	IItemDefinition chargedStaff();
+    IItemDefinition biometricCard();
 
-	IItemDefinition massCannon();
+    IItemDefinition chargedStaff();
 
-	IItemDefinition memoryCard();
+    IItemDefinition massCannon();
 
-	IItemDefinition networkTool();
+    IItemDefinition memoryCard();
 
-	IItemDefinition portableCell();
+    IItemDefinition networkTool();
 
-	IItemDefinition cellCreative();
+    IItemDefinition portableCell();
 
-	IItemDefinition viewCell();
+    IItemDefinition cellCreative();
 
-	IItemDefinition cell1k();
+    IItemDefinition viewCell();
 
-	IItemDefinition cell4k();
+    IItemDefinition cell1k();
 
-	IItemDefinition cell16k();
+    IItemDefinition cell4k();
 
-	IItemDefinition cell64k();
+    IItemDefinition cell16k();
 
-	IItemDefinition spatialCell2();
+    IItemDefinition cell64k();
 
-	IItemDefinition spatialCell16();
+    IItemDefinition spatialCell2();
 
-	IItemDefinition spatialCell128();
+    IItemDefinition spatialCell16();
 
-	IItemDefinition facade();
+    IItemDefinition spatialCell128();
 
-	IItemDefinition crystalSeed();
+    IItemDefinition facade();
 
-	// rv1
-	IItemDefinition encodedPattern();
+    IItemDefinition crystalSeed();
 
-	IItemDefinition colorApplicator();
+    // rv1
+    IItemDefinition encodedPattern();
 
-	AEColoredItemDefinition coloredPaintBall();
+    IItemDefinition colorApplicator();
 
-	AEColoredItemDefinition coloredLumenPaintBall();
+    AEColoredItemDefinition coloredPaintBall();
+
+    AEColoredItemDefinition coloredLumenPaintBall();
 }

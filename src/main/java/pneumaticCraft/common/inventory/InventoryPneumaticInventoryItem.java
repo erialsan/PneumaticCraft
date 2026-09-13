@@ -7,11 +7,13 @@ import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+
 import pneumaticCraft.common.NBTUtil;
 import pneumaticCraft.common.tileentity.TileEntityChargingStation;
 import pneumaticCraft.lib.Log;
 
-public class InventoryPneumaticInventoryItem extends InventoryBasic{
+public class InventoryPneumaticInventoryItem extends InventoryBasic {
+
     // the title of the backpack
     protected String inventoryTitle;
     // the original ItemStack to compare with the player inventory
@@ -21,13 +23,13 @@ public class InventoryPneumaticInventoryItem extends InventoryBasic{
     // if class is reading from NBT tag
     protected boolean reading = false;
 
-    public InventoryPneumaticInventoryItem(TileEntityChargingStation te){
+    public InventoryPneumaticInventoryItem(TileEntityChargingStation te) {
         super("", false, getInventorySize(te.getStackInSlot(TileEntityChargingStation.CHARGE_INVENTORY_INDEX)));
         this.te = te;
         armorStack = te.getStackInSlot(TileEntityChargingStation.CHARGE_INVENTORY_INDEX);
 
         // check if inventory exists if not create one
-        if(!hasInventory()) {
+        if (!hasInventory()) {
             createInventory();
         }
         loadInventory();
@@ -37,10 +39,10 @@ public class InventoryPneumaticInventoryItem extends InventoryBasic{
      * Is called whenever something is changed in the inventory.
      */
     @Override
-    public void markDirty(){
+    public void markDirty() {
         super.markDirty();
         // if reading from NBT don't write
-        if(!reading) {
+        if (!reading) {
             saveInventory();
         }
     }
@@ -50,7 +52,7 @@ public class InventoryPneumaticInventoryItem extends InventoryBasic{
      * content of the inventory and its title.
      */
     @Override
-    public void openInventory(){
+    public void openInventory() {
         loadInventory();
     }
 
@@ -59,7 +61,7 @@ public class InventoryPneumaticInventoryItem extends InventoryBasic{
      * out every backpack which is inside the backpack and saves the inventory.
      */
     @Override
-    public void closeInventory(){
+    public void closeInventory() {
         saveInventory();
     }
 
@@ -67,11 +69,11 @@ public class InventoryPneumaticInventoryItem extends InventoryBasic{
      * Returns the name of the inventory.
      */
     @Override
-    public String getInventoryName(){
+    public String getInventoryName() {
         return "Pneumatic Helmet";
     }
 
-    protected static int getInventorySize(ItemStack is){
+    protected static int getInventorySize(ItemStack is) {
         return 9;
     }
 
@@ -81,14 +83,14 @@ public class InventoryPneumaticInventoryItem extends InventoryBasic{
      * @return True when the NBT is not null and the NBT has key "UpgradeInventory"
      *         otherwise false.
      */
-    protected boolean hasInventory(){
+    protected boolean hasInventory() {
         return NBTUtil.hasTag(armorStack, "UpgradeInventory");
     }
 
     /**
      * Creates the Inventory Tag in the NBT with an empty inventory.
      */
-    protected void createInventory(){
+    protected void createInventory() {
         writeToNBT();
     }
 
@@ -96,19 +98,19 @@ public class InventoryPneumaticInventoryItem extends InventoryBasic{
      * If there is no inventory create one. Then load the content and title of
      * the inventory from the NBT
      */
-    public void loadInventory(){
+    public void loadInventory() {
         readFromNBT();
     }
 
     /**
      * Saves the actual content of the inventory to the NBT.
      */
-    public void saveInventory(){
+    public void saveInventory() {
         writeToNBT();
-        //   updateToChargingStation();
+        // updateToChargingStation();
     }
 
-    private void updateToChargingStation(){
+    private void updateToChargingStation() {
         te.setInventorySlotContents(TileEntityChargingStation.CHARGE_INVENTORY_INDEX, armorStack);
     }
 
@@ -116,15 +118,15 @@ public class InventoryPneumaticInventoryItem extends InventoryBasic{
      * Writes a NBT Node with inventory.
      * 
      * @param outerTag
-     *            The NBT Node to write to.
+     *                 The NBT Node to write to.
      * @return The written NBT Node.
      */
-    public void writeToNBT(){
+    public void writeToNBT() {
         NBTTagList itemList = new NBTTagList();
-        for(int i = 0; i < getSizeInventory(); i++) {
-            if(getStackInSlot(i) != null) {
+        for (int i = 0; i < getSizeInventory(); i++) {
+            if (getStackInSlot(i) != null) {
                 NBTTagCompound slotEntry = new NBTTagCompound();
-                slotEntry.setByte("Slot", (byte)i);
+                slotEntry.setByte("Slot", (byte) i);
                 getStackInSlot(i).writeToNBT(slotEntry);
                 itemList.appendTag(slotEntry);
             }
@@ -141,21 +143,28 @@ public class InventoryPneumaticInventoryItem extends InventoryBasic{
      * Reads the inventory from a NBT Node.
      * 
      * @param outerTag
-     *            The NBT Node to read from.
+     *                 The NBT Node to read from.
      */
-    protected void readFromNBT(){
+    protected void readFromNBT() {
         reading = true;
-        if(NBTUtil.hasTag(armorStack, "Inventory") && armorStack.getTagCompound().getTag("Inventory") instanceof NBTTagCompound) {
+        if (NBTUtil.hasTag(armorStack, "Inventory") && armorStack.getTagCompound()
+            .getTag("Inventory") instanceof NBTTagCompound) {
             Log.info("Converting 'Inventory' tag to 'UpgradeInventory' in Pneumatic items");
-            armorStack.getTagCompound().setTag("UpgradeInventory", armorStack.getTagCompound().getTag("Inventory"));
-            armorStack.getTagCompound().removeTag("Inventory");
+            armorStack.getTagCompound()
+                .setTag(
+                    "UpgradeInventory",
+                    armorStack.getTagCompound()
+                        .getTag("Inventory"));
+            armorStack.getTagCompound()
+                .removeTag("Inventory");
         }
-        NBTTagList itemList = NBTUtil.getCompoundTag(armorStack, "UpgradeInventory").getTagList("Items", 10);
-        for(int i = 0; i < itemList.tagCount(); i++) {
+        NBTTagList itemList = NBTUtil.getCompoundTag(armorStack, "UpgradeInventory")
+            .getTagList("Items", 10);
+        for (int i = 0; i < itemList.tagCount(); i++) {
             NBTTagCompound slotEntry = itemList.getCompoundTagAt(i);
             int j = slotEntry.getByte("Slot");
 
-            if(j >= 0 && j < getSizeInventory()) {
+            if (j >= 0 && j < getSizeInventory()) {
                 setInventorySlotContents(j, ItemStack.loadItemStackFromNBT(slotEntry));
             }
         }

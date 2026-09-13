@@ -1,21 +1,23 @@
 package pneumaticCraft.client.gui.remote;
 
 import net.minecraft.client.resources.I18n;
+
 import pneumaticCraft.client.gui.GuiRemoteEditor;
 import pneumaticCraft.client.gui.widget.WidgetTextField;
 import pneumaticCraft.client.gui.widget.WidgetTextFieldNumber;
 import pneumaticCraft.common.remote.ActionWidgetDropdown;
 
-public class GuiRemoteDropdown extends GuiRemoteVariable<ActionWidgetDropdown>{
+public class GuiRemoteDropdown extends GuiRemoteVariable<ActionWidgetDropdown> {
+
     private WidgetTextField dropDownElementsField;
     private WidgetTextFieldNumber widthField;
 
-    public GuiRemoteDropdown(ActionWidgetDropdown widget, GuiRemoteEditor guiRemote){
+    public GuiRemoteDropdown(ActionWidgetDropdown widget, GuiRemoteEditor guiRemote) {
         super(widget, guiRemote);
     }
 
     @Override
-    public void initGui(){
+    public void initGui() {
         super.initGui();
 
         addLabel(I18n.format("gui.remote.button.width"), guiLeft + 10, guiTop + 100);
@@ -33,7 +35,7 @@ public class GuiRemoteDropdown extends GuiRemoteVariable<ActionWidgetDropdown>{
     }
 
     @Override
-    public void onGuiClosed(){
+    public void onGuiClosed() {
         super.onGuiClosed();
         widget.setDropDownElements(dropDownElementsField.getText());
         widget.setWidth(widthField.getValue());

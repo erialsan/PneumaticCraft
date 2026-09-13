@@ -7,6 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+
 import pneumaticCraft.common.entity.living.EntityDrone;
 import pneumaticCraft.common.entity.living.EntityLogisticsDrone;
 import pneumaticCraft.common.progwidgets.IProgWidget;
@@ -15,15 +16,16 @@ import pneumaticCraft.common.progwidgets.ProgWidgetLogistics;
 import pneumaticCraft.common.progwidgets.ProgWidgetStart;
 import pneumaticCraft.common.tileentity.TileEntityProgrammer;
 
-public class ItemLogisticsDrone extends ItemDrone{
+public class ItemLogisticsDrone extends ItemDrone {
 
-    public ItemLogisticsDrone(){
+    public ItemLogisticsDrone() {
         setMaxStackSize(64);
     }
 
     @Override
-    public boolean onItemUse(ItemStack iStack, EntityPlayer player, World world, int x, int y, int z, int side, float vecX, float vecY, float vecZ){
-        if(!world.isRemote) {
+    public boolean onItemUse(ItemStack iStack, EntityPlayer player, World world, int x, int y, int z, int side,
+        float vecX, float vecY, float vecZ) {
+        if (!world.isRemote) {
             EntityDrone drone = new EntityLogisticsDrone(world, player);
             ForgeDirection dir = ForgeDirection.getOrientation(side);
             drone.setPosition(x + 0.5 + dir.offsetX, y + 0.5 + dir.offsetY, z + 0.5 + dir.offsetZ);
@@ -32,15 +34,15 @@ public class ItemLogisticsDrone extends ItemDrone{
             NBTTagCompound stackTag = iStack.getTagCompound();
             NBTTagCompound entityTag = new NBTTagCompound();
             drone.writeEntityToNBT(entityTag);
-            if(stackTag != null) {
+            if (stackTag != null) {
                 entityTag.setFloat("currentAir", stackTag.getFloat("currentAir"));
                 entityTag.setInteger("color", stackTag.getInteger("color"));
                 NBTTagCompound invTag = stackTag.getCompoundTag("UpgradeInventory");
-                if(invTag != null) entityTag.setTag("Inventory", invTag.copy());
+                if (invTag != null) entityTag.setTag("Inventory", invTag.copy());
             }
             drone.readEntityFromNBT(entityTag);
             addLogisticsProgram(x, y, z, drone.progWidgets);
-            if(iStack.hasDisplayName()) drone.setCustomNameTag(iStack.getDisplayName());
+            if (iStack.hasDisplayName()) drone.setCustomNameTag(iStack.getDisplayName());
 
             drone.naturallySpawned = false;
             drone.onSpawnWithEgg(null);
@@ -49,7 +51,7 @@ public class ItemLogisticsDrone extends ItemDrone{
         return true;
     }
 
-    private void addLogisticsProgram(int x, int y, int z, List<IProgWidget> widgets){
+    private void addLogisticsProgram(int x, int y, int z, List<IProgWidget> widgets) {
         ProgWidgetStart start = new ProgWidgetStart();
         start.setX(0);
         start.setY(0);
@@ -74,7 +76,7 @@ public class ItemLogisticsDrone extends ItemDrone{
     }
 
     @Override
-    public boolean canProgram(ItemStack stack){
+    public boolean canProgram(ItemStack stack) {
         return false;
     }
 }

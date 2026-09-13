@@ -10,11 +10,12 @@ import pneumaticCraft.common.semiblock.SemiBlockHeatFrame;
 import pneumaticCraft.common.tileentity.TileEntityCompressedIronBlock;
 import pneumaticCraft.lib.Textures;
 
-public class SemiBlockRendererHeatFrame implements ISemiBlockRenderer<SemiBlockHeatFrame>{
+public class SemiBlockRendererHeatFrame implements ISemiBlockRenderer<SemiBlockHeatFrame> {
+
     private final ModelHeatFrame model = new ModelHeatFrame();
 
     @Override
-    public void render(SemiBlockHeatFrame semiBlock, float partialTick){
+    public void render(SemiBlockHeatFrame semiBlock, float partialTick) {
         GL11.glPushMatrix();
         Minecraft.getMinecraft().renderEngine.bindTexture(Textures.MODEL_HEAT_FRAME);
         int heatLevel = semiBlock.getHeatLevel();
@@ -22,9 +23,19 @@ public class SemiBlockRendererHeatFrame implements ISemiBlockRenderer<SemiBlockH
         GL11.glColor4d(color[0], color[1], color[2], 1);
 
         AxisAlignedBB aabb;
-        if(semiBlock.getWorld() != null) {
-            semiBlock.getBlock().setBlockBoundsBasedOnState(semiBlock.getWorld(), semiBlock.getPos().chunkPosX, semiBlock.getPos().chunkPosY, semiBlock.getPos().chunkPosZ);
-            aabb = semiBlock.getBlock().getSelectedBoundingBoxFromPool(semiBlock.getWorld(), semiBlock.getPos().chunkPosX, semiBlock.getPos().chunkPosY, semiBlock.getPos().chunkPosZ);
+        if (semiBlock.getWorld() != null) {
+            semiBlock.getBlock()
+                .setBlockBoundsBasedOnState(
+                    semiBlock.getWorld(),
+                    semiBlock.getPos().chunkPosX,
+                    semiBlock.getPos().chunkPosY,
+                    semiBlock.getPos().chunkPosZ);
+            aabb = semiBlock.getBlock()
+                .getSelectedBoundingBoxFromPool(
+                    semiBlock.getWorld(),
+                    semiBlock.getPos().chunkPosX,
+                    semiBlock.getPos().chunkPosY,
+                    semiBlock.getPos().chunkPosZ);
             aabb.minX -= semiBlock.getX();
             aabb.maxX -= semiBlock.getX();
             aabb.minY -= semiBlock.getY();

@@ -6,12 +6,14 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.nbt.NBTTagCompound;
-import pneumaticCraft.client.gui.GuiProgrammer;
-import pneumaticCraft.common.ai.IDroneBase;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import pneumaticCraft.client.gui.GuiProgrammer;
+import pneumaticCraft.common.ai.IDroneBase;
 
-public interface IProgWidget{
+public interface IProgWidget {
+
     public int getX();
 
     public int getY();
@@ -54,21 +56,25 @@ public interface IProgWidget{
 
     /**
      * This one will be called when running in an actual program.
+     * 
      * @param drone
      * @param allWidgets
      * @return
      */
     public IProgWidget getOutputWidget(IDroneBase drone, List<IProgWidget> allWidgets);
 
-    public Class<? extends IProgWidget> returnType();//true for widgets that can give info to the widget left of it (like areas or filters)
+    public Class<? extends IProgWidget> returnType();// true for widgets that can give info to the widget left of it
+                                                     // (like areas or filters)
 
-    public Class<? extends IProgWidget>[] getParameters(); //the entity attack widget for instance returns the filter and area class.
+    public Class<? extends IProgWidget>[] getParameters(); // the entity attack widget for instance returns the filter
+                                                           // and area class.
 
     public void setParameter(int index, IProgWidget parm);
 
     public boolean canSetParameter(int index);
 
-    public IProgWidget[] getConnectedParameters();//this includes whitelist and blacklist. whitelist will go in the first half of elements, blacklist in the second half.
+    public IProgWidget[] getConnectedParameters();// this includes whitelist and blacklist. whitelist will go in the
+                                                  // first half of elements, blacklist in the second half.
 
     public void setParent(IProgWidget widget);
 
@@ -76,6 +82,7 @@ public interface IProgWidget{
 
     /**
      * Unique identifier
+     * 
      * @return
      */
     public String getWidgetString();
@@ -84,6 +91,7 @@ public interface IProgWidget{
 
     /**
      * At least do a tag.setString("id", getWidgetString());
+     * 
      * @param tag
      */
     public void writeToNBT(NBTTagCompound tag);
@@ -99,16 +107,19 @@ public interface IProgWidget{
 
     public WidgetDifficulty getDifficulty();
 
-    public static enum WidgetDifficulty{
-        EASY("easy"), MEDIUM("medium"), ADVANCED("advanced");
+    public static enum WidgetDifficulty {
+
+        EASY("easy"),
+        MEDIUM("medium"),
+        ADVANCED("advanced");
 
         private final String name;
 
-        private WidgetDifficulty(String name){
+        private WidgetDifficulty(String name) {
             this.name = name;
         }
 
-        public String getLocalizedName(){
+        public String getLocalizedName() {
             return I18n.format("gui.progWidget.difficulty." + name);
         }
     }

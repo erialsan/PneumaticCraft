@@ -14,16 +14,16 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import org.apache.commons.lang3.tuple.Pair;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import pneumaticCraft.api.tileentity.IAirHandler;
 import pneumaticCraft.common.block.Blockss;
 import pneumaticCraft.common.item.Itemss;
 import pneumaticCraft.common.network.DescSynced;
 import pneumaticCraft.common.network.GuiSynced;
 import pneumaticCraft.lib.PneumaticValues;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityAirCompressor extends TileEntityPneumaticBase implements ISidedInventory, IRedstoneControlled{
+public class TileEntityAirCompressor extends TileEntityPneumaticBase implements ISidedInventory, IRedstoneControlled {
 
     private ItemStack[] inventory;
 
@@ -46,58 +46,68 @@ public class TileEntityAirCompressor extends TileEntityPneumaticBase implements 
     @GuiSynced
     public int curFuelUsage;
 
-    public TileEntityAirCompressor(){
-        this(PneumaticValues.DANGER_PRESSURE_AIR_COMPRESSOR, PneumaticValues.MAX_PRESSURE_AIR_COMPRESSOR, PneumaticValues.VOLUME_AIR_COMPRESSOR);
+    public TileEntityAirCompressor() {
+        this(
+            PneumaticValues.DANGER_PRESSURE_AIR_COMPRESSOR,
+            PneumaticValues.MAX_PRESSURE_AIR_COMPRESSOR,
+            PneumaticValues.VOLUME_AIR_COMPRESSOR);
     }
 
-    public TileEntityAirCompressor(float dangerPressure, float criticalPressure, int volume){
+    public TileEntityAirCompressor(float dangerPressure, float criticalPressure, int volume) {
         super(dangerPressure, criticalPressure, volume);
         inventory = new ItemStack[INVENTORY_SIZE];
-        setUpgradeSlots(new int[]{UPGRADE_SLOT_START, 2, 3, UPGRADE_SLOT_END});
+        setUpgradeSlots(new int[] { UPGRADE_SLOT_START, 2, 3, UPGRADE_SLOT_END });
     }
 
     @Override
-    public void updateEntity(){
-        if(!worldObj.isRemote) {
-            if(burnTime < curFuelUsage && inventory[0] != null && TileEntityFurnace.isItemFuel(inventory[0]) && redstoneAllows()) {
+    public void updateEntity() {
+        if (!worldObj.isRemote) {
+            if (burnTime < curFuelUsage && inventory[0] != null
+                && TileEntityFurnace.isItemFuel(inventory[0])
+                && redstoneAllows()) {
                 burnTime += TileEntityFurnace.getItemBurnTime(inventory[0]);
                 maxBurnTime = burnTime;
 
                 inventory[0].stackSize--;
-                if(inventory[0].stackSize == 0) {
-                    inventory[0] = inventory[0].getItem().getContainerItem(inventory[0]);
+                if (inventory[0].stackSize == 0) {
+                    inventory[0] = inventory[0].getItem()
+                        .getContainerItem(inventory[0]);
                 }
 
             }
 
-            curFuelUsage = (int)(getBaseProduction() * getSpeedUsageMultiplierFromUpgrades(getUpgradeSlots()) / 10);
-            if(burnTime >= curFuelUsage) {
+            curFuelUsage = (int) (getBaseProduction() * getSpeedUsageMultiplierFromUpgrades(getUpgradeSlots()) / 10);
+            if (burnTime >= curFuelUsage) {
                 burnTime -= curFuelUsage;
-                if(!worldObj.isRemote) {
-                    addAir((int)(getBaseProduction() * getSpeedMultiplierFromUpgrades(getUpgradeSlots()) * getEfficiency() / 100D), ForgeDirection.UNKNOWN);
+                if (!worldObj.isRemote) {
+                    addAir(
+                        (int) (getBaseProduction() * getSpeedMultiplierFromUpgrades(getUpgradeSlots())
+                            * getEfficiency()
+                            / 100D),
+                        ForgeDirection.UNKNOWN);
                     onFuelBurn(curFuelUsage);
                 }
             }
             isActive = burnTime > curFuelUsage;
-        } else if(isActive) spawnBurningParticle();
+        } else if (isActive) spawnBurningParticle();
 
         super.updateEntity();
 
     }
 
-    protected void onFuelBurn(int burnedFuel){}
+    protected void onFuelBurn(int burnedFuel) {}
 
-    public int getEfficiency(){
+    public int getEfficiency() {
         return 100;
     }
 
-    public int getBaseProduction(){
+    public int getBaseProduction() {
         return PneumaticValues.PRODUCTION_COMPRESSOR;
     }
 
     @Override
-    public boolean redstoneAllows(){
-        switch(redstoneMode){
+    public boolean redstoneAllows() {
+        switch (redstoneMode) {
             case 0:
                 return true;
             case 1:
@@ -108,15 +118,15 @@ public class TileEntityAirCompressor extends TileEntityPneumaticBase implements 
         return false;
     }
 
-    private void spawnBurningParticle(){
+    private void spawnBurningParticle() {
         Random rand = new Random();
-        if(rand.nextInt(3) != 0) return;
+        if (rand.nextInt(3) != 0) return;
         float f = xCoord + 0.5F;
         float f1 = yCoord + 0.0F + rand.nextFloat() * 6.0F / 16.0F;
         float f2 = zCoord + 0.5F;
         float f3 = 0.5F;
         float f4 = rand.nextFloat() * 0.4F - 0.2F;
-        switch(ForgeDirection.getOrientation(getBlockMetadata())){
+        switch (ForgeDirection.getOrientation(getBlockMetadata())) {
             case EAST:
                 worldObj.spawnParticle("smoke", f - f3, f1, f2 + f4, 0.0D, 0.0D, 0.0D);
                 worldObj.spawnParticle("flame", f - f3, f1, f2 + f4, 0.0D, 0.0D, 0.0D);
@@ -137,33 +147,33 @@ public class TileEntityAirCompressor extends TileEntityPneumaticBase implements 
     }
 
     @Override
-    protected void disperseAir(){
+    protected void disperseAir() {
         super.disperseAir();
         List<Pair<ForgeDirection, IAirHandler>> teList = getConnectedPneumatics();
-        if(teList.size() == 0) airLeak(ForgeDirection.getOrientation(getBlockMetadata()));
+        if (teList.size() == 0) airLeak(ForgeDirection.getOrientation(getBlockMetadata()));
     }
 
     @Override
-    public boolean isConnectedTo(ForgeDirection side){
+    public boolean isConnectedTo(ForgeDirection side) {
         return ForgeDirection.getOrientation(getBlockMetadata()) == side;
     }
 
-    public int getBurnTimeRemainingScaled(int parts){
-        if(maxBurnTime == 0 || burnTime < curFuelUsage) return 0;
+    public int getBurnTimeRemainingScaled(int parts) {
+        if (maxBurnTime == 0 || burnTime < curFuelUsage) return 0;
         return parts * burnTime / maxBurnTime;
     }
 
     @Override
-    public void handleGUIButtonPress(int buttonID, EntityPlayer player){
-        if(buttonID == 0) {
+    public void handleGUIButtonPress(int buttonID, EntityPlayer player) {
+        if (buttonID == 0) {
             redstoneMode++;
-            if(redstoneMode > 2) redstoneMode = 0;
+            if (redstoneMode > 2) redstoneMode = 0;
         }
     }
 
     @Override
     @SideOnly(Side.CLIENT)
-    public AxisAlignedBB getRenderBoundingBox(){
+    public AxisAlignedBB getRenderBoundingBox() {
         return AxisAlignedBB.getBoundingBox(xCoord, yCoord, zCoord, xCoord + 1, yCoord + 1, zCoord + 1);
     }
 
@@ -171,7 +181,7 @@ public class TileEntityAirCompressor extends TileEntityPneumaticBase implements 
      * Returns the number of slots in the inventory.
      */
     @Override
-    public int getSizeInventory(){
+    public int getSizeInventory() {
 
         return inventory.length;
     }
@@ -180,21 +190,21 @@ public class TileEntityAirCompressor extends TileEntityPneumaticBase implements 
      * Returns the stack in slot i
      */
     @Override
-    public ItemStack getStackInSlot(int slot){
+    public ItemStack getStackInSlot(int slot) {
 
         return inventory[slot];
     }
 
     @Override
-    public ItemStack decrStackSize(int slot, int amount){
+    public ItemStack decrStackSize(int slot, int amount) {
 
         ItemStack itemStack = getStackInSlot(slot);
-        if(itemStack != null) {
-            if(itemStack.stackSize <= amount) {
+        if (itemStack != null) {
+            if (itemStack.stackSize <= amount) {
                 setInventorySlotContents(slot, null);
             } else {
                 itemStack = itemStack.splitStack(amount);
-                if(itemStack.stackSize == 0) {
+                if (itemStack.stackSize == 0) {
                     setInventorySlotContents(slot, null);
                 }
             }
@@ -204,49 +214,49 @@ public class TileEntityAirCompressor extends TileEntityPneumaticBase implements 
     }
 
     @Override
-    public ItemStack getStackInSlotOnClosing(int slot){
+    public ItemStack getStackInSlotOnClosing(int slot) {
 
         ItemStack itemStack = getStackInSlot(slot);
-        if(itemStack != null) {
+        if (itemStack != null) {
             setInventorySlotContents(slot, null);
         }
         return itemStack;
     }
 
     @Override
-    public void setInventorySlotContents(int slot, ItemStack itemStack){
+    public void setInventorySlotContents(int slot, ItemStack itemStack) {
 
         inventory[slot] = itemStack;
-        if(itemStack != null && itemStack.stackSize > getInventoryStackLimit()) {
+        if (itemStack != null && itemStack.stackSize > getInventoryStackLimit()) {
             itemStack.stackSize = getInventoryStackLimit();
         }
     }
 
     @Override
-    public String getInventoryName(){
+    public String getInventoryName() {
 
         return Blockss.airCompressor.getUnlocalizedName();
     }
 
     @Override
-    public int getInventoryStackLimit(){
+    public int getInventoryStackLimit() {
 
         return 64;
     }
 
     @Override
-    public boolean isUseableByPlayer(EntityPlayer var1){
+    public boolean isUseableByPlayer(EntityPlayer var1) {
         return isGuiUseableByPlayer(var1);
     }
 
     @Override
-    public void openInventory(){}
+    public void openInventory() {}
 
     @Override
-    public void closeInventory(){}
+    public void closeInventory() {}
 
     @Override
-    public void readFromNBT(NBTTagCompound nbtTagCompound){
+    public void readFromNBT(NBTTagCompound nbtTagCompound) {
 
         super.readFromNBT(nbtTagCompound);
         burnTime = nbtTagCompound.getInteger("burnTime");
@@ -255,17 +265,17 @@ public class TileEntityAirCompressor extends TileEntityPneumaticBase implements 
         // Read in the ItemStacks in the inventory from NBT
         NBTTagList tagList = nbtTagCompound.getTagList("Items", 10);
         inventory = new ItemStack[getSizeInventory()];
-        for(int i = 0; i < tagList.tagCount(); ++i) {
+        for (int i = 0; i < tagList.tagCount(); ++i) {
             NBTTagCompound tagCompound = tagList.getCompoundTagAt(i);
             byte slot = tagCompound.getByte("Slot");
-            if(slot >= 0 && slot < inventory.length) {
+            if (slot >= 0 && slot < inventory.length) {
                 inventory[slot] = ItemStack.loadItemStackFromNBT(tagCompound);
             }
         }
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound nbtTagCompound){
+    public void writeToNBT(NBTTagCompound nbtTagCompound) {
 
         super.writeToNBT(nbtTagCompound);
 
@@ -274,10 +284,10 @@ public class TileEntityAirCompressor extends TileEntityPneumaticBase implements 
         nbtTagCompound.setInteger("redstoneMode", redstoneMode);
         // Write the ItemStacks in the inventory to NBT
         NBTTagList tagList = new NBTTagList();
-        for(int currentIndex = 0; currentIndex < inventory.length; ++currentIndex) {
-            if(inventory[currentIndex] != null) {
+        for (int currentIndex = 0; currentIndex < inventory.length; ++currentIndex) {
+            if (inventory[currentIndex] != null) {
                 NBTTagCompound tagCompound = new NBTTagCompound();
-                tagCompound.setByte("Slot", (byte)currentIndex);
+                tagCompound.setByte("Slot", (byte) currentIndex);
                 inventory[currentIndex].writeToNBT(tagCompound);
                 tagList.appendTag(tagCompound);
             }
@@ -286,33 +296,33 @@ public class TileEntityAirCompressor extends TileEntityPneumaticBase implements 
     }
 
     @Override
-    public boolean isItemValidForSlot(int i, ItemStack itemstack){
+    public boolean isItemValidForSlot(int i, ItemStack itemstack) {
         return i == 0 || itemstack != null && itemstack.getItem() == Itemss.machineUpgrade;
     }
 
     @Override
     // upgrades in bottom, fuel in the rest.
-    public int[] getAccessibleSlotsFromSide(int var1){
-        return new int[]{0};
+    public int[] getAccessibleSlotsFromSide(int var1) {
+        return new int[] { 0 };
     }
 
     @Override
-    public boolean canInsertItem(int i, ItemStack itemstack, int j){
+    public boolean canInsertItem(int i, ItemStack itemstack, int j) {
         return true;
     }
 
     @Override
-    public boolean canExtractItem(int i, ItemStack itemstack, int j){
+    public boolean canExtractItem(int i, ItemStack itemstack, int j) {
         return true;
     }
 
     @Override
-    public boolean hasCustomInventoryName(){
+    public boolean hasCustomInventoryName() {
         return false;
     }
 
     @Override
-    public int getRedstoneMode(){
+    public int getRedstoneMode() {
         return redstoneMode;
     }
 }

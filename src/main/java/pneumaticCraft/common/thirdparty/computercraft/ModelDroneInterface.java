@@ -5,11 +5,13 @@ import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
+
 import pneumaticCraft.client.model.IBaseModel;
 import pneumaticCraft.lib.Textures;
 
-public class ModelDroneInterface extends ModelBase implements IBaseModel{
-    //fields
+public class ModelDroneInterface extends ModelBase implements IBaseModel {
+
+    // fields
     ModelRenderer Base;
     ModelRenderer Neck;
     ModelRenderer Dish_Base_1;
@@ -24,7 +26,7 @@ public class ModelDroneInterface extends ModelBase implements IBaseModel{
     ModelRenderer Shape4;
     ModelRenderer Shape5;
 
-    public ModelDroneInterface(){
+    public ModelDroneInterface() {
         textureWidth = 64;
         textureHeight = 64;
 
@@ -109,7 +111,7 @@ public class ModelDroneInterface extends ModelBase implements IBaseModel{
     }
 
     @Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5){
+    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         super.render(entity, f, f1, f2, f3, f4, f5);
         setRotationAngles(f, f1, f2, f3, f4, f5, entity);
         Base.render(f5);
@@ -127,14 +129,15 @@ public class ModelDroneInterface extends ModelBase implements IBaseModel{
         Shape5.render(f5);
     }
 
-    private void setRotation(ModelRenderer model, float x, float y, float z){
+    private void setRotation(ModelRenderer model, float x, float y, float z) {
         model.rotateAngleX = x;
         model.rotateAngleY = y;
         model.rotateAngleZ = z;
     }
 
     @Override
-    public void setRotationAngles(float par1, float par2, float par3, float par4, float par5, float par6, Entity par7Entity){
+    public void setRotationAngles(float par1, float par2, float par3, float par4, float par5, float par6,
+        Entity par7Entity) {
         Dish_Base_1.rotateAngleY = par2;
         Dish_Base_2.rotateAngleY = par2;
         Dish_Long_1.rotateAngleY = par2;
@@ -162,27 +165,27 @@ public class ModelDroneInterface extends ModelBase implements IBaseModel{
     }
 
     @Override
-    public void renderStatic(float size, TileEntity tile){
+    public void renderStatic(float size, TileEntity tile) {
 
     }
 
     @Override
-    public ResourceLocation getModelTexture(TileEntity tile){
+    public ResourceLocation getModelTexture(TileEntity tile) {
         return Textures.MODEL_DRONE_INTERFACE;
     }
 
     @Override
-    public boolean rotateModelBasedOnBlockMeta(){
+    public boolean rotateModelBasedOnBlockMeta() {
         return false;
     }
 
     @Override
-    public void renderDynamic(float size, TileEntity tile, float partialTicks){
-        if(tile instanceof TileEntityDroneInterface) {
-            TileEntityDroneInterface inter = (TileEntityDroneInterface)tile;
+    public void renderDynamic(float size, TileEntity tile, float partialTicks) {
+        if (tile instanceof TileEntityDroneInterface) {
+            TileEntityDroneInterface inter = (TileEntityDroneInterface) tile;
             render(null, inter.rotationPitch, inter.rotationYaw, 0, 0, 0, 1 / 16F);
         } else {
-            render(null, (float)Math.toRadians(-42), 0, 0, 0, 0, 1 / 16F);
+            render(null, (float) Math.toRadians(-42), 0, 0, 0, 0, 1 / 16F);
         }
     }
 }

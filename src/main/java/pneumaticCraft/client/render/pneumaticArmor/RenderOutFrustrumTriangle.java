@@ -9,46 +9,50 @@ import net.minecraft.entity.Entity;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
-public class RenderOutFrustrumTriangle{
-    public static void renderTriangle(Entity entity){
+public class RenderOutFrustrumTriangle {
+
+    public static void renderTriangle(Entity entity) {
         double playerYaw = -RenderManager.instance.playerViewY;
-        while(playerYaw >= 360D) {
+        while (playerYaw >= 360D) {
             playerYaw -= 360;
         }
-        while(playerYaw < 0) {
+        while (playerYaw < 0) {
             playerYaw += 360;
         }
         double angle = playerYaw * Math.sin(Math.toRadians(RenderManager.instance.viewerPosX));
-        //  double angle = playerYaw;
+        // double angle = playerYaw;
         // System.out.println("viewY: " + RenderManager.instance.playerViewY);
 
-        ScaledResolution sr = new ScaledResolution(Minecraft.getMinecraft(), Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
+        ScaledResolution sr = new ScaledResolution(
+            Minecraft.getMinecraft(),
+            Minecraft.getMinecraft().displayWidth,
+            Minecraft.getMinecraft().displayHeight);
         int middleX = sr.getScaledWidth() / 2;
         int middleY = sr.getScaledHeight() / 2;
         int triangleX;
         int triangleY;
-        double switchAngle = Math.toDegrees(Math.atan((double)middleX / middleY));
+        double switchAngle = Math.toDegrees(Math.atan((double) middleX / middleY));
         // System.out.println("angle: " + angle + ", switch angle: " + switchAngle);
         float triangleAngle = 0;
         int distanceFromEdge = 1;
-        if(angle < switchAngle) {
+        if (angle < switchAngle) {
             triangleY = distanceFromEdge;
-            triangleX = middleX + (int)(Math.tan(Math.toRadians(angle)) * middleY);
-        } else if(angle > 360 - switchAngle) {
+            triangleX = middleX + (int) (Math.tan(Math.toRadians(angle)) * middleY);
+        } else if (angle > 360 - switchAngle) {
             triangleY = distanceFromEdge;
-            triangleX = middleX - (int)(Math.tan(Math.toRadians(360 - angle)) * middleY);
-        } else if(angle < 180 - switchAngle) {
+            triangleX = middleX - (int) (Math.tan(Math.toRadians(360 - angle)) * middleY);
+        } else if (angle < 180 - switchAngle) {
             triangleAngle = 90;
             triangleX = sr.getScaledWidth() - distanceFromEdge;
-            triangleY = middleY - (int)(Math.tan(Math.toRadians(90 - angle)) * middleX);
-        } else if(angle < 180 + switchAngle) {
+            triangleY = middleY - (int) (Math.tan(Math.toRadians(90 - angle)) * middleX);
+        } else if (angle < 180 + switchAngle) {
             triangleAngle = 180;
             triangleY = sr.getScaledHeight() - distanceFromEdge;
-            triangleX = middleX + (int)(Math.tan(Math.toRadians(180 - angle)) * middleY);
+            triangleX = middleX + (int) (Math.tan(Math.toRadians(180 - angle)) * middleY);
         } else {
             triangleAngle = 270;
             triangleX = distanceFromEdge;
-            triangleY = middleY + (int)(Math.tan(Math.toRadians(270 - angle)) * middleX);
+            triangleY = middleY + (int) (Math.tan(Math.toRadians(270 - angle)) * middleX);
         }
 
         Tessellator tessellator = Tessellator.instance;

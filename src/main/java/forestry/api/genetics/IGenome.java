@@ -14,27 +14,29 @@ import forestry.api.core.INBTTagable;
  */
 public interface IGenome extends INBTTagable {
 
-	IAlleleSpecies getPrimary();
+    IAlleleSpecies getPrimary();
 
-	IAlleleSpecies getSecondary();
+    IAlleleSpecies getSecondary();
 
-	IChromosome[] getChromosomes();
+    IChromosome[] getChromosomes();
 
-	/**
-	 * @deprecated since Forestry 3.3. Use IChromosomeType version
-	 */
-	@Deprecated
-	IAllele getActiveAllele(int chromosome);
-	IAllele getActiveAllele(IChromosomeType chromosomeType);
+    /**
+     * @deprecated since Forestry 3.3. Use IChromosomeType version
+     */
+    @Deprecated
+    IAllele getActiveAllele(int chromosome);
 
-	/**
-	 * @deprecated since Forestry 3.3. Use IChromosomeType version
-	 */
-	@Deprecated
-	IAllele getInactiveAllele(int chromosome);
-	IAllele getInactiveAllele(IChromosomeType chromosomeType);
+    IAllele getActiveAllele(IChromosomeType chromosomeType);
 
-	boolean isGeneticEqual(IGenome other);
-	
-	ISpeciesRoot getSpeciesRoot();
+    /**
+     * @deprecated since Forestry 3.3. Use IChromosomeType version
+     */
+    @Deprecated
+    IAllele getInactiveAllele(int chromosome);
+
+    IAllele getInactiveAllele(IChromosomeType chromosomeType);
+
+    boolean isGeneticEqual(IGenome other);
+
+    ISpeciesRoot getSpeciesRoot();
 }

@@ -1,6 +1,6 @@
 package pneumaticCraft.lib;
 
-public class PneumaticValues{
+public class PneumaticValues {
 
     // danger pressures (bar)
     public static final float DANGER_PRESSURE_TIER_ONE = 5;
@@ -56,7 +56,7 @@ public class PneumaticValues{
 
     public static final float MAX_PRESSURE_LIVING_ENTITY = 1.0F;
 
-    public static final int AIR_LEAK_FACTOR = 40;//mL/bar/tick determines how much air being released.
+    public static final int AIR_LEAK_FACTOR = 40;// mL/bar/tick determines how much air being released.
 
     public static final int CHARGING_STATION_CHARGE_RATE = 10;// mL per tick
     public static final int USAGE_AIR_GRATE = 10; // mL per tick per meter range
@@ -69,17 +69,17 @@ public class PneumaticValues{
     public static final int USAGE_CHAMBER_INTERFACE = 1000;// mL per item transfered.
     public static final int USAGE_VACUUM_PUMP = 10;// mL per tick
     public static final int USAGE_PNEUMATIC_DOOR = 300;
-    public static final int USAGE_ASSEMBLING = 2; //mL/tick
-    public static final int USAGE_UV_LIGHTBOX = 2; //mL per tick the UV light is on.
-    public static final int USAGE_UNIVERSAL_SENSOR = 1;//mL per tick.
-    public static final int USAGE_AERIAL_INTERFACE = 1; //mL per Tick;
-    public static final int USAGE_PNEUMATIC_WRENCH = 100;//mL per usage.
+    public static final int USAGE_ASSEMBLING = 2; // mL/tick
+    public static final int USAGE_UV_LIGHTBOX = 2; // mL per tick the UV light is on.
+    public static final int USAGE_UNIVERSAL_SENSOR = 1;// mL per tick.
+    public static final int USAGE_AERIAL_INTERFACE = 1; // mL per Tick;
+    public static final int USAGE_PNEUMATIC_WRENCH = 100;// mL per usage.
 
     public static final int PRODUCTION_COMPRESSOR = 10; // mL per tick
     public static final int PRODUCTION_ADVANCED_COMPRESSOR = 50; // mL per tick
     public static final int PRODUCTION_VACUUM_PUMP = 2;// mL vacuum per tick
-    public static final int PRODUCTION_PNEUMATIC_ENGINE = 100; //MJ/pump move.
-    public static final int PRODUCTION_ELECTROSTATIC_COMPRESSOR = 200000; //per lightning strike
+    public static final int PRODUCTION_PNEUMATIC_ENGINE = 100; // MJ/pump move.
+    public static final int PRODUCTION_ELECTROSTATIC_COMPRESSOR = 200000; // per lightning strike
 
     // volumes (mL)
     public static final int VOLUME_AIR_COMPRESSOR = 5000;
@@ -121,7 +121,7 @@ public class PneumaticValues{
     public static final float MIN_PRESSURE_PNEUMATIC_PUMP = 5F;
     public static final float MIN_PRESSURE_AERIAL_INTERFACE = 10F;
 
-    public static final int MAX_REDIRECTION_PER_IRON_BAR = 10000; //mL/lightning bolt/bar
+    public static final int MAX_REDIRECTION_PER_IRON_BAR = 10000; // mL/lightning bolt/bar
 
     public static final int AIR_CANISTER_MAX_AIR = 30000;
     public static final int VORTEX_CANNON_MAX_AIR = 30000;
@@ -136,11 +136,12 @@ public class PneumaticValues{
 
     public static final int DRONE_VOLUME = 12000;
     public static final float DRONE_MAX_PRESSURE = 10F;
-    public static final float DRONE_LOW_PRESSURE = 1F; //pressure at which the drone will start to search for a charging pad.
-    public static final int DRONE_USAGE_DIG = 200;//per block, Based on BC quarry, 60MJ/block.
-    public static final int DRONE_USAGE_PLACE = 100;//per block, Based on BC filler, 25MJ/block.
-    public static final int DRONE_USAGE_INV = 10;//per stack
-    public static final int DRONE_USAGE_ATTACK = 200;//per hit
+    public static final float DRONE_LOW_PRESSURE = 1F; // pressure at which the drone will start to search for a
+                                                       // charging pad.
+    public static final int DRONE_USAGE_DIG = 200;// per block, Based on BC quarry, 60MJ/block.
+    public static final int DRONE_USAGE_PLACE = 100;// per block, Based on BC filler, 25MJ/block.
+    public static final int DRONE_USAGE_INV = 10;// per stack
+    public static final int DRONE_USAGE_ATTACK = 200;// per hit
 
     public static final float SPEED_UPGRADE_MULTIPLIER = 1.5F;
     public static final float SPEED_UPGRADE_USAGE_MULTIPLIER = 1.8F;
@@ -149,7 +150,7 @@ public class PneumaticValues{
     public static final double PLASTIC_MIX_RATIO = 0.2;
     public static final int NORMAL_TANK_CAPACITY = 16000;
     public static final int PLASTIC_MIXER_HEAT_RATIO = 1;
-    public static final int PLASTIC_MIXER_MELTING_TEMP = 150 + 273;//150 C
+    public static final int PLASTIC_MIXER_MELTING_TEMP = 150 + 273;// 150 C
     public static final int MAX_DRAIN = 100;
     public static final int DRONE_TANK_SIZE = 16000;
 

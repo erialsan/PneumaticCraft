@@ -4,8 +4,9 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
-public class ModelChargingStationPad extends ModelBase{
-    //fields
+public class ModelChargingStationPad extends ModelBase {
+
+    // fields
     ModelRenderer Shape3;
     ModelRenderer Shape4;
     ModelRenderer Shape5;
@@ -21,7 +22,7 @@ public class ModelChargingStationPad extends ModelBase{
     ModelRenderer Shape15;
     ModelRenderer Shape16;
 
-    public ModelChargingStationPad(){
+    public ModelChargingStationPad() {
         textureWidth = 64;
         textureHeight = 32;
 
@@ -112,7 +113,7 @@ public class ModelChargingStationPad extends ModelBase{
     }
 
     @Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5){
+    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         super.render(entity, f, f1, f2, f3, f4, f5);
         setRotationAngles(f, f1, f2, f3, f4, f5, entity);
         Shape3.render(f5);
@@ -131,7 +132,7 @@ public class ModelChargingStationPad extends ModelBase{
         Shape16.render(f5);
     }
 
-    public void renderModel(float size){
+    public void renderModel(float size) {
         Shape3.render(size);
         Shape4.render(size);
         Shape5.render(size);
@@ -148,7 +149,7 @@ public class ModelChargingStationPad extends ModelBase{
         Shape16.render(size);
     }
 
-    private void setRotation(ModelRenderer model, float x, float y, float z){
+    private void setRotation(ModelRenderer model, float x, float y, float z) {
         model.rotateAngleX = x;
         model.rotateAngleY = y;
         model.rotateAngleZ = z;

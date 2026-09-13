@@ -3,11 +3,14 @@ package pneumaticCraft.common.network;
 import java.util.List;
 
 import net.minecraft.nbt.NBTTagCompound;
+
 import pneumaticCraft.common.inventory.SyncedField;
 
-public interface IDescSynced{
-    public static enum Type{
-        TILE_ENTITY, SEMI_BLOCK;
+public interface IDescSynced {
+
+    public static enum Type {
+        TILE_ENTITY,
+        SEMI_BLOCK;
     }
 
     public Type getSyncType();

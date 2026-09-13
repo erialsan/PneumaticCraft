@@ -12,8 +12,9 @@ import org.lwjgl.opengl.GL11;
 import pneumaticCraft.common.tileentity.TileEntityOmnidirectionalHopper;
 import pneumaticCraft.common.util.PneumaticCraftUtils;
 
-public class ModelOmnidirectionalHopper extends ModelBase implements IBaseModel{
-    //fields
+public class ModelOmnidirectionalHopper extends ModelBase implements IBaseModel {
+
+    // fields
     ModelRenderer Wall1;
     ModelRenderer Wall2;
     ModelRenderer Wall3;
@@ -23,7 +24,7 @@ public class ModelOmnidirectionalHopper extends ModelBase implements IBaseModel{
     ModelRenderer InserterBottom;
     private final ResourceLocation texture;
 
-    public ModelOmnidirectionalHopper(ResourceLocation texture){
+    public ModelOmnidirectionalHopper(ResourceLocation texture) {
         this.texture = texture;
         textureWidth = 64;
         textureHeight = 64;
@@ -73,7 +74,7 @@ public class ModelOmnidirectionalHopper extends ModelBase implements IBaseModel{
     }
 
     @Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5){
+    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         super.render(entity, f, f1, f2, f3, f4, f5);
         setRotationAngles(f, f1, f2, f3, f4, f5, entity);
         Wall1.render(f5);
@@ -85,23 +86,26 @@ public class ModelOmnidirectionalHopper extends ModelBase implements IBaseModel{
         InserterBottom.render(f5);
     }
 
-    private void setRotation(ModelRenderer model, float x, float y, float z){
+    private void setRotation(ModelRenderer model, float x, float y, float z) {
         model.rotateAngleX = x;
         model.rotateAngleY = y;
         model.rotateAngleZ = z;
     }
 
     @Override
-    public void renderStatic(float size, TileEntity tile){
+    public void renderStatic(float size, TileEntity tile) {
         GL11.glPushMatrix();
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         GL11.glColor4d(1, 1, 1, 1);
         TileEntityOmnidirectionalHopper te = null;
 
-        if(tile instanceof TileEntityOmnidirectionalHopper) {
-            te = (TileEntityOmnidirectionalHopper)tile;
-            PneumaticCraftUtils.rotateMatrixByMetadata(te.getDirection().getOpposite().ordinal());
+        if (tile instanceof TileEntityOmnidirectionalHopper) {
+            te = (TileEntityOmnidirectionalHopper) tile;
+            PneumaticCraftUtils.rotateMatrixByMetadata(
+                te.getDirection()
+                    .getOpposite()
+                    .ordinal());
         } else {
             PneumaticCraftUtils.rotateMatrixByMetadata(ForgeDirection.DOWN.ordinal());
         }
@@ -116,7 +120,7 @@ public class ModelOmnidirectionalHopper extends ModelBase implements IBaseModel{
 
         GL11.glPopMatrix();
 
-        if(te != null) {
+        if (te != null) {
             PneumaticCraftUtils.rotateMatrixByMetadata(te.getBlockMetadata());
         } else {
             PneumaticCraftUtils.rotateMatrixByMetadata(ForgeDirection.DOWN.ordinal());
@@ -126,22 +130,22 @@ public class ModelOmnidirectionalHopper extends ModelBase implements IBaseModel{
         GL11.glDisable(GL11.GL_BLEND);
     }
 
-    protected void renderMain(TileEntityOmnidirectionalHopper hopper){}
+    protected void renderMain(TileEntityOmnidirectionalHopper hopper) {}
 
-    protected void renderBottom(TileEntityOmnidirectionalHopper hopper){}
+    protected void renderBottom(TileEntityOmnidirectionalHopper hopper) {}
 
     @Override
-    public void renderDynamic(float size, TileEntity te, float partialTicks){
+    public void renderDynamic(float size, TileEntity te, float partialTicks) {
 
     }
 
     @Override
-    public ResourceLocation getModelTexture(TileEntity tile){
+    public ResourceLocation getModelTexture(TileEntity tile) {
         return texture;
     }
 
     @Override
-    public boolean rotateModelBasedOnBlockMeta(){
+    public boolean rotateModelBasedOnBlockMeta() {
         return false;
     }
 

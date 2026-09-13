@@ -3,9 +3,11 @@ package pneumaticCraft.api.recipe;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
-public interface IThermopneumaticProcessingPlantRecipe{
+public interface IThermopneumaticProcessingPlantRecipe {
+
     /**
      * Should return true when this recipe is valid, providing the input items. Do not modify these input items yet.
+     * 
      * @param inputTank
      * @param inputItem
      * @return
@@ -14,6 +16,7 @@ public interface IThermopneumaticProcessingPlantRecipe{
 
     /**
      * Should return the output fluid stack for this recipe. Do not modify these input items yet.
+     * 
      * @param inputTank
      * @param inputItem
      * @return
@@ -21,7 +24,9 @@ public interface IThermopneumaticProcessingPlantRecipe{
     public FluidStack getRecipeOutput(FluidStack inputTank, ItemStack inputItem);
 
     /**
-     * Decrease the input items used in the recipe here. When the stacksize is decreased to 0 it will automatically be set to null, so you don't have to worry about that.
+     * Decrease the input items used in the recipe here. When the stacksize is decreased to 0 it will automatically be
+     * set to null, so you don't have to worry about that.
+     * 
      * @param inputTank
      * @param inputItem
      */

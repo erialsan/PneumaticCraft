@@ -15,8 +15,9 @@ import pneumaticCraft.common.tileentity.TileEntityPneumaticDoorBase;
 import pneumaticCraft.common.util.PneumaticCraftUtils;
 import pneumaticCraft.lib.Textures;
 
-public class ModelPneumaticDoorBase extends ModelBase implements IBaseModel{
-    //fields
+public class ModelPneumaticDoorBase extends ModelBase implements IBaseModel {
+
+    // fields
     ModelRenderer Shape1;
     ModelRenderer Shape2;
     ModelRenderer Shape4;
@@ -25,7 +26,7 @@ public class ModelPneumaticDoorBase extends ModelBase implements IBaseModel{
     ModelRenderer Cilinder2;
     ModelRenderer Cilinder3;
 
-    public ModelPneumaticDoorBase(){
+    public ModelPneumaticDoorBase() {
         textureWidth = 64;
         textureHeight = 64;
 
@@ -74,7 +75,7 @@ public class ModelPneumaticDoorBase extends ModelBase implements IBaseModel{
     }
 
     @Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5){
+    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         super.render(entity, f, f1, f2, f3, f4, f5);
         setRotationAngles(f, f1, f2, f3, f4, f5, entity);
         Shape1.render(f5);
@@ -86,17 +87,17 @@ public class ModelPneumaticDoorBase extends ModelBase implements IBaseModel{
         Cilinder3.render(f5);
     }
 
-    public void renderModel(float size, float progress, boolean renderBase, boolean rightGoing){
-        if(renderBase) {
+    public void renderModel(float size, float progress, boolean renderBase, boolean rightGoing) {
+        if (renderBase) {
             Shape1.render(size);
             Shape2.render(size);
             Shape4.render(size);
             Shape5.render(size);
         }
-        float cosinus = /*12 / 16F -*/(float)Math.sin(Math.toRadians((1 - progress) * 90)) * 12 / 16F;
-        float sinus = 9 / 16F - (float)Math.cos(Math.toRadians((1 - progress) * 90)) * 9 / 16F;
+        float cosinus = /* 12 / 16F - */(float) Math.sin(Math.toRadians((1 - progress) * 90)) * 12 / 16F;
+        float sinus = 9 / 16F - (float) Math.cos(Math.toRadians((1 - progress) * 90)) * 9 / 16F;
         double extension = Math.sqrt(Math.pow(sinus, 2) + Math.pow(cosinus + 4 / 16F, 2));
-        //System.out.println("sinus: " + sinus);
+        // System.out.println("sinus: " + sinus);
         GL11.glTranslated(((rightGoing ? -4 : 0) + 2.5) / 16F, 0, -6 / 16F);
         double cilinderAngle = Math.toDegrees(Math.atan(sinus / (cosinus + 14 / 16F)));
         GL11.glRotated(cilinderAngle, 0, rightGoing ? 1 : -1, 0);
@@ -109,39 +110,43 @@ public class ModelPneumaticDoorBase extends ModelBase implements IBaseModel{
         Cilinder3.render(size);
     }
 
-    private void setRotation(ModelRenderer model, float x, float y, float z){
+    private void setRotation(ModelRenderer model, float x, float y, float z) {
         model.rotateAngleX = x;
         model.rotateAngleY = y;
         model.rotateAngleZ = z;
     }
 
     @Override
-    public void renderStatic(float size, TileEntity tile){
+    public void renderStatic(float size, TileEntity tile) {
 
     }
 
     @Override
-    public ResourceLocation getModelTexture(TileEntity tile){
+    public ResourceLocation getModelTexture(TileEntity tile) {
         return Textures.MODEL_PNEUMATIC_DOOR_BASE;
     }
 
     @Override
-    public boolean rotateModelBasedOnBlockMeta(){
+    public boolean rotateModelBasedOnBlockMeta() {
         return false;
     }
 
     @Override
-    public void renderDynamic(float size, TileEntity tile, float partialTicks){
-        if(tile instanceof TileEntityPneumaticDoorBase) {
-            TileEntityPneumaticDoorBase door = (TileEntityPneumaticDoorBase)tile;
+    public void renderDynamic(float size, TileEntity tile, float partialTicks) {
+        if (tile instanceof TileEntityPneumaticDoorBase) {
+            TileEntityPneumaticDoorBase door = (TileEntityPneumaticDoorBase) tile;
             ItemStack camoStack = door.getStackInSlot(TileEntityPneumaticDoorBase.CAMO_SLOT);
             boolean renderBase = true;
-            if(camoStack != null && camoStack.getItem() instanceof ItemBlock) {
+            if (camoStack != null && camoStack.getItem() instanceof ItemBlock) {
                 Block block = Block.getBlockFromItem(camoStack.getItem());
                 renderBase = !PneumaticCraftUtils.isRenderIDCamo(block.getRenderType());
             }
             PneumaticCraftUtils.rotateMatrixByMetadata(door.orientation.ordinal());
-            renderModel(size, door.oldProgress + (door.progress - door.oldProgress) * partialTicks, renderBase, ((TileEntityPneumaticDoorBase)tile).rightGoing);
+            renderModel(
+                size,
+                door.oldProgress + (door.progress - door.oldProgress) * partialTicks,
+                renderBase,
+                ((TileEntityPneumaticDoorBase) tile).rightGoing);
         } else {
             renderModel(size, 1, true, false);
         }

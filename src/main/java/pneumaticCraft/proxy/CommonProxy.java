@@ -3,6 +3,10 @@ package pneumaticCraft.proxy;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import net.minecraftforge.common.config.Configuration;
+
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.network.IGuiHandler;
+import cpw.mods.fml.relauncher.Side;
 import pneumaticCraft.client.gui.GuiAdvancedAirCompressor;
 import pneumaticCraft.client.gui.GuiAdvancedLiquidCompressor;
 import pneumaticCraft.client.gui.GuiAerialInterface;
@@ -116,11 +120,9 @@ import pneumaticCraft.common.tileentity.TileEntityThermopneumaticProcessingPlant
 import pneumaticCraft.common.tileentity.TileEntityUVLightBox;
 import pneumaticCraft.common.tileentity.TileEntityUniversalSensor;
 import pneumaticCraft.common.tileentity.TileEntityVacuumPump;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.network.IGuiHandler;
-import cpw.mods.fml.relauncher.Side;
 
-public class CommonProxy implements IGuiHandler{
+public class CommonProxy implements IGuiHandler {
+
     protected CommonHUDHandler clientHudHandler;
     private CommonHUDHandler serverHudHandler;
 
@@ -128,234 +130,383 @@ public class CommonProxy implements IGuiHandler{
 
     public int PneumaticHelmetRenderID = 0;
 
-    public static enum EnumGuiId{
-        AIR_COMPRESSOR, AIR_CANNON, PRESSURE_CHAMBER, CHARGING_STATION, ELEVATOR, PNEUMATIC_HELMET, PRESSURE_CHAMBER_INTERFACE, VACUUM_PUMP, PNEUMATIC_DOOR, ASSEMBLY_CONTROLLER, UV_LIGHT_BOX, SECURITY_STATION_INVENTORY, HACKING, UNIVERSAL_SENSOR, PNEUMATIC_GENERATOR, ELECTRIC_COMPRESSOR, PNEUMATIC_ENGINE, KINETIC_COMPRESSOR, AERIAL_INTERFACE, ELECTROSTATIC_COMPRESSOR, APHORISM_TILE, OMNIDIRECTIONAL_HOPPER, PROGRAMMER, DRONE, PRESSURE_MODULE, AIR_GRATE_MODULE, PNEUMATIC_DYNAMO, FLUX_COMPRESSOR, PLASTIC_MIXER, LIQUID_COMPRESSOR, ADVANCED_AIR_COMPRESSOR, LIQUID_HOPPER, ADVANCED_LIQUID_COMPRESSOR, REMOTE, REMOTE_EDITOR, PROGRAMMABLE_CONTROLLER, GAS_LIFT, REFINERY, THERMOPNEUMATIC_PROCESSING_PLANT, LOGISTICS_REQUESTER, LOGISTICS_STORAGE, LOGISTICS_PASSIVE_PROVIDER, AMADRON, AMADRON_ADD_TRADE, CREATIVE_COMPRESSOR, KEROSENE_LAMP, SENTRY_TURRET;
+    public static enum EnumGuiId {
+        AIR_COMPRESSOR,
+        AIR_CANNON,
+        PRESSURE_CHAMBER,
+        CHARGING_STATION,
+        ELEVATOR,
+        PNEUMATIC_HELMET,
+        PRESSURE_CHAMBER_INTERFACE,
+        VACUUM_PUMP,
+        PNEUMATIC_DOOR,
+        ASSEMBLY_CONTROLLER,
+        UV_LIGHT_BOX,
+        SECURITY_STATION_INVENTORY,
+        HACKING,
+        UNIVERSAL_SENSOR,
+        PNEUMATIC_GENERATOR,
+        ELECTRIC_COMPRESSOR,
+        PNEUMATIC_ENGINE,
+        KINETIC_COMPRESSOR,
+        AERIAL_INTERFACE,
+        ELECTROSTATIC_COMPRESSOR,
+        APHORISM_TILE,
+        OMNIDIRECTIONAL_HOPPER,
+        PROGRAMMER,
+        DRONE,
+        PRESSURE_MODULE,
+        AIR_GRATE_MODULE,
+        PNEUMATIC_DYNAMO,
+        FLUX_COMPRESSOR,
+        PLASTIC_MIXER,
+        LIQUID_COMPRESSOR,
+        ADVANCED_AIR_COMPRESSOR,
+        LIQUID_HOPPER,
+        ADVANCED_LIQUID_COMPRESSOR,
+        REMOTE,
+        REMOTE_EDITOR,
+        PROGRAMMABLE_CONTROLLER,
+        GAS_LIFT,
+        REFINERY,
+        THERMOPNEUMATIC_PROCESSING_PLANT,
+        LOGISTICS_REQUESTER,
+        LOGISTICS_STORAGE,
+        LOGISTICS_PASSIVE_PROVIDER,
+        AMADRON,
+        AMADRON_ADD_TRADE,
+        CREATIVE_COMPRESSOR,
+        KEROSENE_LAMP,
+        SENTRY_TURRET;
     }
 
     private final HackTickHandler serverHackTickHandler = new HackTickHandler();
 
-    public void registerRenders(){
+    public void registerRenders() {
 
     }
 
-    public void initConfig(Configuration config){}
+    public void initConfig(Configuration config) {}
 
-    public World getClientWorld(){
+    public World getClientWorld() {
         return null;
     }
 
-    public EntityPlayer getPlayer(){
+    public EntityPlayer getPlayer() {
         return null;
     }
 
-    public CommonHUDHandler getCommonHudHandler(){
-        if(getSide() == Side.CLIENT) {
+    public CommonHUDHandler getCommonHudHandler() {
+        if (getSide() == Side.CLIENT) {
             return clientHudHandler;
         } else {
             return serverHudHandler;
         }
     }
 
-    public Side getSide(){
-        return FMLCommonHandler.instance().getEffectiveSide();
+    public Side getSide() {
+        return FMLCommonHandler.instance()
+            .getEffectiveSide();
     }
 
-    public void registerHandlers(){
-        FMLCommonHandler.instance().bus().register(serverHudHandler = new CommonHUDHandler());
-        FMLCommonHandler.instance().bus().register(getHackTickHandler());
+    public void registerHandlers() {
+        FMLCommonHandler.instance()
+            .bus()
+            .register(serverHudHandler = new CommonHUDHandler());
+        FMLCommonHandler.instance()
+            .bus()
+            .register(getHackTickHandler());
     }
 
-    public void postInit(){}
+    public void postInit() {}
 
     @Override
-    public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z){
-        switch(EnumGuiId.values()[ID]){
+    public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
+        switch (EnumGuiId.values()[ID]) {
             case AIR_COMPRESSOR:
-                return new ContainerAirCompressor(player.inventory, (TileEntityAirCompressor)world.getTileEntity(x, y, z));
+                return new ContainerAirCompressor(
+                    player.inventory,
+                    (TileEntityAirCompressor) world.getTileEntity(x, y, z));
             case ADVANCED_AIR_COMPRESSOR:
-                return new ContainerAdvancedAirCompressor(player.inventory, (TileEntityAdvancedAirCompressor)world.getTileEntity(x, y, z));
+                return new ContainerAdvancedAirCompressor(
+                    player.inventory,
+                    (TileEntityAdvancedAirCompressor) world.getTileEntity(x, y, z));
             case AIR_CANNON:
-                return new ContainerAirCannon(player.inventory, (TileEntityAirCannon)world.getTileEntity(x, y, z));
+                return new ContainerAirCannon(player.inventory, (TileEntityAirCannon) world.getTileEntity(x, y, z));
             case PRESSURE_CHAMBER:
-                return new ContainerPressureChamber(player.inventory, (TileEntityPressureChamberValve)world.getTileEntity(x, y, z));
+                return new ContainerPressureChamber(
+                    player.inventory,
+                    (TileEntityPressureChamberValve) world.getTileEntity(x, y, z));
             case CHARGING_STATION:
-                return new ContainerChargingStation(player.inventory, (TileEntityChargingStation)world.getTileEntity(x, y, z));
+                return new ContainerChargingStation(
+                    player.inventory,
+                    (TileEntityChargingStation) world.getTileEntity(x, y, z));
             case ELEVATOR:
-                return new ContainerElevator(player.inventory, (TileEntityElevatorBase)world.getTileEntity(x, y, z));
+                return new ContainerElevator(player.inventory, (TileEntityElevatorBase) world.getTileEntity(x, y, z));
             case PNEUMATIC_HELMET:
             case DRONE:
-                return new ContainerChargingStationItemInventory(player.inventory, (TileEntityChargingStation)world.getTileEntity(x, y, z));
+                return new ContainerChargingStationItemInventory(
+                    player.inventory,
+                    (TileEntityChargingStation) world.getTileEntity(x, y, z));
             case PRESSURE_CHAMBER_INTERFACE:
-                return new ContainerPressureChamberInterface(player.inventory, (TileEntityPressureChamberInterface)world.getTileEntity(x, y, z));
+                return new ContainerPressureChamberInterface(
+                    player.inventory,
+                    (TileEntityPressureChamberInterface) world.getTileEntity(x, y, z));
             case VACUUM_PUMP:
-                return new ContainerVacuumPump(player.inventory, (TileEntityVacuumPump)world.getTileEntity(x, y, z));
+                return new ContainerVacuumPump(player.inventory, (TileEntityVacuumPump) world.getTileEntity(x, y, z));
             case PNEUMATIC_DOOR:
-                return new ContainerPneumaticDoor(player.inventory, (TileEntityPneumaticDoorBase)world.getTileEntity(x, y, z));
+                return new ContainerPneumaticDoor(
+                    player.inventory,
+                    (TileEntityPneumaticDoorBase) world.getTileEntity(x, y, z));
             case ASSEMBLY_CONTROLLER:
-                return new ContainerAssemblyController(player.inventory, (TileEntityAssemblyController)world.getTileEntity(x, y, z));
+                return new ContainerAssemblyController(
+                    player.inventory,
+                    (TileEntityAssemblyController) world.getTileEntity(x, y, z));
             case UV_LIGHT_BOX:
-                return new ContainerUVLightBox(player.inventory, (TileEntityUVLightBox)world.getTileEntity(x, y, z));
+                return new ContainerUVLightBox(player.inventory, (TileEntityUVLightBox) world.getTileEntity(x, y, z));
             case SECURITY_STATION_INVENTORY:
-                return new ContainerSecurityStationInventory(player.inventory, (TileEntitySecurityStation)world.getTileEntity(x, y, z));
+                return new ContainerSecurityStationInventory(
+                    player.inventory,
+                    (TileEntitySecurityStation) world.getTileEntity(x, y, z));
             case HACKING:
-                return new ContainerSecurityStationHacking(player.inventory, (TileEntitySecurityStation)world.getTileEntity(x, y, z));
+                return new ContainerSecurityStationHacking(
+                    player.inventory,
+                    (TileEntitySecurityStation) world.getTileEntity(x, y, z));
             case UNIVERSAL_SENSOR:
-                return new ContainerUniversalSensor(player.inventory, (TileEntityUniversalSensor)world.getTileEntity(x, y, z));
+                return new ContainerUniversalSensor(
+                    player.inventory,
+                    (TileEntityUniversalSensor) world.getTileEntity(x, y, z));
             case AERIAL_INTERFACE:
-                return new Container4UpgradeSlots(player.inventory, (TileEntityAerialInterface)world.getTileEntity(x, y, z));
+                return new Container4UpgradeSlots(
+                    player.inventory,
+                    (TileEntityAerialInterface) world.getTileEntity(x, y, z));
             case ELECTROSTATIC_COMPRESSOR:
-                return new Container4UpgradeSlots(player.inventory, (TileEntityElectrostaticCompressor)world.getTileEntity(x, y, z));
+                return new Container4UpgradeSlots(
+                    player.inventory,
+                    (TileEntityElectrostaticCompressor) world.getTileEntity(x, y, z));
             case OMNIDIRECTIONAL_HOPPER:
-                return new ContainerOmnidirectionalHopper(player.inventory, (TileEntityOmnidirectionalHopper)world.getTileEntity(x, y, z));
+                return new ContainerOmnidirectionalHopper(
+                    player.inventory,
+                    (TileEntityOmnidirectionalHopper) world.getTileEntity(x, y, z));
             case PROGRAMMER:
-                return new ContainerProgrammer(player.inventory, (TileEntityProgrammer)world.getTileEntity(x, y, z));
+                return new ContainerProgrammer(player.inventory, (TileEntityProgrammer) world.getTileEntity(x, y, z));
             case PLASTIC_MIXER:
-                return new ContainerPlasticMixer(player.inventory, (TileEntityPlasticMixer)world.getTileEntity(x, y, z));
+                return new ContainerPlasticMixer(
+                    player.inventory,
+                    (TileEntityPlasticMixer) world.getTileEntity(x, y, z));
             case LIQUID_COMPRESSOR:
-                return new ContainerLiquidCompressor(player.inventory, (TileEntityLiquidCompressor)world.getTileEntity(x, y, z));
+                return new ContainerLiquidCompressor(
+                    player.inventory,
+                    (TileEntityLiquidCompressor) world.getTileEntity(x, y, z));
             case ADVANCED_LIQUID_COMPRESSOR:
-                return new ContainerAdvancedLiquidCompressor(player.inventory, (TileEntityAdvancedLiquidCompressor)world.getTileEntity(x, y, z));
+                return new ContainerAdvancedLiquidCompressor(
+                    player.inventory,
+                    (TileEntityAdvancedLiquidCompressor) world.getTileEntity(x, y, z));
             case LIQUID_HOPPER:
-                return new ContainerLiquidHopper(player.inventory, (TileEntityLiquidHopper)world.getTileEntity(x, y, z));
+                return new ContainerLiquidHopper(
+                    player.inventory,
+                    (TileEntityLiquidHopper) world.getTileEntity(x, y, z));
             case REMOTE:
             case REMOTE_EDITOR:
                 return new ContainerRemote(player.getCurrentEquippedItem());
             case PROGRAMMABLE_CONTROLLER:
-                return new ContainerProgrammableController(player.inventory, (TileEntityProgrammableController)world.getTileEntity(x, y, z));
+                return new ContainerProgrammableController(
+                    player.inventory,
+                    (TileEntityProgrammableController) world.getTileEntity(x, y, z));
             case GAS_LIFT:
-                return new ContainerGasLift(player.inventory, (TileEntityGasLift)world.getTileEntity(x, y, z));
+                return new ContainerGasLift(player.inventory, (TileEntityGasLift) world.getTileEntity(x, y, z));
             case REFINERY:
-                return new ContainerRefinery(player.inventory, (TileEntityRefinery)world.getTileEntity(x, y, z));
+                return new ContainerRefinery(player.inventory, (TileEntityRefinery) world.getTileEntity(x, y, z));
             case THERMOPNEUMATIC_PROCESSING_PLANT:
-                return new ContainerThermopneumaticProcessingPlant(player.inventory, (TileEntityThermopneumaticProcessingPlant)world.getTileEntity(x, y, z));
+                return new ContainerThermopneumaticProcessingPlant(
+                    player.inventory,
+                    (TileEntityThermopneumaticProcessingPlant) world.getTileEntity(x, y, z));
             case LOGISTICS_REQUESTER:
             case LOGISTICS_STORAGE:
             case LOGISTICS_PASSIVE_PROVIDER:
-                return new ContainerLogistics(player.inventory, (SemiBlockLogistics)SemiBlockManager.getInstance(world).getSemiBlock(world, x, y, z));
+                return new ContainerLogistics(
+                    player.inventory,
+                    (SemiBlockLogistics) SemiBlockManager.getInstance(world)
+                        .getSemiBlock(world, x, y, z));
             case AMADRON:
                 return new ContainerAmadron(player);
             case AMADRON_ADD_TRADE:
                 return new ContainerAmadronAddTrade();
             case CREATIVE_COMPRESSOR:
-                return new ContainerPneumaticBase((TileEntityBase)world.getTileEntity(x, y, z));
+                return new ContainerPneumaticBase((TileEntityBase) world.getTileEntity(x, y, z));
             case KEROSENE_LAMP:
-                return new ContainerKeroseneLamp(player.inventory, (TileEntityKeroseneLamp)world.getTileEntity(x, y, z));
+                return new ContainerKeroseneLamp(
+                    player.inventory,
+                    (TileEntityKeroseneLamp) world.getTileEntity(x, y, z));
             case SENTRY_TURRET:
-                return new ContainerSentryTurret(player.inventory, (TileEntitySentryTurret)world.getTileEntity(x, y, z));
+                return new ContainerSentryTurret(
+                    player.inventory,
+                    (TileEntitySentryTurret) world.getTileEntity(x, y, z));
         }
-        return ThirdPartyManager.instance().getServerGuiElement(ID, player, world, x, y, z);
+        return ThirdPartyManager.instance()
+            .getServerGuiElement(ID, player, world, x, y, z);
     }
 
     @Override
-    public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z){
-        switch(EnumGuiId.values()[ID]){
+    public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
+        switch (EnumGuiId.values()[ID]) {
             case AIR_COMPRESSOR:
-                return new GuiAirCompressor(player.inventory, (TileEntityAirCompressor)world.getTileEntity(x, y, z));
+                return new GuiAirCompressor(player.inventory, (TileEntityAirCompressor) world.getTileEntity(x, y, z));
             case ADVANCED_AIR_COMPRESSOR:
-                return new GuiAdvancedAirCompressor(player.inventory, (TileEntityAdvancedAirCompressor)world.getTileEntity(x, y, z));
+                return new GuiAdvancedAirCompressor(
+                    player.inventory,
+                    (TileEntityAdvancedAirCompressor) world.getTileEntity(x, y, z));
             case AIR_CANNON:
-                return new GuiAirCannon(player.inventory, (TileEntityAirCannon)world.getTileEntity(x, y, z));
+                return new GuiAirCannon(player.inventory, (TileEntityAirCannon) world.getTileEntity(x, y, z));
             case PRESSURE_CHAMBER:
-                return new GuiPressureChamber(player.inventory, (TileEntityPressureChamberValve)world.getTileEntity(x, y, z));
+                return new GuiPressureChamber(
+                    player.inventory,
+                    (TileEntityPressureChamberValve) world.getTileEntity(x, y, z));
             case CHARGING_STATION:
-                return new GuiChargingStation(player.inventory, (TileEntityChargingStation)world.getTileEntity(x, y, z));
+                return new GuiChargingStation(
+                    player.inventory,
+                    (TileEntityChargingStation) world.getTileEntity(x, y, z));
             case ELEVATOR:
-                return new GuiElevator(player.inventory, (TileEntityElevatorBase)world.getTileEntity(x, y, z));
+                return new GuiElevator(player.inventory, (TileEntityElevatorBase) world.getTileEntity(x, y, z));
             case PNEUMATIC_HELMET:
-                return new GuiPneumaticHelmet(new ContainerChargingStationItemInventory(player.inventory, (TileEntityChargingStation)world.getTileEntity(x, y, z)), (TileEntityChargingStation)world.getTileEntity(x, y, z));
+                return new GuiPneumaticHelmet(
+                    new ContainerChargingStationItemInventory(
+                        player.inventory,
+                        (TileEntityChargingStation) world.getTileEntity(x, y, z)),
+                    (TileEntityChargingStation) world.getTileEntity(x, y, z));
             case PRESSURE_CHAMBER_INTERFACE:
-                return new GuiPressureChamberInterface(player.inventory, (TileEntityPressureChamberInterface)world.getTileEntity(x, y, z));
+                return new GuiPressureChamberInterface(
+                    player.inventory,
+                    (TileEntityPressureChamberInterface) world.getTileEntity(x, y, z));
             case VACUUM_PUMP:
-                return new GuiVacuumPump(player.inventory, (TileEntityVacuumPump)world.getTileEntity(x, y, z));
+                return new GuiVacuumPump(player.inventory, (TileEntityVacuumPump) world.getTileEntity(x, y, z));
             case PNEUMATIC_DOOR:
-                return new GuiPneumaticDoor(player.inventory, (TileEntityPneumaticDoorBase)world.getTileEntity(x, y, z));
+                return new GuiPneumaticDoor(
+                    player.inventory,
+                    (TileEntityPneumaticDoorBase) world.getTileEntity(x, y, z));
             case ASSEMBLY_CONTROLLER:
-                return new GuiAssemblyController(player.inventory, (TileEntityAssemblyController)world.getTileEntity(x, y, z));
+                return new GuiAssemblyController(
+                    player.inventory,
+                    (TileEntityAssemblyController) world.getTileEntity(x, y, z));
             case UV_LIGHT_BOX:
-                return new GuiUVLightBox(player.inventory, (TileEntityUVLightBox)world.getTileEntity(x, y, z));
+                return new GuiUVLightBox(player.inventory, (TileEntityUVLightBox) world.getTileEntity(x, y, z));
             case SECURITY_STATION_INVENTORY:
-                return new GuiSecurityStationInventory(player.inventory, (TileEntitySecurityStation)world.getTileEntity(x, y, z));
+                return new GuiSecurityStationInventory(
+                    player.inventory,
+                    (TileEntitySecurityStation) world.getTileEntity(x, y, z));
             case HACKING:
-                return new GuiSecurityStationHacking(player.inventory, (TileEntitySecurityStation)world.getTileEntity(x, y, z));
+                return new GuiSecurityStationHacking(
+                    player.inventory,
+                    (TileEntitySecurityStation) world.getTileEntity(x, y, z));
             case UNIVERSAL_SENSOR:
-                return new GuiUniversalSensor(player.inventory, (TileEntityUniversalSensor)world.getTileEntity(x, y, z));
+                return new GuiUniversalSensor(
+                    player.inventory,
+                    (TileEntityUniversalSensor) world.getTileEntity(x, y, z));
             case AERIAL_INTERFACE:
-                return new GuiAerialInterface(player.inventory, (TileEntityAerialInterface)world.getTileEntity(x, y, z));
+                return new GuiAerialInterface(
+                    player.inventory,
+                    (TileEntityAerialInterface) world.getTileEntity(x, y, z));
             case ELECTROSTATIC_COMPRESSOR:
-                return new GuiElectrostaticCompressor(player.inventory, (TileEntityElectrostaticCompressor)world.getTileEntity(x, y, z));
+                return new GuiElectrostaticCompressor(
+                    player.inventory,
+                    (TileEntityElectrostaticCompressor) world.getTileEntity(x, y, z));
             case APHORISM_TILE:
-                return new GuiAphorismTile((TileEntityAphorismTile)world.getTileEntity(x, y, z));
+                return new GuiAphorismTile((TileEntityAphorismTile) world.getTileEntity(x, y, z));
             case OMNIDIRECTIONAL_HOPPER:
-                return new GuiOmnidirectionalHopper(player.inventory, (TileEntityOmnidirectionalHopper)world.getTileEntity(x, y, z));
+                return new GuiOmnidirectionalHopper(
+                    player.inventory,
+                    (TileEntityOmnidirectionalHopper) world.getTileEntity(x, y, z));
             case PROGRAMMER:
-                return new GuiProgrammer(player.inventory, (TileEntityProgrammer)world.getTileEntity(x, y, z));
+                return new GuiProgrammer(player.inventory, (TileEntityProgrammer) world.getTileEntity(x, y, z));
             case DRONE:
-                return new GuiDrone(new ContainerChargingStationItemInventory(player.inventory, (TileEntityChargingStation)world.getTileEntity(x, y, z)), (TileEntityChargingStation)world.getTileEntity(x, y, z));
+                return new GuiDrone(
+                    new ContainerChargingStationItemInventory(
+                        player.inventory,
+                        (TileEntityChargingStation) world.getTileEntity(x, y, z)),
+                    (TileEntityChargingStation) world.getTileEntity(x, y, z));
             case PRESSURE_MODULE:
                 return new GuiPressureModule(player, x, y, z);
             case AIR_GRATE_MODULE:
                 return new GuiAirGrateModule(player, x, y, z);
             case PLASTIC_MIXER:
-                return new GuiPlasticMixer(player.inventory, (TileEntityPlasticMixer)world.getTileEntity(x, y, z));
+                return new GuiPlasticMixer(player.inventory, (TileEntityPlasticMixer) world.getTileEntity(x, y, z));
             case LIQUID_COMPRESSOR:
-                return new GuiLiquidCompressor(player.inventory, (TileEntityLiquidCompressor)world.getTileEntity(x, y, z));
+                return new GuiLiquidCompressor(
+                    player.inventory,
+                    (TileEntityLiquidCompressor) world.getTileEntity(x, y, z));
             case ADVANCED_LIQUID_COMPRESSOR:
-                return new GuiAdvancedLiquidCompressor(player.inventory, (TileEntityAdvancedLiquidCompressor)world.getTileEntity(x, y, z));
+                return new GuiAdvancedLiquidCompressor(
+                    player.inventory,
+                    (TileEntityAdvancedLiquidCompressor) world.getTileEntity(x, y, z));
             case LIQUID_HOPPER:
-                return new GuiLiquidHopper(player.inventory, (TileEntityLiquidHopper)world.getTileEntity(x, y, z));
+                return new GuiLiquidHopper(player.inventory, (TileEntityLiquidHopper) world.getTileEntity(x, y, z));
             case REMOTE:
                 return new GuiRemote(player.getCurrentEquippedItem());
             case REMOTE_EDITOR:
                 return new GuiRemoteEditor(player.getCurrentEquippedItem());
             case PROGRAMMABLE_CONTROLLER:
-                return new GuiProgrammableController(player.inventory, (TileEntityProgrammableController)world.getTileEntity(x, y, z));
+                return new GuiProgrammableController(
+                    player.inventory,
+                    (TileEntityProgrammableController) world.getTileEntity(x, y, z));
             case GAS_LIFT:
-                return new GuiGasLift(player.inventory, (TileEntityGasLift)world.getTileEntity(x, y, z));
+                return new GuiGasLift(player.inventory, (TileEntityGasLift) world.getTileEntity(x, y, z));
             case REFINERY:
-                return new GuiRefinery(player.inventory, (TileEntityRefinery)world.getTileEntity(x, y, z));
+                return new GuiRefinery(player.inventory, (TileEntityRefinery) world.getTileEntity(x, y, z));
             case THERMOPNEUMATIC_PROCESSING_PLANT:
-                return new GuiThermopneumaticProcessingPlant(player.inventory, (TileEntityThermopneumaticProcessingPlant)world.getTileEntity(x, y, z));
+                return new GuiThermopneumaticProcessingPlant(
+                    player.inventory,
+                    (TileEntityThermopneumaticProcessingPlant) world.getTileEntity(x, y, z));
             case LOGISTICS_REQUESTER:
-                return new GuiLogisticsRequester(player.inventory, (SemiBlockRequester)SemiBlockManager.getInstance(world).getSemiBlock(world, x, y, z));
+                return new GuiLogisticsRequester(
+                    player.inventory,
+                    (SemiBlockRequester) SemiBlockManager.getInstance(world)
+                        .getSemiBlock(world, x, y, z));
             case LOGISTICS_STORAGE:
-                return new GuiLogisticsStorage(player.inventory, (SemiBlockStorage)SemiBlockManager.getInstance(world).getSemiBlock(world, x, y, z));
+                return new GuiLogisticsStorage(
+                    player.inventory,
+                    (SemiBlockStorage) SemiBlockManager.getInstance(world)
+                        .getSemiBlock(world, x, y, z));
             case LOGISTICS_PASSIVE_PROVIDER:
-                return new GuiLogisticsProvider(player.inventory, (SemiBlockActiveProvider)SemiBlockManager.getInstance(world).getSemiBlock(world, x, y, z));
+                return new GuiLogisticsProvider(
+                    player.inventory,
+                    (SemiBlockActiveProvider) SemiBlockManager.getInstance(world)
+                        .getSemiBlock(world, x, y, z));
             case AMADRON:
                 return new GuiAmadron(player.inventory);
             case AMADRON_ADD_TRADE:
                 return new GuiAmadronAddTrade();
             case CREATIVE_COMPRESSOR:
-                return new GuiCreativeCompressor((TileEntityCreativeCompressor)world.getTileEntity(x, y, z));
+                return new GuiCreativeCompressor((TileEntityCreativeCompressor) world.getTileEntity(x, y, z));
             case KEROSENE_LAMP:
-                return new GuiKeroseneLamp(player.inventory, (TileEntityKeroseneLamp)world.getTileEntity(x, y, z));
+                return new GuiKeroseneLamp(player.inventory, (TileEntityKeroseneLamp) world.getTileEntity(x, y, z));
             case SENTRY_TURRET:
-                return new GuiSentryTurret(player.inventory, (TileEntitySentryTurret)world.getTileEntity(x, y, z));
+                return new GuiSentryTurret(player.inventory, (TileEntitySentryTurret) world.getTileEntity(x, y, z));
         }
-        return ThirdPartyManager.instance().getClientGuiElement(ID, player, world, x, y, z);
+        return ThirdPartyManager.instance()
+            .getClientGuiElement(ID, player, world, x, y, z);
     }
 
-    public int getArmorRenderID(String armorName){
+    public int getArmorRenderID(String armorName) {
         return 0;
     }
 
-    public int getRenderIdForRenderer(Class clazz){
+    public int getRenderIdForRenderer(Class clazz) {
         return 0;
     }
 
-    public void registerVillagerSkins(){}
+    public void registerVillagerSkins() {}
 
-    public HackTickHandler getHackTickHandler(){
+    public HackTickHandler getHackTickHandler() {
         return serverHackTickHandler;
     }
 
-    public boolean isSneakingInGui(){
+    public boolean isSneakingInGui() {
         return false;
     }
 
-    public void init(){}
+    public void init() {}
 
-    public void registerSemiBlockRenderer(ItemSemiBlockBase semiBlock){
+    public void registerSemiBlockRenderer(ItemSemiBlockBase semiBlock) {
 
     }
 }

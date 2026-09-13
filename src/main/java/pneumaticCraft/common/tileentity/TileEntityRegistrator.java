@@ -2,8 +2,9 @@ package pneumaticCraft.common.tileentity;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 
-public class TileEntityRegistrator{
-    public static void init(){
+public class TileEntityRegistrator {
+
+    public static void init() {
         GameRegistry.registerTileEntity(TileEntityPressureTube.class, "TileEntityPressureTube");
         GameRegistry.registerTileEntity(TileEntityAirCompressor.class, "TileEntityAirCompressor");
         GameRegistry.registerTileEntity(TileEntityAdvancedAirCompressor.class, "PneumaticCraft_advancedAirCompressor");
@@ -36,15 +37,19 @@ public class TileEntityRegistrator{
         GameRegistry.registerTileEntity(TileEntityCreativeCompressor.class, "TileEntityCreativeCompressor");
         GameRegistry.registerTileEntity(TileEntityPlasticMixer.class, "PneumaticCraft_plasticMixer");
         GameRegistry.registerTileEntity(TileEntityLiquidCompressor.class, "PneumaticCraft_liquidCompressor");
-        GameRegistry.registerTileEntity(TileEntityAdvancedLiquidCompressor.class, "PneumaticCraft_advancedLiquidCompressor");
+        GameRegistry
+            .registerTileEntity(TileEntityAdvancedLiquidCompressor.class, "PneumaticCraft_advancedLiquidCompressor");
         GameRegistry.registerTileEntity(TileEntityDroneRedstoneEmitter.class, "PneumaticCraft_droneRedstoneEmitter");
         GameRegistry.registerTileEntity(TileEntityCompressedIronBlock.class, "PneumaticCraft_compressedIronBlock");
         GameRegistry.registerTileEntity(TileEntityHeatSink.class, "PneumaticCraft_heatSink");
         GameRegistry.registerTileEntity(TileEntityVortexTube.class, "PneumaticCraft_vortexTube");
-        GameRegistry.registerTileEntity(TileEntityProgrammableController.class, "PneumaticCraft_programmableController");
+        GameRegistry
+            .registerTileEntity(TileEntityProgrammableController.class, "PneumaticCraft_programmableController");
         GameRegistry.registerTileEntity(TileEntityGasLift.class, "PneumaticCraft_gasLift");
         GameRegistry.registerTileEntity(TileEntityRefinery.class, "PneumaticCraft_refinery");
-        GameRegistry.registerTileEntity(TileEntityThermopneumaticProcessingPlant.class, "PneumaticCraft_thermopneumaticProcessingPlant");
+        GameRegistry.registerTileEntity(
+            TileEntityThermopneumaticProcessingPlant.class,
+            "PneumaticCraft_thermopneumaticProcessingPlant");
         GameRegistry.registerTileEntity(TileEntityKeroseneLamp.class, "PneumaticCraft_keroseneLamp");
         GameRegistry.registerTileEntity(TileEntitySentryTurret.class, "PneumaticCraft_sentryTurret");
     }

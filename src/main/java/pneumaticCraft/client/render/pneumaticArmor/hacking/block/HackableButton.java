@@ -1,45 +1,48 @@
 package pneumaticCraft.client.render.pneumaticArmor.hacking.block;
 
+import java.util.List;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
 import pneumaticCraft.api.client.pneumaticHelmet.IHackableBlock;
 
-import java.util.List;
+public class HackableButton implements IHackableBlock {
 
-public class HackableButton implements IHackableBlock{
     @Override
-    public String getId(){
+    public String getId() {
         return null;
     }
 
     @Override
-    public boolean canHack(IBlockAccess world, int x, int y, int z, EntityPlayer player){
+    public boolean canHack(IBlockAccess world, int x, int y, int z, EntityPlayer player) {
         return true;
     }
 
     @Override
-    public void addInfo(World world, int x, int y, int z, List<String> curInfo, EntityPlayer player){
+    public void addInfo(World world, int x, int y, int z, List<String> curInfo, EntityPlayer player) {
         curInfo.add("pneumaticHelmet.hacking.result.activate");
     }
 
     @Override
-    public void addPostHackInfo(World world, int x, int y, int z, List<String> curInfo, EntityPlayer player){
+    public void addPostHackInfo(World world, int x, int y, int z, List<String> curInfo, EntityPlayer player) {
         curInfo.add("pneumaticHelmet.hacking.finished.activated");
     }
 
     @Override
-    public int getHackTime(IBlockAccess world, int x, int y, int z, EntityPlayer player){
+    public int getHackTime(IBlockAccess world, int x, int y, int z, EntityPlayer player) {
         return 20;
     }
 
     @Override
-    public void onHackFinished(World world, int x, int y, int z, EntityPlayer player){
-        world.getBlock(x, y, z).onBlockActivated(world, x, y, z, player, 0, 0, 0, 0);
+    public void onHackFinished(World world, int x, int y, int z, EntityPlayer player) {
+        world.getBlock(x, y, z)
+            .onBlockActivated(world, x, y, z, player, 0, 0, 0, 0);
     }
 
     @Override
-    public boolean afterHackTick(World world, int x, int y, int z){
+    public boolean afterHackTick(World world, int x, int y, int z) {
         return false;
     }
 

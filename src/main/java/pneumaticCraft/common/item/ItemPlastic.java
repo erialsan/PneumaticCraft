@@ -9,43 +9,44 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class ItemPlastic extends ItemPneumatic{
+public class ItemPlastic extends ItemPneumatic {
 
-    public ItemPlastic(){
-        setTextureName("paper");//load up the paper texture;
+    public ItemPlastic() {
+        setTextureName("paper");// load up the paper texture;
         setHasSubtypes(true);
     }
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void getSubItems(Item par1, CreativeTabs tab, List subItems){
-        for(int i = 0; i < 16; i++) {
-            if(i == ItemPlasticPlants.ADRENALINE_PLANT_DAMAGE) continue;
-            if(i == ItemPlasticPlants.MUSIC_PLANT_DAMAGE) continue;
+    public void getSubItems(Item par1, CreativeTabs tab, List subItems) {
+        for (int i = 0; i < 16; i++) {
+            if (i == ItemPlasticPlants.ADRENALINE_PLANT_DAMAGE) continue;
+            if (i == ItemPlasticPlants.MUSIC_PLANT_DAMAGE) continue;
             subItems.add(new ItemStack(this, 1, i));
         }
     }
 
     @Override
-    public int getMetadata(int meta){
+    public int getMetadata(int meta) {
         return meta;
     }
 
     @Override
     @SideOnly(Side.CLIENT)
-    public int getColorFromItemStack(ItemStack itemStack, int renderPass){
+    public int getColorFromItemStack(ItemStack itemStack, int renderPass) {
         int plasticColour = getColour(itemStack);
-        if(plasticColour < 0) {
+        if (plasticColour < 0) {
             plasticColour = Integer.parseInt("ffffff", 16);
         }
         return plasticColour;
     }
 
-    private int getColour(ItemStack iStack){
-        switch(iStack.getItemDamage()){
+    private int getColour(ItemStack iStack) {
+        switch (iStack.getItemDamage()) {
             case ItemPlasticPlants.ADRENALINE_PLANT_DAMAGE:
                 return Integer.parseInt("b1b1b1", 16);
             case ItemPlasticPlants.BURST_PLANT_DAMAGE:
@@ -84,12 +85,16 @@ public class ItemPlastic extends ItemPneumatic{
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void addInformation(ItemStack stack, EntityPlayer player, List infoList, boolean par4){
-        infoList.add(I18n.format("gui.tooltip.plasticPlant", I18n.format(Itemss.plasticPlant.getUnlocalizedName(stack) + ".name")));
+    public void addInformation(ItemStack stack, EntityPlayer player, List infoList, boolean par4) {
+        infoList.add(
+            I18n.format(
+                "gui.tooltip.plasticPlant",
+                I18n.format(Itemss.plasticPlant.getUnlocalizedName(stack) + ".name")));
     }
 
     @Override
-    public String getUnlocalizedName(ItemStack stack){
-        return super.getUnlocalizedName(stack) + "." + ItemDye.field_150923_a[MathHelper.clamp_int(stack.getItemDamage(), 0, 15)];
+    public String getUnlocalizedName(ItemStack stack) {
+        return super.getUnlocalizedName(stack) + "."
+            + ItemDye.field_150923_a[MathHelper.clamp_int(stack.getItemDamage(), 0, 15)];
     }
 }

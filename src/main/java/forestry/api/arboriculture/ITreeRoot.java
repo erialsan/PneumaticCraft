@@ -21,93 +21,94 @@ import forestry.api.genetics.ISpeciesRoot;
 
 public interface ITreeRoot extends ISpeciesRoot {
 
-	@Override
-	boolean isMember(ItemStack itemstack);
+    @Override
+    boolean isMember(ItemStack itemstack);
 
-	@Override
-	ITree getMember(ItemStack itemstack);
+    @Override
+    ITree getMember(ItemStack itemstack);
 
-	@Override
-	ITree getMember(NBTTagCompound compound);
+    @Override
+    ITree getMember(NBTTagCompound compound);
 
-	@Override
-	ITree templateAsIndividual(IAllele[] template);
+    @Override
+    ITree templateAsIndividual(IAllele[] template);
 
-	@Override
-	ITree templateAsIndividual(IAllele[] templateActive, IAllele[] templateInactive);
+    @Override
+    ITree templateAsIndividual(IAllele[] templateActive, IAllele[] templateInactive);
 
-	@Override
-	ITreeGenome templateAsGenome(IAllele[] template);
+    @Override
+    ITreeGenome templateAsGenome(IAllele[] template);
 
-	@Override
-	ITreeGenome templateAsGenome(IAllele[] templateActive, IAllele[] templateInactive);
+    @Override
+    ITreeGenome templateAsGenome(IAllele[] templateActive, IAllele[] templateInactive);
 
-	/**
-	 * @param world
-	 * @return {@link IArboristTracker} associated with the passed world.
-	 */
-	@Override
-	IArboristTracker getBreedingTracker(World world, GameProfile player);
+    /**
+     * @param world
+     * @return {@link IArboristTracker} associated with the passed world.
+     */
+    @Override
+    IArboristTracker getBreedingTracker(World world, GameProfile player);
 
-	/* TREE SPECIFIC */
-	/**
-	 * Register a leaf tick handler.
-	 * @param handler the {@link ILeafTickHandler} to register.
-	 */
-	void registerLeafTickHandler(ILeafTickHandler handler);
+    /* TREE SPECIFIC */
+    /**
+     * Register a leaf tick handler.
+     * 
+     * @param handler the {@link ILeafTickHandler} to register.
+     */
+    void registerLeafTickHandler(ILeafTickHandler handler);
 
-	Collection<ILeafTickHandler> getLeafTickHandlers();
+    Collection<ILeafTickHandler> getLeafTickHandlers();
 
-	/**
-	 * @return type of tree encoded on the itemstack. EnumBeeType.NONE if it isn't a tree.
-	 */
-	EnumGermlingType getType(ItemStack stack);
+    /**
+     * @return type of tree encoded on the itemstack. EnumBeeType.NONE if it isn't a tree.
+     */
+    EnumGermlingType getType(ItemStack stack);
 
-	ITree getTree(World world, int x, int y, int z);
+    ITree getTree(World world, int x, int y, int z);
 
-	ITree getTree(World world, ITreeGenome genome);
+    ITree getTree(World world, ITreeGenome genome);
 
-	boolean plantSapling(World world, ITree tree, GameProfile owner, int x, int y, int z);
+    boolean plantSapling(World world, ITree tree, GameProfile owner, int x, int y, int z);
 
-	/**
-	 * @deprecated since Forestry 3.5.0. Use ITreeGenData setLeavesDecorative.
-	 */
-	@Deprecated
-	// decorative=true for creative and player-placed leaves. No decay, pollination, or drops.
-	boolean setLeaves(World world, IIndividual tree, GameProfile owner, int x, int y, int z, boolean decorative);
+    /**
+     * @deprecated since Forestry 3.5.0. Use ITreeGenData setLeavesDecorative.
+     */
+    @Deprecated
+    // decorative=true for creative and player-placed leaves. No decay, pollination, or drops.
+    boolean setLeaves(World world, IIndividual tree, GameProfile owner, int x, int y, int z, boolean decorative);
 
-	/**
-	 * @deprecated since Forestry 3.5.0. Use ITreeGenData setLeaves.
-	 */
-	@Deprecated
-	// set normal leaves created as worldgen
-	boolean setLeaves(World world, IIndividual tree, GameProfile owner, int x, int y, int z);
+    /**
+     * @deprecated since Forestry 3.5.0. Use ITreeGenData setLeaves.
+     */
+    @Deprecated
+    // set normal leaves created as worldgen
+    boolean setLeaves(World world, IIndividual tree, GameProfile owner, int x, int y, int z);
 
-	@Override
-	IChromosome[] templateAsChromosomes(IAllele[] template);
+    @Override
+    IChromosome[] templateAsChromosomes(IAllele[] template);
 
-	@Override
-	IChromosome[] templateAsChromosomes(IAllele[] templateActive, IAllele[] templateInactive);
+    @Override
+    IChromosome[] templateAsChromosomes(IAllele[] templateActive, IAllele[] templateInactive);
 
-	boolean setFruitBlock(World world, IAlleleFruit allele, float sappiness, short[] indices, int x, int y, int z);
+    boolean setFruitBlock(World world, IAlleleFruit allele, float sappiness, short[] indices, int x, int y, int z);
 
-	/* GAME MODE */
-	ArrayList<ITreekeepingMode> getTreekeepingModes();
+    /* GAME MODE */
+    ArrayList<ITreekeepingMode> getTreekeepingModes();
 
-	ITreekeepingMode getTreekeepingMode(World world);
+    ITreekeepingMode getTreekeepingMode(World world);
 
-	ITreekeepingMode getTreekeepingMode(String name);
+    ITreekeepingMode getTreekeepingMode(String name);
 
-	void registerTreekeepingMode(ITreekeepingMode mode);
+    void registerTreekeepingMode(ITreekeepingMode mode);
 
-	void setTreekeepingMode(World world, String name);
+    void setTreekeepingMode(World world, String name);
 
-	/* TEMPLATES */
-	@Override
-	ArrayList<ITree> getIndividualTemplates();
+    /* TEMPLATES */
+    @Override
+    ArrayList<ITree> getIndividualTemplates();
 
-	/* MUTATIONS */
-	@Override
-	Collection<ITreeMutation> getMutations(boolean shuffle);
+    /* MUTATIONS */
+    @Override
+    Collection<ITreeMutation> getMutations(boolean shuffle);
 
 }

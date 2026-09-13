@@ -5,16 +5,18 @@ import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
+
 import pneumaticCraft.lib.Textures;
 
-public class ModelPneumaticCilinder extends ModelBase implements IBaseModel{
+public class ModelPneumaticCilinder extends ModelBase implements IBaseModel {
+
     // fields
     ModelRenderer Base;
     ModelRenderer Cilinder;
     ModelRenderer Input1;
     ModelRenderer Input2;
 
-    public ModelPneumaticCilinder(){
+    public ModelPneumaticCilinder() {
         textureWidth = 64;
         textureHeight = 32;
 
@@ -45,7 +47,7 @@ public class ModelPneumaticCilinder extends ModelBase implements IBaseModel{
     }
 
     @Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5){
+    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         super.render(entity, f, f1, f2, f3, f4, f5);
         setRotationAngles(f, f1, f2, f3, f4, f5, entity);
         Base.render(f5);
@@ -55,35 +57,35 @@ public class ModelPneumaticCilinder extends ModelBase implements IBaseModel{
     }
 
     @Override
-    public void renderStatic(float size, TileEntity tile){
+    public void renderStatic(float size, TileEntity tile) {
         renderModel(size);
     }
 
-    public void renderModel(float size){
+    public void renderModel(float size) {
         Base.render(size);
         Cilinder.render(size);
         Input1.render(size);
         Input2.render(size);
     }
 
-    private void setRotation(ModelRenderer model, float x, float y, float z){
+    private void setRotation(ModelRenderer model, float x, float y, float z) {
         model.rotateAngleX = x;
         model.rotateAngleY = y;
         model.rotateAngleZ = z;
     }
 
     @Override
-    public ResourceLocation getModelTexture(TileEntity tile){
+    public ResourceLocation getModelTexture(TileEntity tile) {
         return Textures.MODEL_PNEUMATIC_CILINDER;
     }
 
     @Override
-    public boolean rotateModelBasedOnBlockMeta(){
+    public boolean rotateModelBasedOnBlockMeta() {
         return false;
     }
 
     @Override
-    public void renderDynamic(float size, TileEntity te, float partialTicks){
+    public void renderDynamic(float size, TileEntity te, float partialTicks) {
 
     }
 

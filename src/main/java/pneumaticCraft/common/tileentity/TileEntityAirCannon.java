@@ -46,6 +46,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import org.apache.commons.lang3.tuple.Pair;
 
+import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 import pneumaticCraft.api.tileentity.IAirHandler;
 import pneumaticCraft.common.block.Blockss;
 import pneumaticCraft.common.item.ItemMachineUpgrade;
@@ -64,10 +65,9 @@ import pneumaticCraft.common.util.PneumaticCraftUtils;
 import pneumaticCraft.lib.PneumaticValues;
 import pneumaticCraft.lib.Sounds;
 import pneumaticCraft.lib.TileEntityConstants;
-import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 
-public class TileEntityAirCannon extends TileEntityPneumaticBase implements ISidedInventory, IInventory,
-        IMinWorkingPressure, IRedstoneControl{
+public class TileEntityAirCannon extends TileEntityPneumaticBase
+    implements ISidedInventory, IInventory, IMinWorkingPressure, IRedstoneControl {
 
     private ItemStack[] inventory;
     private final Random rand = new Random();
@@ -95,11 +95,14 @@ public class TileEntityAirCannon extends TileEntityPneumaticBase implements ISid
     @GuiSynced
     public int redstoneMode;
     private int oldRangeUpgrades;
-    private boolean externalControl;//used in the CC API, to disallow the Cannon to update its angles when things like range upgrades / GPS Tool have changed.
+    private boolean externalControl;// used in the CC API, to disallow the Cannon to update its angles when things like
+                                    // range upgrades / GPS Tool have changed.
     private boolean entityUpgradeInserted, dispenserUpgradeInserted;
-    private final List<EntityItem> trackedItems = new ArrayList<EntityItem>();//Items that are being checked to be hoppering into inventories.
+    private final List<EntityItem> trackedItems = new ArrayList<EntityItem>();// Items that are being checked to be
+                                                                              // hoppering into inventories.
     private Set<UUID> trackedItemIds;
-    private ChunkPosition lastInsertingInventory; //Last coordinate where the item went into the inventory (as a result of the Block Tracker upgrade).
+    private ChunkPosition lastInsertingInventory; // Last coordinate where the item went into the inventory (as a result
+                                                  // of the Block Tracker upgrade).
     private ForgeDirection lastInsertingInventorySide;
     @GuiSynced
     public boolean insertingInventoryHasSpace = true;
@@ -112,24 +115,27 @@ public class TileEntityAirCannon extends TileEntityPneumaticBase implements ISid
     public final int UPGRADE_SLOT_3 = 4;
     public final int UPGRADE_SLOT_4 = 5;
 
-    public TileEntityAirCannon(){
-        super(PneumaticValues.DANGER_PRESSURE_AIR_CANNON, PneumaticValues.MAX_PRESSURE_AIR_CANNON, PneumaticValues.VOLUME_AIR_CANNON);
+    public TileEntityAirCannon() {
+        super(
+            PneumaticValues.DANGER_PRESSURE_AIR_CANNON,
+            PneumaticValues.MAX_PRESSURE_AIR_CANNON,
+            PneumaticValues.VOLUME_AIR_CANNON);
         inventory = new ItemStack[INVENTORY_SIZE];
-        setUpgradeSlots(new int[]{UPGRADE_SLOT_1, UPGRADE_SLOT_2, UPGRADE_SLOT_3, UPGRADE_SLOT_4});
+        setUpgradeSlots(new int[] { UPGRADE_SLOT_1, UPGRADE_SLOT_2, UPGRADE_SLOT_3, UPGRADE_SLOT_4 });
     }
 
     @Override
-    public void updateEntity(){
+    public void updateEntity() {
         // GPS Tool read
-        if(inventory[1] != null && inventory[1].getItem() == Itemss.GPSTool && !externalControl) {
-            if(inventory[1].stackTagCompound != null) {
+        if (inventory[1] != null && inventory[1].getItem() == Itemss.GPSTool && !externalControl) {
+            if (inventory[1].stackTagCompound != null) {
 
                 NBTTagCompound gpsTag = inventory[1].stackTagCompound;
                 int destinationX = gpsTag.getInteger("x");
                 int destinationY = gpsTag.getInteger("y");
                 int destinationZ = gpsTag.getInteger("z");
 
-                if(destinationX != gpsX || destinationY != gpsY || destinationZ != gpsZ) {
+                if (destinationX != gpsX || destinationY != gpsY || destinationZ != gpsZ) {
 
                     gpsX = destinationX;
                     gpsY = destinationY;
@@ -140,15 +146,16 @@ public class TileEntityAirCannon extends TileEntityPneumaticBase implements ISid
         }
 
         int curRangeUpgrades = Math.min(8, getUpgrades(ItemMachineUpgrade.UPGRADE_RANGE, getUpgradeSlots()));
-        if(curRangeUpgrades != oldRangeUpgrades) {
+        if (curRangeUpgrades != oldRangeUpgrades) {
             oldRangeUpgrades = curRangeUpgrades;
-            if(!externalControl) updateDestination();
+            if (!externalControl) updateDestination();
         }
 
-        if(worldObj.getTotalWorldTime() % 40 == 0) {
+        if (worldObj.getTotalWorldTime() % 40 == 0) {
             boolean isDispenserUpgradeInserted = getUpgrades(ItemMachineUpgrade.UPGRADE_DISPENSER_DAMAGE) > 0;
             boolean isEntityTrackerUpgradeInserted = getUpgrades(ItemMachineUpgrade.UPGRADE_ENTITY_TRACKER) > 0;
-            if(dispenserUpgradeInserted != isDispenserUpgradeInserted || entityUpgradeInserted != isEntityTrackerUpgradeInserted) {
+            if (dispenserUpgradeInserted != isDispenserUpgradeInserted
+                || entityUpgradeInserted != isEntityTrackerUpgradeInserted) {
                 dispenserUpgradeInserted = isDispenserUpgradeInserted;
                 entityUpgradeInserted = isEntityTrackerUpgradeInserted;
                 updateDestination();
@@ -158,40 +165,40 @@ public class TileEntityAirCannon extends TileEntityPneumaticBase implements ISid
         // update angles
         doneTurning = true;
         float speedMultiplier = getSpeedMultiplierFromUpgrades(getUpgradeSlots());
-        if(rotationAngle < targetRotationAngle) {
-            if(rotationAngle < targetRotationAngle - TileEntityConstants.CANNON_SLOW_ANGLE) {
+        if (rotationAngle < targetRotationAngle) {
+            if (rotationAngle < targetRotationAngle - TileEntityConstants.CANNON_SLOW_ANGLE) {
                 rotationAngle += TileEntityConstants.CANNON_TURN_HIGH_SPEED * speedMultiplier;
             } else {
                 rotationAngle += TileEntityConstants.CANNON_TURN_LOW_SPEED * speedMultiplier;
             }
-            if(rotationAngle > targetRotationAngle) rotationAngle = targetRotationAngle;
+            if (rotationAngle > targetRotationAngle) rotationAngle = targetRotationAngle;
             doneTurning = false;
         }
-        if(rotationAngle > targetRotationAngle) {
-            if(rotationAngle > targetRotationAngle + TileEntityConstants.CANNON_SLOW_ANGLE) {
+        if (rotationAngle > targetRotationAngle) {
+            if (rotationAngle > targetRotationAngle + TileEntityConstants.CANNON_SLOW_ANGLE) {
                 rotationAngle -= TileEntityConstants.CANNON_TURN_HIGH_SPEED * speedMultiplier;
             } else {
                 rotationAngle -= TileEntityConstants.CANNON_TURN_LOW_SPEED * speedMultiplier;
             }
-            if(rotationAngle < targetRotationAngle) rotationAngle = targetRotationAngle;
+            if (rotationAngle < targetRotationAngle) rotationAngle = targetRotationAngle;
             doneTurning = false;
         }
-        if(heightAngle < targetHeightAngle) {
-            if(heightAngle < targetHeightAngle - TileEntityConstants.CANNON_SLOW_ANGLE) {
+        if (heightAngle < targetHeightAngle) {
+            if (heightAngle < targetHeightAngle - TileEntityConstants.CANNON_SLOW_ANGLE) {
                 heightAngle += TileEntityConstants.CANNON_TURN_HIGH_SPEED * speedMultiplier;
             } else {
                 heightAngle += TileEntityConstants.CANNON_TURN_LOW_SPEED * speedMultiplier;
             }
-            if(heightAngle > targetHeightAngle) heightAngle = targetHeightAngle;
+            if (heightAngle > targetHeightAngle) heightAngle = targetHeightAngle;
             doneTurning = false;
         }
-        if(heightAngle > targetHeightAngle) {
-            if(heightAngle > targetHeightAngle + TileEntityConstants.CANNON_SLOW_ANGLE) {
+        if (heightAngle > targetHeightAngle) {
+            if (heightAngle > targetHeightAngle + TileEntityConstants.CANNON_SLOW_ANGLE) {
                 heightAngle -= TileEntityConstants.CANNON_TURN_HIGH_SPEED * speedMultiplier;
             } else {
                 heightAngle -= TileEntityConstants.CANNON_TURN_LOW_SPEED * speedMultiplier;
             }
-            if(heightAngle < targetHeightAngle) heightAngle = targetHeightAngle;
+            if (heightAngle < targetHeightAngle) heightAngle = targetHeightAngle;
             doneTurning = false;
         }
 
@@ -201,36 +208,43 @@ public class TileEntityAirCannon extends TileEntityPneumaticBase implements ISid
 
     }
 
-    private void updateTrackedItems(){
-        if(trackedItemIds != null) {
+    private void updateTrackedItems() {
+        if (trackedItemIds != null) {
             trackedItems.clear();
-            for(Entity entity : (List<Entity>)worldObj.loadedEntityList) {
-                if(trackedItemIds.contains(entity.getUniqueID()) && entity instanceof EntityItem) {
-                    trackedItems.add((EntityItem)entity);
+            for (Entity entity : (List<Entity>) worldObj.loadedEntityList) {
+                if (trackedItemIds.contains(entity.getUniqueID()) && entity instanceof EntityItem) {
+                    trackedItems.add((EntityItem) entity);
                 }
             }
             trackedItemIds = null;
         }
         Iterator<EntityItem> iterator = trackedItems.iterator();
-        while(iterator.hasNext()) {
+        while (iterator.hasNext()) {
             EntityItem item = iterator.next();
-            if(item.worldObj != worldObj || item.isDead) {
+            if (item.worldObj != worldObj || item.isDead) {
                 iterator.remove();
             } else {
                 Map<ChunkPosition, ForgeDirection> positions = new HashMap<ChunkPosition, ForgeDirection>();
                 double range = 0.2;
-                for(ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
+                for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
                     double posX = item.posX + d.offsetX * range;
                     double posY = item.posY + d.offsetY * range;
                     double posZ = item.posZ + d.offsetZ * range;
-                    positions.put(new ChunkPosition((int)Math.floor(posX), (int)Math.floor(posY), (int)Math.floor(posZ)), d.getOpposite());
+                    positions.put(
+                        new ChunkPosition((int) Math.floor(posX), (int) Math.floor(posY), (int) Math.floor(posZ)),
+                        d.getOpposite());
                 }
-                for(Entry<ChunkPosition, ForgeDirection> entry : positions.entrySet()) {
+                for (Entry<ChunkPosition, ForgeDirection> entry : positions.entrySet()) {
                     ChunkPosition pos = entry.getKey();
                     TileEntity te = worldObj.getTileEntity(pos.chunkPosX, pos.chunkPosY, pos.chunkPosZ);
                     IInventory inv = IOHelper.getInventoryForTE(te);
-                    ItemStack remainder = IOHelper.insert(inv, item.getEntityItem(), entry.getValue().ordinal(), false);
-                    if(remainder != null) {
+                    ItemStack remainder = IOHelper.insert(
+                        inv,
+                        item.getEntityItem(),
+                        entry.getValue()
+                            .ordinal(),
+                        false);
+                    if (remainder != null) {
                         item.setEntityItemStack(remainder);
                     } else {
                         item.setDead();
@@ -246,93 +260,106 @@ public class TileEntityAirCannon extends TileEntityPneumaticBase implements ISid
 
     // ANGLE METHODS -------------------------------------------------
 
-    private void updateDestination(){
+    private void updateDestination() {
         doneTurning = false;
         // take dispenser upgrade in account
         double payloadFrictionY = 0.98D;// this value will differ when a
                                         // dispenser upgrade is inserted.
         double payloadFrictionX = 0.98D;
         double payloadGravity = 0.04D;
-        if(getUpgrades(ItemMachineUpgrade.UPGRADE_ENTITY_TRACKER) > 0) {
+        if (getUpgrades(ItemMachineUpgrade.UPGRADE_ENTITY_TRACKER) > 0) {
             payloadFrictionY = 0.98D;
             payloadFrictionX = 0.91D;
             payloadGravity = 0.08D;
-        } else if(getUpgrades(ItemMachineUpgrade.UPGRADE_DISPENSER_DAMAGE, getUpgradeSlots()) > 0 && inventory[0] != null) {// if
-            // there
-            // is
-            // a
-            // dispenser
-            // upgrade
-            // inserted.
-            Item item = inventory[0].getItem();
-            if(item == Items.potionitem || item == Items.experience_bottle || item == Items.egg || item == Items.snowball) {// EntityThrowable
-                payloadFrictionY = 0.99D;
-                payloadGravity = 0.03D;
-            } else if(item == Items.arrow) {
-                payloadFrictionY = 0.99D;
-                payloadGravity = 0.05D;
-            } else if(item == Items.minecart || item == Items.chest_minecart || item == Items.hopper_minecart || item == Items.tnt_minecart || item == Items.furnace_minecart) {
-                payloadFrictionY = 0.95D;
-            }
-            // else if(itemID == Item.fireballCharge.itemID){
-            // payloadGravity = 0.0D;
-            // }
+        } else if (getUpgrades(ItemMachineUpgrade.UPGRADE_DISPENSER_DAMAGE, getUpgradeSlots()) > 0
+            && inventory[0] != null) {// if
+                // there
+                // is
+                // a
+                // dispenser
+                // upgrade
+                // inserted.
+                Item item = inventory[0].getItem();
+                if (item == Items.potionitem || item == Items.experience_bottle
+                    || item == Items.egg
+                    || item == Items.snowball) {// EntityThrowable
+                    payloadFrictionY = 0.99D;
+                    payloadGravity = 0.03D;
+                } else if (item == Items.arrow) {
+                    payloadFrictionY = 0.99D;
+                    payloadGravity = 0.05D;
+                } else if (item == Items.minecart || item == Items.chest_minecart
+                    || item == Items.hopper_minecart
+                    || item == Items.tnt_minecart
+                    || item == Items.furnace_minecart) {
+                        payloadFrictionY = 0.95D;
+                    }
+                // else if(itemID == Item.fireballCharge.itemID){
+                // payloadGravity = 0.0D;
+                // }
 
-            // family items (throwable) which only differ in gravity.
-            if(item == Items.potionitem) payloadGravity = 0.05D;
-            else if(item == Items.experience_bottle) payloadGravity = 0.07D;
+                // family items (throwable) which only differ in gravity.
+                if (item == Items.potionitem) payloadGravity = 0.05D;
+                else if (item == Items.experience_bottle) payloadGravity = 0.07D;
 
-            payloadFrictionX = payloadFrictionY;
+                payloadFrictionX = payloadFrictionY;
 
-            // items which have different frictions for each axis.
-            if(item == Items.boat) {
-                payloadFrictionX = 0.99D;
-                payloadFrictionY = 0.95D;
+                // items which have different frictions for each axis.
+                if (item == Items.boat) {
+                    payloadFrictionX = 0.99D;
+                    payloadFrictionY = 0.95D;
+                }
+                if (item == Items.spawn_egg) {
+                    payloadFrictionY = 0.98D;
+                    payloadFrictionX = 0.91D;
+                    payloadGravity = 0.08D;
+                }
             }
-            if(item == Items.spawn_egg) {
-                payloadFrictionY = 0.98D;
-                payloadFrictionX = 0.91D;
-                payloadGravity = 0.08D;
-            }
-        }
 
         // calculate the heading.
         double deltaX = gpsX - xCoord;
         double deltaZ = gpsZ - zCoord;
         float calculatedRotationAngle;
-        if(deltaX >= 0 && deltaZ < 0) {
-            calculatedRotationAngle = (float)(Math.atan(Math.abs(deltaX / deltaZ)) / Math.PI * 180D);
-        } else if(deltaX >= 0 && deltaZ >= 0) {
-            calculatedRotationAngle = (float)(Math.atan(Math.abs(deltaZ / deltaX)) / Math.PI * 180D) + 90;
-        } else if(deltaX < 0 && deltaZ >= 0) {
-            calculatedRotationAngle = (float)(Math.atan(Math.abs(deltaX / deltaZ)) / Math.PI * 180D) + 180;
+        if (deltaX >= 0 && deltaZ < 0) {
+            calculatedRotationAngle = (float) (Math.atan(Math.abs(deltaX / deltaZ)) / Math.PI * 180D);
+        } else if (deltaX >= 0 && deltaZ >= 0) {
+            calculatedRotationAngle = (float) (Math.atan(Math.abs(deltaZ / deltaX)) / Math.PI * 180D) + 90;
+        } else if (deltaX < 0 && deltaZ >= 0) {
+            calculatedRotationAngle = (float) (Math.atan(Math.abs(deltaX / deltaZ)) / Math.PI * 180D) + 180;
         } else {
-            calculatedRotationAngle = (float)(Math.atan(Math.abs(deltaZ / deltaX)) / Math.PI * 180D) + 270;
+            calculatedRotationAngle = (float) (Math.atan(Math.abs(deltaZ / deltaX)) / Math.PI * 180D) + 270;
         }
 
         // calculate the height angle.
         double distance = Math.sqrt(deltaX * deltaX + deltaZ * deltaZ);
         double deltaY = gpsY - yCoord;
-        float calculatedHeightAngle = calculateBestHeightAngle(distance, deltaY, getForce(), payloadGravity, payloadFrictionX, payloadFrictionY);
+        float calculatedHeightAngle = calculateBestHeightAngle(
+            distance,
+            deltaY,
+            getForce(),
+            payloadGravity,
+            payloadFrictionX,
+            payloadFrictionY);
 
         setTargetAngles(calculatedRotationAngle, calculatedHeightAngle);
     }
 
-    private float calculateBestHeightAngle(double distance, double deltaY, float force, double payloadGravity, double payloadFrictionX, double payloadFrictionY){
+    private float calculateBestHeightAngle(double distance, double deltaY, float force, double payloadGravity,
+        double payloadFrictionX, double payloadFrictionY) {
         double bestAngle = 0;
         double bestDistance = Float.MAX_VALUE;
-        if(payloadGravity == 0D) {
-            return 90F - (float)(Math.atan(deltaY / distance) * 180F / Math.PI);
+        if (payloadGravity == 0D) {
+            return 90F - (float) (Math.atan(deltaY / distance) * 180F / Math.PI);
         }
-        for(double i = Math.PI * 0.25D; i < Math.PI * 0.50D; i += 0.001D) {
+        for (double i = Math.PI * 0.25D; i < Math.PI * 0.50D; i += 0.001D) {
             double motionX = Math.cos(i) * force;// calculate the x component of
                                                  // the vector
             double motionY = Math.sin(i) * force;// calculate the y component of
                                                  // the vector
             double posX = 0;
             double posY = 0;
-            while(posY > deltaY || motionY > 0) { // simulate movement, until we
-                                                  // reach the y-level required
+            while (posY > deltaY || motionY > 0) { // simulate movement, until we
+                                                   // reach the y-level required
                 posX += motionX;
                 posY += motionY;
                 motionY -= payloadGravity;// gravity
@@ -341,62 +368,63 @@ public class TileEntityAirCannon extends TileEntityPneumaticBase implements ISid
             }
             double distanceToTarget = Math.abs(distance - posX);// take the
                                                                 // distance
-            if(distanceToTarget < bestDistance) {// and return the best angle.
+            if (distanceToTarget < bestDistance) {// and return the best angle.
                 bestDistance = distanceToTarget;
                 bestAngle = i;
             }
         }
         coordWithinReach = bestDistance < 1.5D;
-        return 90F - (float)(bestAngle * 180D / Math.PI);
+        return 90F - (float) (bestAngle * 180D / Math.PI);
     }
 
-    public synchronized void setTargetAngles(float rotationAngle, float heightAngle){
+    public synchronized void setTargetAngles(float rotationAngle, float heightAngle) {
         targetRotationAngle = rotationAngle;
         targetHeightAngle = heightAngle;
-        if(!worldObj.isRemote) scheduleDescriptionPacket();
+        if (!worldObj.isRemote) scheduleDescriptionPacket();
     }
 
     // this function calculates with the parsed in X and Z angles and the force
     // the needed, and outputs the X, Y and Z velocities.
-    public double[] getVelocityVector(float angleX, float angleZ, float force){
+    public double[] getVelocityVector(float angleX, float angleZ, float force) {
         double[] velocities = new double[3];
-        velocities[0] = Math.sin((double)angleZ / 180 * Math.PI);
-        velocities[1] = Math.cos((double)angleX / 180 * Math.PI);
-        velocities[2] = Math.cos((double)angleZ / 180 * Math.PI) * -1;
+        velocities[0] = Math.sin((double) angleZ / 180 * Math.PI);
+        velocities[1] = Math.cos((double) angleX / 180 * Math.PI);
+        velocities[2] = Math.cos((double) angleZ / 180 * Math.PI) * -1;
 
-        velocities[0] *= Math.sin((double)angleX / 180 * Math.PI);
-        velocities[2] *= Math.sin((double)angleX / 180 * Math.PI);
+        velocities[0] *= Math.sin((double) angleX / 180 * Math.PI);
+        velocities[2] *= Math.sin((double) angleX / 180 * Math.PI);
         // calculate the total velocity vector, in relation.
-        double vectorTotal = velocities[0] * velocities[0] + velocities[1] * velocities[1] + velocities[2] * velocities[2];
+        double vectorTotal = velocities[0] * velocities[0] + velocities[1] * velocities[1]
+            + velocities[2] * velocities[2];
         vectorTotal = force / vectorTotal; // calculate the relation between the
                                            // forces to be shot, and the
                                            // calculated vector (the scale).
-        for(int i = 0; i < 3; i++) {
+        for (int i = 0; i < 3; i++) {
             velocities[i] *= vectorTotal; // scale up the velocities
             // System.out.println("velocities " + i + " = " + velocities[i]);
         }
         return velocities;
     }
 
-    public boolean hasCoordinate(){
+    public boolean hasCoordinate() {
         return gpsX != 0 || gpsY != 0 || gpsZ != 0;
     }
 
     // PNEUMATIC METHODS -----------------------------------------
 
     @Override
-    protected void disperseAir(){
+    protected void disperseAir() {
         super.disperseAir();
         List<Pair<ForgeDirection, IAirHandler>> teList = getConnectedPneumatics();
-        if(teList.size() == 0) airLeak(ForgeDirection.getOrientation(getBlockMetadata()));
+        if (teList.size() == 0) airLeak(ForgeDirection.getOrientation(getBlockMetadata()));
     }
 
     @Override
-    public boolean isConnectedTo(ForgeDirection side){
+    public boolean isConnectedTo(ForgeDirection side) {
         return ForgeDirection.getOrientation(worldObj.getBlockMetadata(xCoord, yCoord, zCoord)) == side;
     }
 
-    public float getForce(){
+    public float getForce() {
         return 2F + oldRangeUpgrades;
     }
 
@@ -407,7 +435,7 @@ public class TileEntityAirCannon extends TileEntityPneumaticBase implements ISid
      * Returns the number of slots in the inventory.
      */
     @Override
-    public int getSizeInventory(){
+    public int getSizeInventory() {
 
         return inventory.length;
     }
@@ -416,21 +444,21 @@ public class TileEntityAirCannon extends TileEntityPneumaticBase implements ISid
      * Returns the stack in slot i
      */
     @Override
-    public ItemStack getStackInSlot(int slot){
+    public ItemStack getStackInSlot(int slot) {
 
         return inventory[slot];
     }
 
     @Override
-    public ItemStack decrStackSize(int slot, int amount){
+    public ItemStack decrStackSize(int slot, int amount) {
 
         ItemStack itemStack = getStackInSlot(slot);
-        if(itemStack != null) {
-            if(itemStack.stackSize <= amount) {
+        if (itemStack != null) {
+            if (itemStack.stackSize <= amount) {
                 setInventorySlotContents(slot, null);
             } else {
                 itemStack = itemStack.splitStack(amount);
-                if(itemStack.stackSize == 0) {
+                if (itemStack.stackSize == 0) {
                     setInventorySlotContents(slot, null);
                 }
             }
@@ -440,35 +468,35 @@ public class TileEntityAirCannon extends TileEntityPneumaticBase implements ISid
     }
 
     @Override
-    public ItemStack getStackInSlotOnClosing(int slot){
+    public ItemStack getStackInSlotOnClosing(int slot) {
 
         ItemStack itemStack = getStackInSlot(slot);
-        if(itemStack != null) {
+        if (itemStack != null) {
             setInventorySlotContents(slot, null);
         }
         return itemStack;
     }
 
     @Override
-    public void setInventorySlotContents(int slot, ItemStack itemStack){
+    public void setInventorySlotContents(int slot, ItemStack itemStack) {
         inventory[slot] = itemStack;
-        if(itemStack != null && itemStack.stackSize > getInventoryStackLimit()) {
+        if (itemStack != null && itemStack.stackSize > getInventoryStackLimit()) {
             itemStack.stackSize = getInventoryStackLimit();
         }
     }
 
     @Override
-    public String getInventoryName(){
+    public String getInventoryName() {
         return Blockss.airCannon.getUnlocalizedName();
     }
 
     @Override
-    public int getInventoryStackLimit(){
+    public int getInventoryStackLimit() {
         return 64;
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound tag){
+    public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
         redstonePowered = tag.getBoolean("redstonePowered");
         targetRotationAngle = tag.getFloat("targetRotationAngle");
@@ -478,8 +506,8 @@ public class TileEntityAirCannon extends TileEntityPneumaticBase implements ISid
         gpsX = tag.getInteger("gpsX");
         gpsY = tag.getInteger("gpsY");
         gpsZ = tag.getInteger("gpsZ");
-        if(tag.hasKey("fireOnRightAngle")) {
-            redstoneMode = tag.getBoolean("fireOnRightAngle") ? 0 : 1; //TODO remove legacy
+        if (tag.hasKey("fireOnRightAngle")) {
+            redstoneMode = tag.getBoolean("fireOnRightAngle") ? 0 : 1; // TODO remove legacy
         } else {
             redstoneMode = tag.getByte("redstoneMode");
         }
@@ -488,23 +516,26 @@ public class TileEntityAirCannon extends TileEntityPneumaticBase implements ISid
         // Read in the ItemStacks in the inventory from NBT
         NBTTagList tagList = tag.getTagList("Items", 10);
         inventory = new ItemStack[getSizeInventory()];
-        for(int i = 0; i < tagList.tagCount(); ++i) {
+        for (int i = 0; i < tagList.tagCount(); ++i) {
             NBTTagCompound tagCompound = tagList.getCompoundTagAt(i);
             byte slot = tagCompound.getByte("Slot");
-            if(slot >= 0 && slot < inventory.length) {
+            if (slot >= 0 && slot < inventory.length) {
                 inventory[slot] = ItemStack.loadItemStackFromNBT(tagCompound);
             }
         }
 
         trackedItemIds = new HashSet<UUID>();
         tagList = tag.getTagList("trackedItems", 10);
-        for(int i = 0; i < tagList.tagCount(); i++) {
+        for (int i = 0; i < tagList.tagCount(); i++) {
             NBTTagCompound t = tagList.getCompoundTagAt(i);
             trackedItemIds.add(new UUID(t.getLong("UUIDMost"), t.getLong("UUIDLeast")));
         }
 
-        if(tag.hasKey("inventoryX")) {
-            lastInsertingInventory = new ChunkPosition(tag.getInteger("inventoryX"), tag.getInteger("inventoryY"), tag.getInteger("inventoryZ"));
+        if (tag.hasKey("inventoryX")) {
+            lastInsertingInventory = new ChunkPosition(
+                tag.getInteger("inventoryX"),
+                tag.getInteger("inventoryY"),
+                tag.getInteger("inventoryZ"));
             lastInsertingInventorySide = ForgeDirection.getOrientation(tag.getByte("inventorySide"));
         } else {
             lastInsertingInventory = null;
@@ -513,7 +544,7 @@ public class TileEntityAirCannon extends TileEntityPneumaticBase implements ISid
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound tag){
+    public void writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
         tag.setBoolean("redstonePowered", redstonePowered);
         tag.setFloat("targetRotationAngle", targetRotationAngle);
@@ -523,14 +554,14 @@ public class TileEntityAirCannon extends TileEntityPneumaticBase implements ISid
         tag.setInteger("gpsX", gpsX);
         tag.setInteger("gpsY", gpsY);
         tag.setInteger("gpsZ", gpsZ);
-        tag.setByte("redstoneMode", (byte)redstoneMode);
+        tag.setByte("redstoneMode", (byte) redstoneMode);
         tag.setBoolean("targetWithinReach", coordWithinReach);
         // Write the ItemStacks in the inventory to NBT
         NBTTagList tagList = new NBTTagList();
-        for(int currentIndex = 0; currentIndex < inventory.length; ++currentIndex) {
-            if(inventory[currentIndex] != null) {
+        for (int currentIndex = 0; currentIndex < inventory.length; ++currentIndex) {
+            if (inventory[currentIndex] != null) {
                 NBTTagCompound tagCompound = new NBTTagCompound();
-                tagCompound.setByte("Slot", (byte)currentIndex);
+                tagCompound.setByte("Slot", (byte) currentIndex);
                 inventory[currentIndex].writeToNBT(tagCompound);
                 tagList.appendTag(tagCompound);
             }
@@ -538,7 +569,7 @@ public class TileEntityAirCannon extends TileEntityPneumaticBase implements ISid
         tag.setTag("Items", tagList);
 
         tagList = new NBTTagList();
-        for(EntityItem entity : trackedItems) {
+        for (EntityItem entity : trackedItems) {
             UUID uuid = entity.getUniqueID();
             NBTTagCompound t = new NBTTagCompound();
             t.setLong("UUIDMost", uuid.getMostSignificantBits());
@@ -547,38 +578,39 @@ public class TileEntityAirCannon extends TileEntityPneumaticBase implements ISid
         }
         tag.setTag("trackedItems", tagList);
 
-        if(lastInsertingInventory != null) {
+        if (lastInsertingInventory != null) {
             tag.setInteger("inventoryX", lastInsertingInventory.chunkPosX);
             tag.setInteger("inventoryY", lastInsertingInventory.chunkPosY);
             tag.setInteger("inventoryZ", lastInsertingInventory.chunkPosZ);
-            tag.setByte("inventorySide", (byte)lastInsertingInventorySide.ordinal());
+            tag.setByte("inventorySide", (byte) lastInsertingInventorySide.ordinal());
         }
     }
 
     @Override
-    public boolean isItemValidForSlot(int i, ItemStack itemstack){
-        if(i == GPS_SLOT && itemstack != null && itemstack.getItem() != Itemss.GPSTool) return false;
-        if(i > GPS_SLOT && i <= UPGRADE_SLOT_4 && itemstack != null && itemstack.getItem() != Itemss.machineUpgrade) return false;
+    public boolean isItemValidForSlot(int i, ItemStack itemstack) {
+        if (i == GPS_SLOT && itemstack != null && itemstack.getItem() != Itemss.GPSTool) return false;
+        if (i > GPS_SLOT && i <= UPGRADE_SLOT_4 && itemstack != null && itemstack.getItem() != Itemss.machineUpgrade)
+            return false;
         return true;
     }
 
     @Override
-    public int[] getAccessibleSlotsFromSide(int var1){
-        return new int[]{1, 2, 3, 4, 5, 0};
+    public int[] getAccessibleSlotsFromSide(int var1) {
+        return new int[] { 1, 2, 3, 4, 5, 0 };
     }
 
     @Override
-    public boolean canInsertItem(int slot, ItemStack itemstack, int side){
+    public boolean canInsertItem(int slot, ItemStack itemstack, int side) {
         return true;
     }
 
     @Override
-    public boolean canExtractItem(int slot, ItemStack itemstack, int side){
+    public boolean canExtractItem(int slot, ItemStack itemstack, int side) {
         return true;
     }
 
     @Override
-    public boolean isUseableByPlayer(EntityPlayer var1){
+    public boolean isUseableByPlayer(EntityPlayer var1) {
         return isGuiUseableByPlayer(var1);
     }
 
@@ -586,29 +618,35 @@ public class TileEntityAirCannon extends TileEntityPneumaticBase implements ISid
     // ------------------------------------------------------------
 
     @Override
-    public void handleGUIButtonPress(int buttonID, EntityPlayer player){
-        if(buttonID == 0) {
-            if(++redstoneMode > 2) redstoneMode = 0;
-            if(redstoneMode == 2 && getUpgrades(ItemMachineUpgrade.UPGRADE_BLOCK_TRACKER) == 0) redstoneMode = 0;
+    public void handleGUIButtonPress(int buttonID, EntityPlayer player) {
+        if (buttonID == 0) {
+            if (++redstoneMode > 2) redstoneMode = 0;
+            if (redstoneMode == 2 && getUpgrades(ItemMachineUpgrade.UPGRADE_BLOCK_TRACKER) == 0) redstoneMode = 0;
         }
     }
 
-    public void onNeighbourBlockChange(int x, int y, int z, Block block){
-        if(!block.isAir(worldObj, x, y, z) && worldObj.isBlockIndirectlyGettingPowered(x, y, z) && !redstonePowered && (redstoneMode != 0 || doneTurning) && (redstoneMode != 2 || inventoryCanCarry())) {
+    public void onNeighbourBlockChange(int x, int y, int z, Block block) {
+        if (!block.isAir(worldObj, x, y, z) && worldObj.isBlockIndirectlyGettingPowered(x, y, z)
+            && !redstonePowered
+            && (redstoneMode != 0 || doneTurning)
+            && (redstoneMode != 2 || inventoryCanCarry())) {
             fire();
             redstonePowered = true;
-        } else if(!worldObj.isBlockIndirectlyGettingPowered(x, y, z) && redstonePowered) {
+        } else if (!worldObj.isBlockIndirectlyGettingPowered(x, y, z) && redstonePowered) {
             redstonePowered = false;
         }
     }
 
-    private boolean inventoryCanCarry(){
+    private boolean inventoryCanCarry() {
         insertingInventoryHasSpace = true;
-        if(lastInsertingInventory == null) return true;
-        if(inventory[0] == null) return true;
-        TileEntity te = worldObj.getTileEntity(lastInsertingInventory.chunkPosX, lastInsertingInventory.chunkPosY, lastInsertingInventory.chunkPosZ);
+        if (lastInsertingInventory == null) return true;
+        if (inventory[0] == null) return true;
+        TileEntity te = worldObj.getTileEntity(
+            lastInsertingInventory.chunkPosX,
+            lastInsertingInventory.chunkPosY,
+            lastInsertingInventory.chunkPosZ);
         IInventory inv = IOHelper.getInventoryForTE(te);
-        if(inv != null) {
+        if (inv != null) {
             ItemStack remainder = IOHelper.insert(inv, inventory[0].copy(), lastInsertingInventorySide.ordinal(), true);
             insertingInventoryHasSpace = remainder == null;
             return insertingInventoryHasSpace;
@@ -619,40 +657,44 @@ public class TileEntityAirCannon extends TileEntityPneumaticBase implements ISid
         }
     }
 
-    private synchronized boolean fire(){
+    private synchronized boolean fire() {
         Entity itemShot = getCloseEntityIfUpgraded();
-        if(getPressure(ForgeDirection.UNKNOWN) >= PneumaticValues.MIN_PRESSURE_AIR_CANNON && (itemShot != null || inventory[0] != null)) {
+        if (getPressure(ForgeDirection.UNKNOWN) >= PneumaticValues.MIN_PRESSURE_AIR_CANNON
+            && (itemShot != null || inventory[0] != null)) {
             double[] velocity = getVelocityVector(heightAngle, rotationAngle, getForce());
-            addAir((int)(-500 * getForce()), ForgeDirection.UNKNOWN);
+            addAir((int) (-500 * getForce()), ForgeDirection.UNKNOWN);
             boolean shootingInventory = false;
-            if(itemShot == null) {
+            if (itemShot == null) {
                 shootingInventory = true;
                 itemShot = getPayloadEntity();
 
-                if(itemShot instanceof EntityItem) {
+                if (itemShot instanceof EntityItem) {
                     inventory[0] = null;
-                    if(getUpgrades(ItemMachineUpgrade.UPGRADE_BLOCK_TRACKER) > 0) {
-                        trackedItems.add((EntityItem)itemShot);
+                    if (getUpgrades(ItemMachineUpgrade.UPGRADE_BLOCK_TRACKER) > 0) {
+                        trackedItems.add((EntityItem) itemShot);
                     }
                 } else {
                     inventory[0].stackSize--;
-                    if(inventory[0].stackSize <= 0) inventory[0] = null;
+                    if (inventory[0].stackSize <= 0) inventory[0] = null;
                 }
-            } else if(itemShot instanceof EntityPlayer) {
-                EntityPlayerMP entityplayermp = (EntityPlayerMP)itemShot;
-                if(entityplayermp.playerNetServerHandler.func_147362_b().isChannelOpen()) {
+            } else if (itemShot instanceof EntityPlayer) {
+                EntityPlayerMP entityplayermp = (EntityPlayerMP) itemShot;
+                if (entityplayermp.playerNetServerHandler.func_147362_b()
+                    .isChannelOpen()) {
                     entityplayermp.setPositionAndUpdate(xCoord + 0.5D, yCoord + 1.8D, zCoord + 0.5D);
                 }
             }
 
-            if(itemShot.isRiding()) {
-                itemShot.mountEntity((Entity)null);
+            if (itemShot.isRiding()) {
+                itemShot.mountEntity((Entity) null);
             }
 
             itemShot.setPosition(xCoord + 0.5D, yCoord + 1.8D, zCoord + 0.5D);
-            NetworkHandler.sendToAllAround(new PacketSetEntityMotion(itemShot, velocity[0], velocity[1], velocity[2]), new TargetPoint(worldObj.provider.dimensionId, xCoord, yCoord, zCoord, 64));
+            NetworkHandler.sendToAllAround(
+                new PacketSetEntityMotion(itemShot, velocity[0], velocity[1], velocity[2]),
+                new TargetPoint(worldObj.provider.dimensionId, xCoord, yCoord, zCoord, 64));
 
-            if(itemShot instanceof EntityFireball) {
+            if (itemShot instanceof EntityFireball) {
                 velocity[0] *= 0.05D;
                 velocity[1] *= 0.05D;
                 velocity[2] *= 0.05D;
@@ -666,17 +708,35 @@ public class TileEntityAirCannon extends TileEntityPneumaticBase implements ISid
             itemShot.isCollided = false;
             itemShot.isCollidedHorizontally = false;
             itemShot.isCollidedVertically = false;
-            if(itemShot instanceof EntityLivingBase) ((EntityLivingBase)itemShot).setJumping(true);
+            if (itemShot instanceof EntityLivingBase) ((EntityLivingBase) itemShot).setJumping(true);
 
-            if(shootingInventory && !worldObj.isRemote) worldObj.spawnEntityInWorld(itemShot);
+            if (shootingInventory && !worldObj.isRemote) worldObj.spawnEntityInWorld(itemShot);
 
-            for(int i = 0; i < 10; i++) {
+            for (int i = 0; i < 10; i++) {
                 double velX = velocity[0] * 0.4D + (rand.nextGaussian() - 0.5D) * 0.05D;
                 double velY = velocity[1] * 0.4D + (rand.nextGaussian() - 0.5D) * 0.05D;
                 double velZ = velocity[2] * 0.4D + (rand.nextGaussian() - 0.5D) * 0.05D;
-                NetworkHandler.sendToAllAround(new PacketSpawnParticle("largesmoke", xCoord + 0.5D, yCoord + 0.7D, zCoord + 0.5D, velX, velY, velZ), worldObj);
+                NetworkHandler.sendToAllAround(
+                    new PacketSpawnParticle(
+                        "largesmoke",
+                        xCoord + 0.5D,
+                        yCoord + 0.7D,
+                        zCoord + 0.5D,
+                        velX,
+                        velY,
+                        velZ),
+                    worldObj);
             }
-            NetworkHandler.sendToAllAround(new PacketPlaySound(Sounds.CANNON_SOUND, xCoord, yCoord, zCoord, 1.0F, rand.nextFloat() / 4F + 0.75F, true), worldObj);
+            NetworkHandler.sendToAllAround(
+                new PacketPlaySound(
+                    Sounds.CANNON_SOUND,
+                    xCoord,
+                    yCoord,
+                    zCoord,
+                    1.0F,
+                    rand.nextFloat() / 4F + 0.75F,
+                    true),
+                worldObj);
             return true;
         } else {
             return false;
@@ -684,31 +744,32 @@ public class TileEntityAirCannon extends TileEntityPneumaticBase implements ISid
     }
 
     // warning: no null-check for inventory slot 0
-    private Entity getPayloadEntity(){
+    private Entity getPayloadEntity() {
 
-        if(getUpgrades(ItemMachineUpgrade.UPGRADE_DISPENSER_DAMAGE, getUpgradeSlots()) > 0) {
+        if (getUpgrades(ItemMachineUpgrade.UPGRADE_DISPENSER_DAMAGE, getUpgradeSlots()) > 0) {
             Item item = inventory[0].getItem();
-            if(item == Item.getItemFromBlock(Blocks.tnt)) {
+            if (item == Item.getItemFromBlock(Blocks.tnt)) {
                 EntityTNTPrimed tnt = new EntityTNTPrimed(worldObj);
                 tnt.fuse = 80;
                 return tnt;
-            } else if(item == Items.experience_bottle) return new EntityExpBottle(worldObj);
-            else if(item == Items.potionitem) {
+            } else if (item == Items.experience_bottle) return new EntityExpBottle(worldObj);
+            else if (item == Items.potionitem) {
                 EntityPotion potion = new EntityPotion(worldObj);
                 potion.setPotionDamage(inventory[0].getItemDamage());
                 return potion;
-            } else if(item == Items.arrow) return new EntityArrow(worldObj);
-            else if(item == Items.egg) return new EntityEgg(worldObj);
+            } else if (item == Items.arrow) return new EntityArrow(worldObj);
+            else if (item == Items.egg) return new EntityEgg(worldObj);
             // else if(itemID == Item.fireballCharge) return new
             // EntitySmallFireball(worldObj);
-            else if(item == Items.snowball) return new EntitySnowball(worldObj);
-            else if(item == Items.spawn_egg) return ItemMonsterPlacer.spawnCreature(worldObj, inventory[0].getItemDamage(), 0, 0, 0);
-            else if(item == Items.minecart) return new EntityMinecartEmpty(worldObj);
-            else if(item == Items.chest_minecart) return new EntityMinecartChest(worldObj);
-            else if(item == Items.furnace_minecart) return new EntityMinecartFurnace(worldObj);
-            else if(item == Items.hopper_minecart) return new EntityMinecartHopper(worldObj);
-            else if(item == Items.tnt_minecart) return new EntityMinecartTNT(worldObj);
-            else if(item == Items.boat) return new EntityBoat(worldObj);
+            else if (item == Items.snowball) return new EntitySnowball(worldObj);
+            else if (item == Items.spawn_egg)
+                return ItemMonsterPlacer.spawnCreature(worldObj, inventory[0].getItemDamage(), 0, 0, 0);
+            else if (item == Items.minecart) return new EntityMinecartEmpty(worldObj);
+            else if (item == Items.chest_minecart) return new EntityMinecartChest(worldObj);
+            else if (item == Items.furnace_minecart) return new EntityMinecartFurnace(worldObj);
+            else if (item == Items.hopper_minecart) return new EntityMinecartHopper(worldObj);
+            else if (item == Items.tnt_minecart) return new EntityMinecartTNT(worldObj);
+            else if (item == Items.boat) return new EntityBoat(worldObj);
 
         }
         EntityItem item = new EntityItem(worldObj);
@@ -730,14 +791,30 @@ public class TileEntityAirCannon extends TileEntityPneumaticBase implements ISid
 
     }
 
-    private Entity getCloseEntityIfUpgraded(){
+    private Entity getCloseEntityIfUpgraded() {
         int entityUpgrades = getUpgrades(ItemMachineUpgrade.UPGRADE_ENTITY_TRACKER);
-        if(entityUpgrades > 0) {
+        if (entityUpgrades > 0) {
             entityUpgrades = Math.min(entityUpgrades, 5);
-            List<Entity> entities = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, AxisAlignedBB.getBoundingBox(xCoord - entityUpgrades, yCoord - entityUpgrades, zCoord - entityUpgrades, xCoord + 1 + entityUpgrades, yCoord + 1 + entityUpgrades, zCoord + 1 + entityUpgrades));
+            List<EntityLivingBase> entities = worldObj.getEntitiesWithinAABB(
+                EntityLivingBase.class,
+                AxisAlignedBB.getBoundingBox(
+                    xCoord - entityUpgrades,
+                    yCoord - entityUpgrades,
+                    zCoord - entityUpgrades,
+                    xCoord + 1 + entityUpgrades,
+                    yCoord + 1 + entityUpgrades,
+                    zCoord + 1 + entityUpgrades));
             Entity closestEntity = null;
-            for(Entity entity : entities) {
-                if(closestEntity == null || PneumaticCraftUtils.distBetween(closestEntity.posX, closestEntity.posY, closestEntity.posZ, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5) > PneumaticCraftUtils.distBetween(entity.posX, entity.posY, entity.posZ, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5)) {
+            for (Entity entity : entities) {
+                if (closestEntity == null || PneumaticCraftUtils.distBetween(
+                    closestEntity.posX,
+                    closestEntity.posY,
+                    closestEntity.posZ,
+                    xCoord + 0.5,
+                    yCoord + 0.5,
+                    zCoord + 0.5)
+                    > PneumaticCraftUtils
+                        .distBetween(entity.posX, entity.posY, entity.posZ, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5)) {
                     closestEntity = entity;
                 }
             }
@@ -747,71 +824,75 @@ public class TileEntityAirCannon extends TileEntityPneumaticBase implements ISid
     }
 
     @Override
-    public boolean hasCustomInventoryName(){
+    public boolean hasCustomInventoryName() {
         return false;
     }
 
     @Override
-    public void openInventory(){}
+    public void openInventory() {}
 
     @Override
-    public void closeInventory(){}
+    public void closeInventory() {}
 
     /*
-     *  COMPUTERCRAFT API
+     * COMPUTERCRAFT API
      */
 
     @Override
-    public String getType(){
+    public String getType() {
         return "airCannon";
     }
 
     @Override
-    protected void addLuaMethods(){
+    protected void addLuaMethods() {
         super.addLuaMethods();
         luaMethods.add(new LuaConstant("getMinWorkingPressure", PneumaticValues.MIN_PRESSURE_AIR_CANNON));
 
-        luaMethods.add(new LuaMethod("setTargetLocation"){
+        luaMethods.add(new LuaMethod("setTargetLocation") {
+
             @Override
-            public Object[] call(Object[] args) throws Exception{
-                if(args.length == 3) {
-                    gpsX = ((Double)args[0]).intValue();
-                    gpsY = ((Double)args[1]).intValue();
-                    gpsZ = ((Double)args[2]).intValue();
+            public Object[] call(Object[] args) throws Exception {
+                if (args.length == 3) {
+                    gpsX = ((Double) args[0]).intValue();
+                    gpsY = ((Double) args[1]).intValue();
+                    gpsZ = ((Double) args[2]).intValue();
                     updateDestination();
-                    return new Object[]{coordWithinReach};
+                    return new Object[] { coordWithinReach };
                 } else {
                     throw new IllegalArgumentException("setTargetLocation requires 3 parameters (x,y,z)");
                 }
             }
         });
 
-        luaMethods.add(new LuaMethod("fire"){
+        luaMethods.add(new LuaMethod("fire") {
+
             @Override
-            public Object[] call(Object[] args) throws Exception{
-                if(args.length == 0) {
-                    return new Object[]{fire()};//returns true if the fire succeeded.
+            public Object[] call(Object[] args) throws Exception {
+                if (args.length == 0) {
+                    return new Object[] { fire() };// returns true if the fire succeeded.
                 } else {
                     throw new IllegalArgumentException("fire doesn't take any arguments!");
                 }
             }
         });
-        luaMethods.add(new LuaMethod("isDoneTurning"){
+        luaMethods.add(new LuaMethod("isDoneTurning") {
+
             @Override
-            public Object[] call(Object[] args) throws Exception{
-                if(args.length == 0) {
-                    return new Object[]{doneTurning};
+            public Object[] call(Object[] args) throws Exception {
+                if (args.length == 0) {
+                    return new Object[] { doneTurning };
                 } else {
                     throw new IllegalArgumentException("isDoneTurning doesn't take any arguments!");
                 }
             }
         });
 
-        luaMethods.add(new LuaMethod("setRotationAngle"){
+        luaMethods.add(new LuaMethod("setRotationAngle") {
+
             @Override
-            public Object[] call(Object[] args) throws Exception{
-                if(args.length == 1) {
-                    setTargetAngles(((Double)args[0]).floatValue(), targetHeightAngle);
+            public Object[] call(Object[] args) throws Exception {
+                if (args.length == 1) {
+                    setTargetAngles(((Double) args[0]).floatValue(), targetHeightAngle);
                     return null;
                 } else {
                     throw new IllegalArgumentException("setRotationAngle does take one argument!");
@@ -819,11 +900,12 @@ public class TileEntityAirCannon extends TileEntityPneumaticBase implements ISid
             }
         });
 
-        luaMethods.add(new LuaMethod("setHeightAngle"){
+        luaMethods.add(new LuaMethod("setHeightAngle") {
+
             @Override
-            public Object[] call(Object[] args) throws Exception{
-                if(args.length == 1) {
-                    setTargetAngles(targetRotationAngle, 90 - ((Double)args[0]).floatValue());
+            public Object[] call(Object[] args) throws Exception {
+                if (args.length == 1) {
+                    setTargetAngles(targetRotationAngle, 90 - ((Double) args[0]).floatValue());
                     return null;
                 } else {
                     throw new IllegalArgumentException("setHeightAngle does take one argument!");
@@ -831,11 +913,12 @@ public class TileEntityAirCannon extends TileEntityPneumaticBase implements ISid
             }
         });
 
-        luaMethods.add(new LuaMethod("setExternalControl"){
+        luaMethods.add(new LuaMethod("setExternalControl") {
+
             @Override
-            public Object[] call(Object[] args) throws Exception{
-                if(args.length == 1) {
-                    externalControl = (Boolean)args[0];
+            public Object[] call(Object[] args) throws Exception {
+                if (args.length == 1) {
+                    externalControl = (Boolean) args[0];
                     return null;
                 } else {
                     throw new IllegalArgumentException("setExternalControl does take one argument!");
@@ -845,12 +928,12 @@ public class TileEntityAirCannon extends TileEntityPneumaticBase implements ISid
     }
 
     @Override
-    public float getMinWorkingPressure(){
+    public float getMinWorkingPressure() {
         return PneumaticValues.MIN_PRESSURE_AIR_CANNON;
     }
 
     @Override
-    public int getRedstoneMode(){
+    public int getRedstoneMode() {
         return redstoneMode;
     }
 }

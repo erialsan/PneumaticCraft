@@ -2,9 +2,9 @@ package pneumaticCraft.common.item;
 
 import pneumaticCraft.common.semiblock.SemiBlockDefaultStorage;
 
-public class ItemLogisticsFrameDefaultStorage extends ItemLogisticsFrame{
+public class ItemLogisticsFrameDefaultStorage extends ItemLogisticsFrame {
 
-    public ItemLogisticsFrameDefaultStorage(){
+    public ItemLogisticsFrameDefaultStorage() {
         super(SemiBlockDefaultStorage.ID);
     }
 

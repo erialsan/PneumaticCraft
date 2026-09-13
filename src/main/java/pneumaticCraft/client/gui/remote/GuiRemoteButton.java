@@ -2,21 +2,23 @@ package pneumaticCraft.client.gui.remote;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.world.ChunkPosition;
+
 import pneumaticCraft.client.gui.GuiRemoteEditor;
 import pneumaticCraft.client.gui.widget.WidgetTextFieldNumber;
 import pneumaticCraft.common.remote.ActionWidgetButton;
 
-public class GuiRemoteButton extends GuiRemoteVariable<ActionWidgetButton>{
+public class GuiRemoteButton extends GuiRemoteVariable<ActionWidgetButton> {
+
     private WidgetTextFieldNumber widthField;
     private WidgetTextFieldNumber heightField;
     private WidgetTextFieldNumber xValueField, yValueField, zValueField;
 
-    public GuiRemoteButton(ActionWidgetButton widget, GuiRemoteEditor guiRemote){
+    public GuiRemoteButton(ActionWidgetButton widget, GuiRemoteEditor guiRemote) {
         super(widget, guiRemote);
     }
 
     @Override
-    public void initGui(){
+    public void initGui() {
         super.initGui();
 
         addLabel(I18n.format("gui.remote.button.settingValue"), guiLeft + 10, guiTop + 95);
@@ -57,9 +59,12 @@ public class GuiRemoteButton extends GuiRemoteVariable<ActionWidgetButton>{
     }
 
     @Override
-    public void onGuiClosed(){
+    public void onGuiClosed() {
         super.onGuiClosed();
-        widget.settingCoordinate = new ChunkPosition(xValueField.getValue(), yValueField.getValue(), zValueField.getValue());
+        widget.settingCoordinate = new ChunkPosition(
+            xValueField.getValue(),
+            yValueField.getValue(),
+            zValueField.getValue());
         widget.setWidth(widthField.getValue());
         widget.setHeight(heightField.getValue());
     }

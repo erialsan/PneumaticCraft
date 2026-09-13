@@ -5,8 +5,9 @@ import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraftforge.common.util.ForgeDirection;
 
-public class ModelPressureTube extends ModelBase{
-    //fields
+public class ModelPressureTube extends ModelBase {
+
+    // fields
     ModelRenderer Left1;
     ModelRenderer Left2;
     ModelRenderer Left3;
@@ -25,7 +26,7 @@ public class ModelPressureTube extends ModelBase{
     ModelRenderer Base12;
     ModelRenderer CapLeft;
 
-    public ModelPressureTube(){
+    public ModelPressureTube() {
         textureWidth = 64;
         textureHeight = 32;
 
@@ -134,7 +135,7 @@ public class ModelPressureTube extends ModelBase{
     }
 
     @Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5){
+    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         super.render(entity, f, f1, f2, f3, f4, f5);
         setRotationAngles(f, f1, f2, f3, f4, f5, entity);
         Left1.render(f5);
@@ -156,7 +157,7 @@ public class ModelPressureTube extends ModelBase{
         CapLeft.render(f5);
     }
 
-    public void renderModel(float size, boolean[] sidesConnected){
+    public void renderModel(float size, boolean[] sidesConnected) {
         Base1.render(size);
         Base2.render(size);
         Base3.render(size);
@@ -169,8 +170,8 @@ public class ModelPressureTube extends ModelBase{
         Base10.render(size);
         Base11.render(size);
         Base12.render(size);
-        for(ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
-            switch(dir){
+        for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
+            switch (dir) {
                 case UP:
                     setTubeRotation(0, 0, -90);
                     break;
@@ -190,7 +191,7 @@ public class ModelPressureTube extends ModelBase{
                     setTubeRotation(0, 0, 0);
                     break;
             }
-            if(sidesConnected[dir.ordinal()]) {
+            if (sidesConnected[dir.ordinal()]) {
                 Left1.render(size);
                 Left2.render(size);
                 Left3.render(size);
@@ -202,10 +203,10 @@ public class ModelPressureTube extends ModelBase{
         }
     }
 
-    private void setTubeRotation(float x, float y, float z){
-        x = (float)Math.toRadians(x);
-        y = (float)Math.toRadians(y);
-        z = (float)Math.toRadians(z);
+    private void setTubeRotation(float x, float y, float z) {
+        x = (float) Math.toRadians(x);
+        y = (float) Math.toRadians(y);
+        z = (float) Math.toRadians(z);
         setRotation(Left1, x, y, z);
         setRotation(Left2, x, y, z);
         setRotation(Left3, x, y, z);
@@ -213,7 +214,7 @@ public class ModelPressureTube extends ModelBase{
         setRotation(CapLeft, x, y, z);
     }
 
-    private void setRotation(ModelRenderer model, float x, float y, float z){
+    private void setRotation(ModelRenderer model, float x, float y, float z) {
         model.rotateAngleX = x;
         model.rotateAngleY = y;
         model.rotateAngleZ = z;

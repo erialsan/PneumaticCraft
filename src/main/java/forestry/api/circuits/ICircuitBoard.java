@@ -13,20 +13,20 @@ import forestry.api.core.INBTTagable;
 
 public interface ICircuitBoard extends INBTTagable {
 
-	int getPrimaryColor();
+    int getPrimaryColor();
 
-	int getSecondaryColor();
+    int getSecondaryColor();
 
-	void addTooltip(List<String> list);
+    void addTooltip(List<String> list);
 
-	void onInsertion(TileEntity tile);
+    void onInsertion(TileEntity tile);
 
-	void onLoad(TileEntity tile);
+    void onLoad(TileEntity tile);
 
-	void onRemoval(TileEntity tile);
+    void onRemoval(TileEntity tile);
 
-	void onTick(TileEntity tile);
-	
-	ICircuit[] getCircuits();
+    void onTick(TileEntity tile);
+
+    ICircuit[] getCircuits();
 
 }

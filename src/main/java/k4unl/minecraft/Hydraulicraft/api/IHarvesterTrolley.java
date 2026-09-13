@@ -60,12 +60,12 @@ public interface IHarvesterTrolley {
     Block getBlockForSeed(ItemStack seed);
 
     /**
-     * Pass a reference to the trolley texture in here. Look at the original trolley textures to see how the map is layed out.
+     * Pass a reference to the trolley texture in here. Look at the original trolley textures to see how the map is
+     * layed out.
      *
      * @return
      */
     ResourceLocation getTexture();
-
 
     /**
      * Gets the plant height at this location.

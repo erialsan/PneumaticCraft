@@ -3,16 +3,16 @@ package pneumaticCraft.common.itemBlock;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 
-public class ItemBlockPressureChamberWall extends ItemBlockPneumaticCraft{
+public class ItemBlockPressureChamberWall extends ItemBlockPneumaticCraft {
 
-    public ItemBlockPressureChamberWall(Block block){
+    public ItemBlockPressureChamberWall(Block block) {
         super(block);
         setHasSubtypes(true);
     }
 
     @Override
-    public String getUnlocalizedName(ItemStack is){
-        switch(is.getItemDamage()){
+    public String getUnlocalizedName(ItemStack is) {
+        switch (is.getItemDamage()) {
             case 0:
                 return super.getUnlocalizedName(is) + ".wall";
             case 6:
@@ -22,7 +22,7 @@ public class ItemBlockPressureChamberWall extends ItemBlockPneumaticCraft{
     }
 
     @Override
-    public int getMetadata(int meta){
+    public int getMetadata(int meta) {
         return meta;
     }
 

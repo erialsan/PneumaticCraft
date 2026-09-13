@@ -11,8 +11,9 @@ import org.lwjgl.opengl.GL11;
 import pneumaticCraft.common.tileentity.TileEntityAssemblyDrill;
 import pneumaticCraft.lib.Textures;
 
-public class ModelAssemblyDrill extends ModelBase implements IBaseModel{
-    //fields
+public class ModelAssemblyDrill extends ModelBase implements IBaseModel {
+
+    // fields
     ModelRenderer Base;
     ModelRenderer BaseTurn;
     ModelRenderer BaseTurn2;
@@ -24,7 +25,7 @@ public class ModelAssemblyDrill extends ModelBase implements IBaseModel{
     ModelRenderer DrillBase;
     ModelRenderer Drill;
 
-    public ModelAssemblyDrill(){
+    public ModelAssemblyDrill() {
         textureWidth = 64;
         textureHeight = 64;
 
@@ -91,7 +92,7 @@ public class ModelAssemblyDrill extends ModelBase implements IBaseModel{
     }
 
     @Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5){
+    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         super.render(entity, f, f1, f2, f3, f4, f5);
         setRotationAngles(f, f1, f2, f3, f4, f5, entity);
         Base.render(f5);
@@ -107,24 +108,24 @@ public class ModelAssemblyDrill extends ModelBase implements IBaseModel{
     }
 
     @Override
-    public void renderStatic(float size, TileEntity te){}
+    public void renderStatic(float size, TileEntity te) {}
 
     @Override
-    public void renderDynamic(float size, TileEntity te, float partialTicks){
-        if(te instanceof TileEntityAssemblyDrill) {
-            TileEntityAssemblyDrill tile = (TileEntityAssemblyDrill)te;
+    public void renderDynamic(float size, TileEntity te, float partialTicks) {
+        if (te instanceof TileEntityAssemblyDrill) {
+            TileEntityAssemblyDrill tile = (TileEntityAssemblyDrill) te;
             float[] renderAngles = new float[5];
-            for(int i = 0; i < 4; i++) {
+            for (int i = 0; i < 4; i++) {
                 renderAngles[i] = tile.oldAngles[i] + (tile.angles[i] - tile.oldAngles[i]) * partialTicks;
             }
             renderAngles[4] = tile.oldDrillRotation + (tile.drillRotation - tile.oldDrillRotation) * partialTicks;
             renderModel(size, renderAngles);
         } else {
-            renderModel(size, new float[]{0, 0, 35, 55, 0});
+            renderModel(size, new float[] { 0, 0, 35, 55, 0 });
         }
     }
 
-    public void renderModel(float size, float[] angles){
+    public void renderModel(float size, float[] angles) {
         Base.render(size);
         GL11.glPushMatrix();
         GL11.glRotatef(angles[0], 0, 1, 0);
@@ -152,19 +153,19 @@ public class ModelAssemblyDrill extends ModelBase implements IBaseModel{
         GL11.glPopMatrix();
     }
 
-    private void setRotation(ModelRenderer model, float x, float y, float z){
+    private void setRotation(ModelRenderer model, float x, float y, float z) {
         model.rotateAngleX = x;
         model.rotateAngleY = y;
         model.rotateAngleZ = z;
     }
 
     @Override
-    public ResourceLocation getModelTexture(TileEntity tile){
+    public ResourceLocation getModelTexture(TileEntity tile) {
         return Textures.MODEL_ASSEMBLY_LASER_AND_DRILL;
     }
 
     @Override
-    public boolean rotateModelBasedOnBlockMeta(){
+    public boolean rotateModelBasedOnBlockMeta() {
         return false;
     }
 

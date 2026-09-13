@@ -10,7 +10,8 @@ import org.lwjgl.opengl.GL11;
 
 import cpw.mods.fml.client.FMLClientHandler;
 
-public class RenderNavigator{
+public class RenderNavigator {
+
     private final int targetX;
     private final int targetY;
     private final int targetZ;
@@ -19,7 +20,7 @@ public class RenderNavigator{
     private boolean increaseAlpha;
     private double alphaValue = 0.2D;
 
-    public RenderNavigator(World world, int targetX, int targetY, int targetZ){
+    public RenderNavigator(World world, int targetX, int targetY, int targetZ) {
         this.targetX = targetX;
         this.targetY = targetY;
         this.targetZ = targetZ;
@@ -27,19 +28,29 @@ public class RenderNavigator{
         updatePath();
     }
 
-    public void updatePath(){
-        EntityPlayer player = FMLClientHandler.instance().getClient().thePlayer;
-        path = worldObj.getEntityPathToXYZ(player, targetX, targetY, targetZ, CoordTrackUpgradeHandler.SEARCH_RANGE, true, true, false, true);
-        if(!tracedToDestination()) {
+    public void updatePath() {
+        EntityPlayer player = FMLClientHandler.instance()
+            .getClient().thePlayer;
+        path = worldObj.getEntityPathToXYZ(
+            player,
+            targetX,
+            targetY,
+            targetZ,
+            CoordTrackUpgradeHandler.SEARCH_RANGE,
+            true,
+            true,
+            false,
+            true);
+        if (!tracedToDestination()) {
             path = CoordTrackUpgradeHandler.getDronePath(player, targetX, targetY, targetZ);
         }
     }
 
-    public void render(boolean wirePath, boolean xRayEnabled, float partialTicks){
-        if(path == null) return;
+    public void render(boolean wirePath, boolean xRayEnabled, float partialTicks) {
+        if (path == null) return;
 
         GL11.glDepthMask(false);
-        if(xRayEnabled) GL11.glDisable(GL11.GL_DEPTH_TEST);
+        if (xRayEnabled) GL11.glDisable(GL11.GL_DEPTH_TEST);
         GL11.glDisable(GL11.GL_CULL_FACE);
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT);
@@ -54,15 +65,15 @@ public class RenderNavigator{
         GL11.glPushMatrix();
         GL11.glTranslated(0, 0.01D, 0);
 
-        //Draws just wires
-        if(wirePath) {
-            if(noDestinationPath) {
+        // Draws just wires
+        if (wirePath) {
+            if (noDestinationPath) {
                 GL11.glEnable(GL11.GL_LINE_STIPPLE);
-                GL11.glLineStipple(4, (short)0x00FF);
+                GL11.glLineStipple(4, (short) 0x00FF);
             }
-            for(int i = 1; i < path.getCurrentPathLength(); i++) {
+            for (int i = 1; i < path.getCurrentPathLength(); i++) {
                 double red = 1;
-                if(path.getCurrentPathLength() - i < 200) {
+                if (path.getCurrentPathLength() - i < 200) {
                     red = (path.getCurrentPathLength() - i) * 0.005D;
                 }
                 GL11.glColor4d(red, 1 - red, 0, 0.5D);
@@ -70,25 +81,28 @@ public class RenderNavigator{
                 PathPoint pathPoint = path.getPathPointFromIndex(i);
                 tess.startDrawing(GL11.GL_LINE_STRIP);
                 tess.addVertex(lastPoint.xCoord + 0.5D, lastPoint.yCoord, lastPoint.zCoord + 0.5D);
-                tess.addVertex((lastPoint.xCoord + pathPoint.xCoord) / 2D + 0.5D, Math.max(lastPoint.yCoord, pathPoint.yCoord), (lastPoint.zCoord + pathPoint.zCoord) / 2D + 0.5D);
+                tess.addVertex(
+                    (lastPoint.xCoord + pathPoint.xCoord) / 2D + 0.5D,
+                    Math.max(lastPoint.yCoord, pathPoint.yCoord),
+                    (lastPoint.zCoord + pathPoint.zCoord) / 2D + 0.5D);
                 tess.addVertex(pathPoint.xCoord + 0.5D, pathPoint.yCoord, pathPoint.zCoord + 0.5D);
                 tess.draw();
             }
         } else {
-            if(noDestinationPath) {
-                if(increaseAlpha) {
+            if (noDestinationPath) {
+                if (increaseAlpha) {
                     alphaValue += 0.005D;
-                    if(alphaValue > 0.3D) increaseAlpha = false;
+                    if (alphaValue > 0.3D) increaseAlpha = false;
                 } else {
                     alphaValue -= 0.005D;
-                    if(alphaValue < 0.2D) increaseAlpha = true;
+                    if (alphaValue < 0.2D) increaseAlpha = true;
                 }
             } else {
-                if(alphaValue > 0.2D) alphaValue -= 0.005D;
+                if (alphaValue > 0.2D) alphaValue -= 0.005D;
             }
-            for(int i = 0; i < path.getCurrentPathLength(); i++) {
+            for (int i = 0; i < path.getCurrentPathLength(); i++) {
                 double red = 1;
-                if(path.getCurrentPathLength() - i < 200) {
+                if (path.getCurrentPathLength() - i < 200) {
                     red = (path.getCurrentPathLength() - i) * 0.005D;
                 }
                 GL11.glColor4d(red, 1 - red, 0, alphaValue);
@@ -111,8 +125,8 @@ public class RenderNavigator{
         GL11.glEnable(GL11.GL_TEXTURE_2D);
     }
 
-    public boolean tracedToDestination(){
-        if(path == null) return false;
+    public boolean tracedToDestination() {
+        if (path == null) return false;
         PathPoint finalPoint = path.getFinalPathPoint();
         return finalPoint.xCoord == targetX && finalPoint.yCoord == targetY && finalPoint.zCoord == targetZ;
     }

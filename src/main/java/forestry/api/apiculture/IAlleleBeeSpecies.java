@@ -12,42 +12,42 @@ import net.minecraft.util.IIcon;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
 import forestry.api.genetics.IAlleleSpecies;
 
 public interface IAlleleBeeSpecies extends IAlleleSpecies {
 
-	/**
-	 * @return the IBeeRoot
-	 */
-	IBeeRoot getRoot();
+    /**
+     * @return the IBeeRoot
+     */
+    IBeeRoot getRoot();
 
-	/**
-	 * @return true if this species is only active at night.
-	 */
-	boolean isNocturnal();
-	
-	/**
-	 * @return Map of possible products with the chance for drop each bee cycle. (0 - 100)
-	 */
-	Map<ItemStack, Integer> getProducts();
+    /**
+     * @return true if this species is only active at night.
+     */
+    boolean isNocturnal();
 
-	/**
-	 * @return Map of possible specialities with the chance for drop each bee cycle. (0 - 100)
-	 */
-	Map<ItemStack, Integer> getSpecialty();
+    /**
+     * @return Map of possible products with the chance for drop each bee cycle. (0 - 100)
+     */
+    Map<ItemStack, Integer> getProducts();
 
-	/**
-	 * Only jubilant bees produce specialities.
-	 * @return true if the bee is jubilant, false otherwise.
-	 */
-	boolean isJubilant(IBeeGenome genome, IBeeHousing housing);
+    /**
+     * @return Map of possible specialities with the chance for drop each bee cycle. (0 - 100)
+     */
+    Map<ItemStack, Integer> getSpecialty();
 
-	@SideOnly(Side.CLIENT)
-	IIcon getIcon(EnumBeeType type, int renderPass);
+    /**
+     * Only jubilant bees produce specialities.
+     * 
+     * @return true if the bee is jubilant, false otherwise.
+     */
+    boolean isJubilant(IBeeGenome genome, IBeeHousing housing);
 
-	/**
-	 * @return Path of the texture to use for entity rendering.
-	 */
-	String getEntityTexture();
+    @SideOnly(Side.CLIENT)
+    IIcon getIcon(EnumBeeType type, int renderPass);
+
+    /**
+     * @return Path of the texture to use for entity rendering.
+     */
+    String getEntityTexture();
 }

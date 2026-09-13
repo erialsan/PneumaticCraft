@@ -10,18 +10,18 @@ import forestry.api.genetics.IEffectData;
 
 public interface IBeekeepingLogic extends INBTTagable {
 
-	/* STATE INFORMATION */
-	int getBreedingTime();
+    /* STATE INFORMATION */
+    int getBreedingTime();
 
-	int getTotalBreedingTime();
+    int getTotalBreedingTime();
 
-	IBee getQueen();
+    IBee getQueen();
 
-	IBeeHousing getHousing();
-	
-	IEffectData[] getEffectData();
+    IBeeHousing getHousing();
 
-	/* UPDATING */
-	void update();
+    IEffectData[] getEffectData();
+
+    /* UPDATING */
+    void update();
 
 }

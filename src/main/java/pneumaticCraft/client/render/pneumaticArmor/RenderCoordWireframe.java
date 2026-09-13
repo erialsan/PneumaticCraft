@@ -5,29 +5,30 @@ import net.minecraft.world.World;
 
 import org.lwjgl.opengl.GL11;
 
-public class RenderCoordWireframe{
+public class RenderCoordWireframe {
+
     public final int x, y, z;
     public final World worldObj;
     public int ticksExisted;
 
-    public RenderCoordWireframe(World worldObj, int x, int y, int z){
+    public RenderCoordWireframe(World worldObj, int x, int y, int z) {
         this.worldObj = worldObj;
         this.x = x;
         this.y = y;
         this.z = z;
     }
 
-    public void render(float partialTicks){
+    public void render(float partialTicks) {
         /*
-        Block block = Block.blocksList[world.getBlockId(x, y, z)];
-        block.setBlockBoundsBasedOnState(world, x, y, z);
-        double minX = block.getBlockBoundsMinX();
-        double minY = block.getBlockBoundsMinY();
-        double minZ = block.getBlockBoundsMinZ();
-        double maxX = minX + (block.getBlockBoundsMaxX() - minX) * progress;
-        double maxY = minY + (block.getBlockBoundsMaxY() - minY) * progress;
-        double maxZ = minZ + (block.getBlockBoundsMaxX() - minZ) * progress;
-        */
+         * Block block = Block.blocksList[world.getBlockId(x, y, z)];
+         * block.setBlockBoundsBasedOnState(world, x, y, z);
+         * double minX = block.getBlockBoundsMinX();
+         * double minY = block.getBlockBoundsMinY();
+         * double minZ = block.getBlockBoundsMinZ();
+         * double maxX = minX + (block.getBlockBoundsMaxX() - minX) * progress;
+         * double maxY = minY + (block.getBlockBoundsMaxY() - minY) * progress;
+         * double maxZ = minZ + (block.getBlockBoundsMaxX() - minZ) * progress;
+         */
         double minX = 0;
         double minY = 0;
         double minZ = 0;

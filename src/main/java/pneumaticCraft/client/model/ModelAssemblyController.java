@@ -15,8 +15,9 @@ import pneumaticCraft.client.gui.GuiPneumaticContainerBase;
 import pneumaticCraft.common.tileentity.TileEntityAssemblyController;
 import pneumaticCraft.lib.Textures;
 
-public class ModelAssemblyController extends ModelBase implements IBaseModel{
-    //fields
+public class ModelAssemblyController extends ModelBase implements IBaseModel {
+
+    // fields
     ModelRenderer Base;
     ModelRenderer InputBack1;
     ModelRenderer InputBack2;
@@ -29,7 +30,7 @@ public class ModelAssemblyController extends ModelBase implements IBaseModel{
     ModelRenderer Screen;
     ModelRenderer ScreenLegPart;
 
-    public ModelAssemblyController(){
+    public ModelAssemblyController() {
         textureWidth = 64;
         textureHeight = 32;
 
@@ -102,7 +103,7 @@ public class ModelAssemblyController extends ModelBase implements IBaseModel{
     }
 
     @Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5){
+    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         super.render(entity, f, f1, f2, f3, f4, f5);
         setRotationAngles(f, f1, f2, f3, f4, f5, entity);
         Base.render(f5);
@@ -119,19 +120,20 @@ public class ModelAssemblyController extends ModelBase implements IBaseModel{
     }
 
     @Override
-    public void renderStatic(float size, TileEntity tile){
-        if(tile instanceof TileEntityAssemblyController) {
-            TileEntityAssemblyController te = (TileEntityAssemblyController)tile;
+    public void renderStatic(float size, TileEntity tile) {
+        if (tile instanceof TileEntityAssemblyController) {
+            TileEntityAssemblyController te = (TileEntityAssemblyController) tile;
             renderModel(size, te.sidesConnected, true, te.displayedText, te.hasProblem);
         } else {
             renderModel(size, new boolean[6], false, "", false);
         }
     }
 
-    public void renderModel(float size, boolean[] connectedSides, boolean shouldFacePlayer, String displayedText, boolean hasProblem){
+    public void renderModel(float size, boolean[] connectedSides, boolean shouldFacePlayer, String displayedText,
+        boolean hasProblem) {
         Base.render(size);
         GL11.glPushMatrix();
-        if(connectedSides[ForgeDirection.NORTH.ordinal()]) {
+        if (connectedSides[ForgeDirection.NORTH.ordinal()]) {
             InputBack1.render(size);
             InputBack2.render(size);
             InputBack3.render(size);
@@ -141,7 +143,7 @@ public class ModelAssemblyController extends ModelBase implements IBaseModel{
             InputBack7.render(size);
         }
         GL11.glRotated(90, 0, 1, 0);
-        if(connectedSides[ForgeDirection.EAST.ordinal()]) {
+        if (connectedSides[ForgeDirection.EAST.ordinal()]) {
             InputBack1.render(size);
             InputBack2.render(size);
             InputBack3.render(size);
@@ -151,7 +153,7 @@ public class ModelAssemblyController extends ModelBase implements IBaseModel{
             InputBack7.render(size);
         }
         GL11.glRotated(90, 0, 1, 0);
-        if(connectedSides[ForgeDirection.SOUTH.ordinal()]) {
+        if (connectedSides[ForgeDirection.SOUTH.ordinal()]) {
             InputBack1.render(size);
             InputBack2.render(size);
             InputBack3.render(size);
@@ -161,7 +163,7 @@ public class ModelAssemblyController extends ModelBase implements IBaseModel{
             InputBack7.render(size);
         }
         GL11.glRotated(90, 0, 1, 0);
-        if(connectedSides[ForgeDirection.WEST.ordinal()]) {
+        if (connectedSides[ForgeDirection.WEST.ordinal()]) {
             InputBack1.render(size);
             InputBack2.render(size);
             InputBack3.render(size);
@@ -171,7 +173,7 @@ public class ModelAssemblyController extends ModelBase implements IBaseModel{
             InputBack7.render(size);
         }
         GL11.glPopMatrix();
-        if(shouldFacePlayer) GL11.glRotatef(180 + RenderManager.instance.playerViewY, 0.0F, 1.0F, 0.0F);
+        if (shouldFacePlayer) GL11.glRotatef(180 + RenderManager.instance.playerViewY, 0.0F, 1.0F, 0.0F);
         ScreenLeg.render(size);
         Screen.render(size);
         ScreenLegPart.render(size);
@@ -181,28 +183,28 @@ public class ModelAssemblyController extends ModelBase implements IBaseModel{
         GL11.glScaled(textSize, textSize, textSize);
         GL11.glDisable(GL11.GL_LIGHTING);
         Minecraft.getMinecraft().fontRenderer.drawString(displayedText, 1, 4, 0xFFFFFFFF);
-        if(hasProblem) GuiPneumaticContainerBase.drawTexture(Textures.GUI_PROBLEMS_TEXTURE, 28, 12);
+        if (hasProblem) GuiPneumaticContainerBase.drawTexture(Textures.GUI_PROBLEMS_TEXTURE, 28, 12);
         GL11.glEnable(GL11.GL_LIGHTING);
     }
 
-    private void setRotation(ModelRenderer model, float x, float y, float z){
+    private void setRotation(ModelRenderer model, float x, float y, float z) {
         model.rotateAngleX = x;
         model.rotateAngleY = y;
         model.rotateAngleZ = z;
     }
 
     @Override
-    public ResourceLocation getModelTexture(TileEntity tile){
+    public ResourceLocation getModelTexture(TileEntity tile) {
         return Textures.MODEL_ASSEMBLY_CONTROLLER;
     }
 
     @Override
-    public boolean rotateModelBasedOnBlockMeta(){
+    public boolean rotateModelBasedOnBlockMeta() {
         return false;
     }
 
     @Override
-    public void renderDynamic(float size, TileEntity te, float partialTicks){
+    public void renderDynamic(float size, TileEntity te, float partialTicks) {
         // TODO Auto-generated method stub
 
     }

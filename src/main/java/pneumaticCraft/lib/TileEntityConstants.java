@@ -1,6 +1,7 @@
 package pneumaticCraft.lib;
 
-public class TileEntityConstants{
+public class TileEntityConstants {
+
     public static final float CANNON_TURN_HIGH_SPEED = 3.0F;
     public static final float CANNON_TURN_LOW_SPEED = 0.5F;
     public static final float CANNON_SLOW_ANGLE = 20F;// the cannon starts to
@@ -23,15 +24,16 @@ public class TileEntityConstants{
     public static final float ASSEMBLY_DRILL_ACCELERATION = 1F;
     public static final float ASSEMBLY_DRILL_MAX_SPEED = 100F;
 
-    public static final int LIGHT_BOX_0_100_TIME = 600; //seconds.
+    public static final int LIGHT_BOX_0_100_TIME = 600; // seconds.
 
-    public static final int PCB_ETCH_TIME = 300; //seconds
+    public static final int PCB_ETCH_TIME = 300; // seconds
 
-    public static final float NETWORK_NORMAL_BRIDGE_SPEED = 0.02F;//*100 % / tick
-    public static final float NETWORK_AI_BRIDGE_SPEED = 0.03F;//*100 % / tick
+    public static final float NETWORK_NORMAL_BRIDGE_SPEED = 0.02F;// *100 % / tick
+    public static final float NETWORK_AI_BRIDGE_SPEED = 0.03F;// *100 % / tick
     public static final float NETWORK_NOTE_RATING_MULTIPLIER = 1.2F;
     public static final int SECURITY_STATION_MAX_RANGE = 16;
-    public static final int SECURITY_STATION_REBOOT_TIME = 1200;//ticks
+    public static final int SECURITY_STATION_REBOOT_TIME = 1200;// ticks
 
-    public static final double PACKET_UPDATE_DISTANCE = 64D;//maximum client distance before clients aren't being sent anymore from the server.
+    public static final double PACKET_UPDATE_DISTANCE = 64D;// maximum client distance before clients aren't being sent
+                                                            // anymore from the server.
 }

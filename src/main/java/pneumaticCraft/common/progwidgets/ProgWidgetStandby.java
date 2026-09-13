@@ -2,62 +2,64 @@ package pneumaticCraft.common.progwidgets;
 
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.util.ResourceLocation;
+
 import pneumaticCraft.common.ai.IDroneBase;
 import pneumaticCraft.common.entity.living.EntityDrone;
 import pneumaticCraft.common.item.ItemPlasticPlants;
 import pneumaticCraft.lib.Textures;
 
-public class ProgWidgetStandby extends ProgWidget{
+public class ProgWidgetStandby extends ProgWidget {
+
     @Override
-    public boolean hasStepInput(){
+    public boolean hasStepInput() {
         return true;
     }
 
     @Override
-    public Class<? extends IProgWidget> returnType(){
+    public Class<? extends IProgWidget> returnType() {
         return null;
     }
 
     @Override
-    public Class<? extends IProgWidget>[] getParameters(){
+    public Class<? extends IProgWidget>[] getParameters() {
         return null;
     }
 
     @Override
-    public String getWidgetString(){
+    public String getWidgetString() {
         return "standby";
     }
 
     @Override
-    public int getCraftingColorIndex(){
+    public int getCraftingColorIndex() {
         return ItemPlasticPlants.REPULSION_PLANT_DAMAGE;
     }
 
     @Override
-    public WidgetDifficulty getDifficulty(){
+    public WidgetDifficulty getDifficulty() {
         return WidgetDifficulty.EASY;
     }
 
     @Override
-    protected ResourceLocation getTexture(){
+    protected ResourceLocation getTexture() {
         return Textures.PROG_WIDGET_STANDBY;
     }
 
     @Override
-    public EntityAIBase getWidgetAI(IDroneBase drone, IProgWidget widget){
-        return new DroneAIStandby((EntityDrone)drone);
+    public EntityAIBase getWidgetAI(IDroneBase drone, IProgWidget widget) {
+        return new DroneAIStandby((EntityDrone) drone);
     }
 
-    public static class DroneAIStandby extends EntityAIBase{
+    public static class DroneAIStandby extends EntityAIBase {
 
         private final EntityDrone drone;
 
-        public DroneAIStandby(EntityDrone drone){
+        public DroneAIStandby(EntityDrone drone) {
             this.drone = drone;
         }
 
         @Override
-        public boolean shouldExecute(){
+        public boolean shouldExecute() {
             drone.setStandby(true);
             return false;
         }

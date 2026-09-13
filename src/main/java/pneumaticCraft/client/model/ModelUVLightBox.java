@@ -16,8 +16,9 @@ import pneumaticCraft.common.item.Itemss;
 import pneumaticCraft.common.tileentity.TileEntityUVLightBox;
 import pneumaticCraft.lib.Textures;
 
-public class ModelUVLightBox extends ModelBase implements IBaseModel{
-    //fields
+public class ModelUVLightBox extends ModelBase implements IBaseModel {
+
+    // fields
     ModelRenderer Base;
     ModelRenderer Top;
     ModelRenderer Support1;
@@ -50,11 +51,12 @@ public class ModelUVLightBox extends ModelBase implements IBaseModel{
     private EntityItem blueprintEntity;
     private EntityItem pcbEntity;
 
-    public ModelUVLightBox(){
+    public ModelUVLightBox() {
         // EE3 snippet, to initialize an EntityItem which doesn't bob.
-        customRenderItem = new RenderItem(){
+        customRenderItem = new RenderItem() {
+
             @Override
-            public boolean shouldBob(){
+            public boolean shouldBob() {
 
                 return false;
             };
@@ -231,7 +233,7 @@ public class ModelUVLightBox extends ModelBase implements IBaseModel{
     }
 
     @Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5){
+    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         super.render(entity, f, f1, f2, f3, f4, f5);
         setRotationAngles(f, f1, f2, f3, f4, f5, entity);
         Base.render(f5);
@@ -257,7 +259,7 @@ public class ModelUVLightBox extends ModelBase implements IBaseModel{
         InputLeft5.render(f5);
     }
 
-    public void renderModel(float size, boolean renderLeft, boolean renderRight, boolean lightsOn){
+    public void renderModel(float size, boolean renderLeft, boolean renderRight, boolean lightsOn) {
         Base.render(size);
         Top.render(size);
         Support1.render(size);
@@ -268,7 +270,7 @@ public class ModelUVLightBox extends ModelBase implements IBaseModel{
         BlueprintHolder2.render(size);
         BlueprintHolder3.render(size);
         BlueprintHolder4.render(size);
-        if(lightsOn) {
+        if (lightsOn) {
             Light21.render(size);
             Light22.render(size);
             Light23.render(size);
@@ -283,14 +285,14 @@ public class ModelUVLightBox extends ModelBase implements IBaseModel{
             Light15.render(size);
             Light16.render(size);
         }
-        if(renderLeft) {
+        if (renderLeft) {
             InputLeft1.render(size);
             InputLeft2.render(size);
             InputLeft3.render(size);
             InputLeft4.render(size);
             InputLeft5.render(size);
         }
-        if(renderRight) {
+        if (renderRight) {
             GL11.glRotated(180, 0, 1, 0);
             InputLeft1.render(size);
             InputLeft2.render(size);
@@ -300,23 +302,23 @@ public class ModelUVLightBox extends ModelBase implements IBaseModel{
         }
     }
 
-    private void setRotation(ModelRenderer model, float x, float y, float z){
+    private void setRotation(ModelRenderer model, float x, float y, float z) {
         model.rotateAngleX = x;
         model.rotateAngleY = y;
         model.rotateAngleZ = z;
     }
 
     @Override
-    public void renderStatic(float size, TileEntity te){
-        if(te instanceof TileEntityUVLightBox) {
-            TileEntityUVLightBox tile = (TileEntityUVLightBox)te;
+    public void renderStatic(float size, TileEntity te) {
+        if (te instanceof TileEntityUVLightBox) {
+            TileEntityUVLightBox tile = (TileEntityUVLightBox) te;
             renderModel(size, tile.leftConnected, tile.rightConnected, tile.areLightsOn);
-            if(blueprintEntity == null) {
+            if (blueprintEntity == null) {
                 blueprintEntity = new EntityItem(tile.getWorldObj());
                 blueprintEntity.setEntityItemStack(new ItemStack(Itemss.PCBBlueprint));
                 blueprintEntity.hoverStart = 0.0F;
             }
-            if(pcbEntity == null) {
+            if (pcbEntity == null) {
                 pcbEntity = new EntityItem(tile.getWorldObj());
                 pcbEntity.setEntityItemStack(new ItemStack(Itemss.emptyPCB));
                 pcbEntity.hoverStart = 0.0F;
@@ -332,11 +334,12 @@ public class ModelUVLightBox extends ModelBase implements IBaseModel{
             GL11.glScalef(scaleFactor, scaleFactor, scaleFactor);
             // GL11.glRotatef(rotationAngle, 0.0F, 1.0F, 0.0F);
             GL11.glRotated(-90, 1, 0, 0);
-            //GL11.glRotated(90, 0, 0, 1);
+            // GL11.glRotated(90, 0, 0, 1);
             boolean fancySetting = RenderManager.instance.options.fancyGraphics;
             RenderManager.instance.options.fancyGraphics = true;
             customRenderItem.doRender(blueprintEntity, 0, 0, 0, 0, 0);
-            if(tile.inventory[TileEntityUVLightBox.PCB_INDEX] != null && tile.inventory[TileEntityUVLightBox.PCB_INDEX].getItem() == Itemss.emptyPCB) {
+            if (tile.inventory[TileEntityUVLightBox.PCB_INDEX] != null
+                && tile.inventory[TileEntityUVLightBox.PCB_INDEX].getItem() == Itemss.emptyPCB) {
                 GL11.glTranslated(0, 0, 0.5 / 16D);
                 customRenderItem.doRender(pcbEntity, 0, 0, 0, 0, 0);
             }
@@ -347,17 +350,17 @@ public class ModelUVLightBox extends ModelBase implements IBaseModel{
     }
 
     @Override
-    public ResourceLocation getModelTexture(TileEntity tile){
+    public ResourceLocation getModelTexture(TileEntity tile) {
         return Textures.MODEL_UV_LIGHTBOX;
     }
 
     @Override
-    public boolean rotateModelBasedOnBlockMeta(){
+    public boolean rotateModelBasedOnBlockMeta() {
         return true;
     }
 
     @Override
-    public void renderDynamic(float size, TileEntity te, float partialTicks){
+    public void renderDynamic(float size, TileEntity te, float partialTicks) {
         // TODO Auto-generated method stub
 
     }

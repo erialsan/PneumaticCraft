@@ -9,11 +9,11 @@ import org.lwjgl.opengl.GL11;
 import pneumaticCraft.common.tileentity.TileEntityElevatorCaller;
 import pneumaticCraft.common.util.PneumaticCraftUtils;
 
-public class RenderElevatorCaller extends TileEntitySpecialRenderer{
+public class RenderElevatorCaller extends TileEntitySpecialRenderer {
 
     @Override
-    public void renderTileEntityAt(TileEntity tileentity, double x, double y, double z, float f){
-        TileEntityElevatorCaller tile = (TileEntityElevatorCaller)tileentity;
+    public void renderTileEntityAt(TileEntity tileentity, double x, double y, double z, float f) {
+        TileEntityElevatorCaller tile = (TileEntityElevatorCaller) tileentity;
         Tessellator tess = Tessellator.instance;
         GL11.glPushMatrix();
         GL11.glTranslated(x + 0.5, y + 1.5, z + 0.5);
@@ -22,7 +22,7 @@ public class RenderElevatorCaller extends TileEntitySpecialRenderer{
         PneumaticCraftUtils.rotateMatrixByMetadata(tileentity.getBlockMetadata());
         GL11.glTranslatef(-1, 0, -1);
 
-        for(TileEntityElevatorCaller.ElevatorButton button : tile.getFloors()) {
+        for (TileEntityElevatorCaller.ElevatorButton button : tile.getFloors()) {
             GL11.glDisable(GL11.GL_TEXTURE_2D);
             GL11.glDisable(GL11.GL_LIGHTING);
             tess.startDrawingQuads();
@@ -38,9 +38,13 @@ public class RenderElevatorCaller extends TileEntitySpecialRenderer{
             GL11.glPushMatrix();
             GL11.glTranslated(button.posX + 0.5D, button.posY + 0.5D, 0.498);
             GL11.glTranslated(button.width / 2, button.height / 2, 0);
-            float textScale = Math.min((float)button.width / 10F, (float)button.height / 10F);
+            float textScale = Math.min((float) button.width / 10F, (float) button.height / 10F);
             GL11.glScalef(textScale, textScale, textScale);
-            func_147498_b().drawString(button.buttonText, -func_147498_b().getStringWidth(button.buttonText) / 2, -func_147498_b().FONT_HEIGHT / 2, 0xFF000000);
+            func_147498_b().drawString(
+                button.buttonText,
+                -func_147498_b().getStringWidth(button.buttonText) / 2,
+                -func_147498_b().FONT_HEIGHT / 2,
+                0xFF000000);
             GL11.glPopMatrix();
         }
         GL11.glPopMatrix();

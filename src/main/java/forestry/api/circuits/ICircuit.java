@@ -10,23 +10,24 @@ import java.util.List;
 import net.minecraft.tileentity.TileEntity;
 
 public interface ICircuit {
-	String getUID();
 
-	boolean requiresDiscovery();
+    String getUID();
 
-	int getLimit();
+    boolean requiresDiscovery();
 
-	String getName();
+    int getLimit();
 
-	boolean isCircuitable(TileEntity tile);
+    String getName();
 
-	void onInsertion(int slot, TileEntity tile);
+    boolean isCircuitable(TileEntity tile);
 
-	void onLoad(int slot, TileEntity tile);
+    void onInsertion(int slot, TileEntity tile);
 
-	void onRemoval(int slot, TileEntity tile);
+    void onLoad(int slot, TileEntity tile);
 
-	void onTick(int slot, TileEntity tile);
+    void onRemoval(int slot, TileEntity tile);
 
-	void addTooltip(List<String> list);
+    void onTick(int slot, TileEntity tile);
+
+    void addTooltip(List<String> list);
 }

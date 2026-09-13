@@ -1,6 +1,7 @@
 package pneumaticCraft.common.progwidgets;
 
-public interface ICountWidget{
+public interface ICountWidget {
+
     public boolean useCount();
 
     public void setUseCount(boolean useCount);

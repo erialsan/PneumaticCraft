@@ -11,38 +11,40 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import pneumaticCraft.PneumaticCraft;
 import pneumaticCraft.client.render.block.RenderElevatorFrame;
 import pneumaticCraft.common.tileentity.TileEntityElevatorBase;
 import pneumaticCraft.common.tileentity.TileEntityElevatorFrame;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
-public class BlockElevatorFrame extends BlockPneumaticCraftModeled{
+public class BlockElevatorFrame extends BlockPneumaticCraftModeled {
 
-    public BlockElevatorFrame(Material par2Material){
+    public BlockElevatorFrame(Material par2Material) {
         super(par2Material);
     }
 
     @Override
-    public void onBlockAdded(World world, int x, int y, int z){
+    public void onBlockAdded(World world, int x, int y, int z) {
         super.onBlockAdded(world, x, y, z);
         TileEntityElevatorBase elevatorBase = getElevatorTE(world, x, y, z);
-        if(elevatorBase != null) {
+        if (elevatorBase != null) {
             elevatorBase.updateMaxElevatorHeight();
         }
     }
 
     @Override
-    protected Class<? extends TileEntity> getTileEntityClass(){
+    protected Class<? extends TileEntity> getTileEntityClass() {
         return TileEntityElevatorFrame.class;
     }
 
     @Override
-    public MovingObjectPosition collisionRayTrace(World world, int x, int y, int z, Vec3 origin, Vec3 direction){
-        if(world.isRemote) {
-            ItemStack playerStack = PneumaticCraft.proxy.getPlayer().getCurrentEquippedItem();
-            if(playerStack != null && playerStack.getItem() == Item.getItemFromBlock(this)) {
+    public MovingObjectPosition collisionRayTrace(World world, int x, int y, int z, Vec3 origin, Vec3 direction) {
+        if (world.isRemote) {
+            ItemStack playerStack = PneumaticCraft.proxy.getPlayer()
+                .getCurrentEquippedItem();
+            if (playerStack != null && playerStack.getItem() == Item.getItemFromBlock(this)) {
                 return super.collisionRayTrace(world, x, y, z, origin, direction);
             }
         }
@@ -53,21 +55,21 @@ public class BlockElevatorFrame extends BlockPneumaticCraftModeled{
 
         boolean isColliding = false;
 
-        if(!frameXNeg && !frameZNeg) {
+        if (!frameXNeg && !frameZNeg) {
             setBlockBounds(0, 0, 0, 2 / 16F, 1, 2 / 16F);
-            if(super.collisionRayTrace(world, x, y, z, origin, direction) != null) isColliding = true;
+            if (super.collisionRayTrace(world, x, y, z, origin, direction) != null) isColliding = true;
         }
-        if(!frameXNeg && !frameZPos) {
+        if (!frameXNeg && !frameZPos) {
             setBlockBounds(0, 0, 14 / 16F, 2 / 16F, 1, 1);
-            if(super.collisionRayTrace(world, x, y, z, origin, direction) != null) isColliding = true;
+            if (super.collisionRayTrace(world, x, y, z, origin, direction) != null) isColliding = true;
         }
-        if(!frameXPos && !frameZPos) {
+        if (!frameXPos && !frameZPos) {
             setBlockBounds(14 / 16F, 0, 14 / 16F, 1, 1, 1);
-            if(super.collisionRayTrace(world, x, y, z, origin, direction) != null) isColliding = true;
+            if (super.collisionRayTrace(world, x, y, z, origin, direction) != null) isColliding = true;
         }
-        if(!frameXPos && !frameZNeg) {
+        if (!frameXPos && !frameZNeg) {
             setBlockBounds(14 / 16F, 0, 0, 1, 1, 2 / 16F);
-            if(super.collisionRayTrace(world, x, y, z, origin, direction) != null) isColliding = true;
+            if (super.collisionRayTrace(world, x, y, z, origin, direction) != null) isColliding = true;
         }
 
         setBlockBounds(0, 0, 0, 1, 1, 1);
@@ -76,7 +78,7 @@ public class BlockElevatorFrame extends BlockPneumaticCraftModeled{
 
     @Override
     @SideOnly(Side.CLIENT)
-    public int getRenderType(){
+    public int getRenderType() {
         return PneumaticCraft.proxy.getRenderIdForRenderer(RenderElevatorFrame.class);
     }
 
@@ -85,9 +87,9 @@ public class BlockElevatorFrame extends BlockPneumaticCraftModeled{
      * box can change after the pool has been cleared to be reused)
      */
     @Override
-    public AxisAlignedBB getCollisionBoundingBoxFromPool(World par1World, int par2, int par3, int par4){
+    public AxisAlignedBB getCollisionBoundingBoxFromPool(World par1World, int par2, int par3, int par4) {
         float blockHeight = getElevatorBlockHeight(par1World, par2, par3, par4);
-        if(blockHeight > 0F) {
+        if (blockHeight > 0F) {
             // this.setBlockBounds(0, 0, 0, 1, blockHeight, 1);
             // return super.getCollisionBoundingBoxFromPool(par1World, par2,
             // par3, par4);
@@ -102,55 +104,58 @@ public class BlockElevatorFrame extends BlockPneumaticCraftModeled{
      * Triggered whenever an entity collides with this block (enters into the block). Args: world, x, y, z, entity
      */
     @Override
-    public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity entity){
-        //  float blockHeight = getElevatorBlockHeight(world, x, y, z);
-        //   if(blockHeight > 0) {
+    public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity entity) {
+        // float blockHeight = getElevatorBlockHeight(world, x, y, z);
+        // if(blockHeight > 0) {
         // if(entity.posY < y + blockHeight) {
-        //     entity.setPosition(entity.posX, y + blockHeight + 2, entity.posZ);
+        // entity.setPosition(entity.posX, y + blockHeight + 2, entity.posZ);
         TileEntityElevatorBase te = getElevatorTE(world, x, y, z);
-        if(te != null && te.oldExtension != te.extension) {
-            entity.setPosition(entity.posX, te.yCoord + te.extension + (double)entity.yOffset + entity.ySize + 1, entity.posZ);
+        if (te != null && te.oldExtension != te.extension) {
+            entity.setPosition(
+                entity.posX,
+                te.yCoord + te.extension + (double) entity.yOffset + entity.ySize + 1,
+                entity.posZ);
         }
         entity.fallDistance = 0;
-        //}
-        //   }
+        // }
+        // }
     }
 
-    public static TileEntityElevatorBase getElevatorTE(IBlockAccess world, int x, int y, int z){
+    public static TileEntityElevatorBase getElevatorTE(IBlockAccess world, int x, int y, int z) {
         int i = 0;
-        while(true) {
+        while (true) {
             i--;
-            if(world.getBlock(x, y + i, z) == Blockss.elevatorBase) break;
-            if(world.getBlock(x, y + i, z) != Blockss.elevatorFrame || y <= 0) return null;
+            if (world.getBlock(x, y + i, z) == Blockss.elevatorBase) break;
+            if (world.getBlock(x, y + i, z) != Blockss.elevatorFrame || y <= 0) return null;
         }
-        return (TileEntityElevatorBase)world.getTileEntity(x, y + i, z);
+        return (TileEntityElevatorBase) world.getTileEntity(x, y + i, z);
     }
 
-    private float getElevatorBlockHeight(World world, int x, int y, int z){
+    private float getElevatorBlockHeight(World world, int x, int y, int z) {
         TileEntityElevatorBase te = getElevatorTE(world, x, y, z);
-        if(te == null) return 0F;
+        if (te == null) return 0F;
         float blockHeight = te.extension - (y - te.yCoord) + 1;
         // System.out.println("blockHeight (" + x + ", " + y + ", " + z + "): " + blockHeight);
         // + blockHeight);
-        if(blockHeight < 0F) return 0F;
-        if(blockHeight > 1F) return 1F;
+        if (blockHeight < 0F) return 0F;
+        if (blockHeight > 1F) return 1F;
         return blockHeight;
     }
 
     @Override
-    public void onNeighborBlockChange(World world, int x, int y, int z, Block block){
+    public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
         int blockMeta = world.getBlockMetadata(x, y, z);
-        if(blockMeta == 0 && world.getBlock(x, y - 1, z) == Blockss.elevatorBase) {
+        if (blockMeta == 0 && world.getBlock(x, y - 1, z) == Blockss.elevatorBase) {
             world.setBlockMetadataWithNotify(x, y, z, 1, 2);
-        } else if(blockMeta == 1) {
+        } else if (blockMeta == 1) {
             world.setBlockMetadataWithNotify(x, y, z, 0, 2);
         }
     }
 
     @Override
-    public void breakBlock(World world, int x, int y, int z, Block block, int meta){
+    public void breakBlock(World world, int x, int y, int z, Block block, int meta) {
         TileEntityElevatorBase elevatorBase = getElevatorTE(world, x, y, z);
-        if(elevatorBase != null) {
+        if (elevatorBase != null) {
             elevatorBase.updateMaxElevatorHeight();
         }
         super.breakBlock(world, x, y, z, block, meta);

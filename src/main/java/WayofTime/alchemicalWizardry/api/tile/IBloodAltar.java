@@ -3,8 +3,7 @@ package WayofTime.alchemicalWizardry.api.tile;
 /**
  * Created by Pokefenn.
  */
-public interface IBloodAltar
-{
+public interface IBloodAltar {
 
     public int getCapacity();
 

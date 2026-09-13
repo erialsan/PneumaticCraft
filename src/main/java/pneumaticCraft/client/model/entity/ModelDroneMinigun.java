@@ -18,8 +18,9 @@ import pneumaticCraft.common.entity.living.EntityDrone;
 import pneumaticCraft.common.minigun.Minigun;
 import pneumaticCraft.lib.Textures;
 
-public class ModelDroneMinigun extends ModelBase{
-    //fields
+public class ModelDroneMinigun extends ModelBase {
+
+    // fields
     ModelRenderer barrel;
     ModelRenderer support1;
     ModelRenderer support2;
@@ -31,7 +32,7 @@ public class ModelDroneMinigun extends ModelBase{
     ModelRenderer mount;
     ModelRenderer magazineColor;
 
-    public ModelDroneMinigun(){
+    public ModelDroneMinigun() {
         textureWidth = 64;
         textureHeight = 32;
 
@@ -98,26 +99,29 @@ public class ModelDroneMinigun extends ModelBase{
     }
 
     @Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5){
+    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         super.render(entity, f, f1, f2, f3, f4, f5);
         setRotationAngles(f, f1, f2, f3, f4, f5, entity);
-        EntityDrone drone = (EntityDrone)entity;
+        EntityDrone drone = (EntityDrone) entity;
         renderMinigun(drone != null ? drone.getMinigun() : null, f5, 0, true);
     }
 
-    public void renderMinigun(Minigun minigun, float size, float partialTick, boolean renderMount){
-        Minecraft.getMinecraft().getTextureManager().bindTexture(Textures.MODEL_DRONE_MINIGUN);
+    public void renderMinigun(Minigun minigun, float size, float partialTick, boolean renderMount) {
+        Minecraft.getMinecraft()
+            .getTextureManager()
+            .bindTexture(Textures.MODEL_DRONE_MINIGUN);
         GL11.glColor4d(1, 1, 1, 1);
         GL11.glPushMatrix();
-        if(renderMount) {
+        if (renderMount) {
             GL11.glTranslated(0, 5 / 16D, -12 / 16D);
             mount.render(size);
             GL11.glTranslated(0, -5 / 16D, 12 / 16D);
         }
 
         float barrelRotation = 0;
-        if(minigun != null) {
-            barrelRotation = (float)(minigun.getOldMinigunRotation() + partialTick * (minigun.getMinigunRotation() - minigun.getOldMinigunRotation()));
+        if (minigun != null) {
+            barrelRotation = (float) (minigun.getOldMinigunRotation()
+                + partialTick * (minigun.getMinigunRotation() - minigun.getOldMinigunRotation()));
             double yaw = minigun.oldMinigunYaw + partialTick * (minigun.minigunYaw - minigun.oldMinigunYaw);
             double pitch = minigun.oldMinigunPitch + partialTick * (minigun.minigunPitch - minigun.oldMinigunPitch);
 
@@ -128,8 +132,8 @@ public class ModelDroneMinigun extends ModelBase{
         }
         barrel.rotateAngleY = 0;
         barrel.rotateAngleX = 0;
-        for(int i = 0; i < 6; i++) {
-            barrel.rotateAngleZ = (float)(Math.PI / 3 * i) + barrelRotation;
+        for (int i = 0; i < 6; i++) {
+            barrel.rotateAngleZ = (float) (Math.PI / 3 * i) + barrelRotation;
             barrel.render(size);
         }
         support1.rotateAngleZ = barrelRotation;
@@ -152,7 +156,7 @@ public class ModelDroneMinigun extends ModelBase{
         GL11.glPopMatrix();
     }
 
-    private void setRotation(ModelRenderer model, float x, float y, float z){
+    private void setRotation(ModelRenderer model, float x, float y, float z) {
         model.rotateAngleX = x;
         model.rotateAngleY = y;
         model.rotateAngleZ = z;

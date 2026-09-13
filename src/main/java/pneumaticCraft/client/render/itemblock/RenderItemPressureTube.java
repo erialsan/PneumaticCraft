@@ -5,39 +5,39 @@ import net.minecraftforge.client.IItemRenderer;
 
 import org.lwjgl.opengl.GL11;
 
-import pneumaticCraft.client.model.ModelPressureTube;
-import pneumaticCraft.lib.Textures;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import pneumaticCraft.client.model.ModelPressureTube;
+import pneumaticCraft.lib.Textures;
 
 @SideOnly(Side.CLIENT)
-public class RenderItemPressureTube implements IItemRenderer{
+public class RenderItemPressureTube implements IItemRenderer {
 
     private final ModelPressureTube model;
     private final boolean advanced;
 
-    public RenderItemPressureTube(boolean advanced){
+    public RenderItemPressureTube(boolean advanced) {
         model = new ModelPressureTube();
         this.advanced = advanced;
     }
 
     @Override
-    public boolean handleRenderType(ItemStack item, ItemRenderType type){
+    public boolean handleRenderType(ItemStack item, ItemRenderType type) {
 
         return true;
     }
 
     @Override
-    public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper){
+    public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper) {
 
         return true;
     }
 
     @Override
-    public void renderItem(ItemRenderType type, ItemStack item, Object... data){
+    public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
         int itemDamage = item.getItemDamage();
-        switch(type){
+        switch (type) {
             case ENTITY: {
                 render(0.0F, 0.0F, 1.0F, 1.0F, itemDamage);
                 return;
@@ -62,7 +62,7 @@ public class RenderItemPressureTube implements IItemRenderer{
         }
     }
 
-    private void render(float x, float y, float z, float scale, int itemDamage){
+    private void render(float x, float y, float z, float scale, int itemDamage) {
         GL11.glPushMatrix();
         // GL11.glDisable(GL11.GL_LIGHTING);
         // GL11.glDisable(GL11.GL_TEXTURE_2D);
@@ -74,10 +74,13 @@ public class RenderItemPressureTube implements IItemRenderer{
 
         // Bind texture
 
-        FMLClientHandler.instance().getClient().getTextureManager().bindTexture(advanced ? Textures.MODEL_ADVANCED_PRESSURE_TUBE : Textures.MODEL_PRESSURE_TUBE);
+        FMLClientHandler.instance()
+            .getClient()
+            .getTextureManager()
+            .bindTexture(advanced ? Textures.MODEL_ADVANCED_PRESSURE_TUBE : Textures.MODEL_PRESSURE_TUBE);
 
         // Render
-        model.renderModel(1F / 16F, new boolean[]{true, true, false, false, false, false});
+        model.renderModel(1F / 16F, new boolean[] { true, true, false, false, false, false });
 
         // GL11.glEnable(GL11.GL_TEXTURE_2D);
         // GL11.glEnable(GL11.GL_LIGHTING);

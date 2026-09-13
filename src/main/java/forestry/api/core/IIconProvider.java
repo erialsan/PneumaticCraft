@@ -12,14 +12,14 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 /**
- * Provides icons, needed in some interfaces, most notably for bees and trees. 
+ * Provides icons, needed in some interfaces, most notably for bees and trees.
  */
 public interface IIconProvider {
-	
-	@SideOnly(Side.CLIENT)
-	IIcon getIcon(short texUID);
-	
-	@SideOnly(Side.CLIENT)
-	void registerIcons(IIconRegister register);
+
+    @SideOnly(Side.CLIENT)
+    IIcon getIcon(short texUID);
+
+    @SideOnly(Side.CLIENT)
+    void registerIcons(IIconRegister register);
 
 }

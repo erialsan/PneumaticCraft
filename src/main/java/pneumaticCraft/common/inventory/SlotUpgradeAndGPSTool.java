@@ -4,11 +4,12 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+
 import pneumaticCraft.common.item.Itemss;
 
-class SlotUpgradeAndGPSTool extends Slot{
+class SlotUpgradeAndGPSTool extends Slot {
 
-    SlotUpgradeAndGPSTool(IInventory par2IInventory, int par3, int par4, int par5){
+    SlotUpgradeAndGPSTool(IInventory par2IInventory, int par3, int par4, int par5) {
         super(par2IInventory, par3, par4, par5);
     }
 
@@ -17,7 +18,7 @@ class SlotUpgradeAndGPSTool extends Slot{
      * the armor slots.
      */
     @Override
-    public boolean isItemValid(ItemStack par1ItemStack){
+    public boolean isItemValid(ItemStack par1ItemStack) {
         Item item = par1ItemStack == null ? null : par1ItemStack.getItem();
         return item == Itemss.machineUpgrade || item == Itemss.GPSTool;
     }

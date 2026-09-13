@@ -14,6 +14,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 import org.apache.commons.lang3.text.WordUtils;
 
+import cpw.mods.fml.client.FMLClientHandler;
 import pneumaticCraft.client.gui.semiblock.GuiLogisticsLiquidFilter;
 import pneumaticCraft.client.gui.widget.IGuiWidget;
 import pneumaticCraft.client.gui.widget.WidgetFluidFilter;
@@ -27,9 +28,9 @@ import pneumaticCraft.common.network.NetworkHandler;
 import pneumaticCraft.common.network.PacketAmadronTradeAdd;
 import pneumaticCraft.common.recipes.AmadronOfferCustom;
 import pneumaticCraft.lib.Textures;
-import cpw.mods.fml.client.FMLClientHandler;
 
-public class GuiAmadronAddTrade extends GuiPneumaticContainerBase{
+public class GuiAmadronAddTrade extends GuiPneumaticContainerBase {
+
     private GuiSearcher searchGui;
     private GuiInventorySearcher invSearchGui;
     private GuiInventorySearcher gpsSearchGui;
@@ -45,17 +46,17 @@ public class GuiAmadronAddTrade extends GuiPneumaticContainerBase{
 
     private ChunkPosition inputPosition, outputPosition;
 
-    public GuiAmadronAddTrade(){
+    public GuiAmadronAddTrade() {
         super(new ContainerAmadronAddTrade(), null, Textures.GUI_WIDGET_OPTIONS_STRING);
         xSize = 183;
         ySize = 202;
     }
 
     @Override
-    public void initGui(){
+    public void initGui() {
         super.initGui();
 
-        ContainerAmadronAddTrade container = (ContainerAmadronAddTrade)inventorySlots;
+        ContainerAmadronAddTrade container = (ContainerAmadronAddTrade) inventorySlots;
 
         addLabel(I18n.format("gui.amadron.addTrade.selling"), guiLeft + 4, guiTop + 5);
         addLabel(I18n.format("gui.amadron.addTrade.buying"), guiLeft + 93, guiTop + 5);
@@ -79,22 +80,38 @@ public class GuiAmadronAddTrade extends GuiPneumaticContainerBase{
 
         GuiButtonSpecial gpsButton1 = new GuiButtonSpecial(6, guiLeft + 10, guiTop + 115, 20, 20, "");
         GuiButtonSpecial gpsButton2 = new GuiButtonSpecial(7, guiLeft + 99, guiTop + 115, 20, 20, "");
-        gpsButton1.setTooltipText(Arrays.asList(WordUtils.wrap(I18n.format("gui.amadron.button.selectSellingBlock.tooltip"), 40).split(System.getProperty("line.separator"))));
-        gpsButton2.setTooltipText(Arrays.asList(WordUtils.wrap(I18n.format("gui.amadron.button.selectPaymentBlock.tooltip"), 40).split(System.getProperty("line.separator"))));
+        gpsButton1.setTooltipText(
+            Arrays.asList(
+                WordUtils.wrap(I18n.format("gui.amadron.button.selectSellingBlock.tooltip"), 40)
+                    .split(System.getProperty("line.separator"))));
+        gpsButton2.setTooltipText(
+            Arrays.asList(
+                WordUtils.wrap(I18n.format("gui.amadron.button.selectPaymentBlock.tooltip"), 40)
+                    .split(System.getProperty("line.separator"))));
         gpsButton1.setRenderStacks(new ItemStack(Itemss.GPSTool));
         gpsButton2.setRenderStacks(new ItemStack(Itemss.GPSTool));
         addWidget(gpsButton1);
         addWidget(gpsButton2);
 
-        inputNumber = new WidgetTextFieldNumber(fontRendererObj, guiLeft + 6, guiTop + 145, 40, fontRendererObj.FONT_HEIGHT).setValue(inputNumber != null ? inputNumber.getValue() : 0);
-        outputNumber = new WidgetTextFieldNumber(fontRendererObj, guiLeft + 95, guiTop + 145, 40, fontRendererObj.FONT_HEIGHT).setValue(outputNumber != null ? outputNumber.getValue() : 0);
+        inputNumber = new WidgetTextFieldNumber(
+            fontRendererObj,
+            guiLeft + 6,
+            guiTop + 145,
+            40,
+            fontRendererObj.FONT_HEIGHT).setValue(inputNumber != null ? inputNumber.getValue() : 0);
+        outputNumber = new WidgetTextFieldNumber(
+            fontRendererObj,
+            guiLeft + 95,
+            guiTop + 145,
+            40,
+            fontRendererObj.FONT_HEIGHT).setValue(outputNumber != null ? outputNumber.getValue() : 0);
         inputNumber.setTooltip(I18n.format("gui.amadron.addTrade.itemFluidAmount"));
         outputNumber.setTooltip(I18n.format("gui.amadron.addTrade.itemFluidAmount"));
         addWidget(inputNumber);
         addWidget(outputNumber);
 
-        if(searchGui != null) {
-            if(isSettingInput) {
+        if (searchGui != null) {
+            if (isSettingInput) {
                 inputFluid.setFluid(null);
                 container.setStack(0, searchGui.getSearchStack());
             } else {
@@ -102,8 +119,8 @@ public class GuiAmadronAddTrade extends GuiPneumaticContainerBase{
                 container.setStack(1, searchGui.getSearchStack());
             }
         }
-        if(invSearchGui != null) {
-            if(isSettingInput) {
+        if (invSearchGui != null) {
+            if (isSettingInput) {
                 inputFluid.setFluid(null);
                 container.setStack(0, invSearchGui.getSearchStack());
             } else {
@@ -111,8 +128,8 @@ public class GuiAmadronAddTrade extends GuiPneumaticContainerBase{
                 container.setStack(1, invSearchGui.getSearchStack());
             }
         }
-        if(fluidGui != null) {
-            if(isSettingInput) {
+        if (fluidGui != null) {
+            if (isSettingInput) {
                 container.setStack(0, null);
                 inputFluid.setFluid(fluidGui.getFilter());
             } else {
@@ -120,11 +137,15 @@ public class GuiAmadronAddTrade extends GuiPneumaticContainerBase{
                 outputFluid.setFluid(fluidGui.getFilter());
             }
         }
-        if(gpsSearchGui != null) {
-            if(isSettingInput) {
-                inputPosition = gpsSearchGui.getSearchStack() != null ? ItemGPSTool.getGPSLocation(gpsSearchGui.getSearchStack()) : null;
+        if (gpsSearchGui != null) {
+            if (isSettingInput) {
+                inputPosition = gpsSearchGui.getSearchStack() != null
+                    ? ItemGPSTool.getGPSLocation(gpsSearchGui.getSearchStack())
+                    : null;
             } else {
-                outputPosition = gpsSearchGui.getSearchStack() != null ? ItemGPSTool.getGPSLocation(gpsSearchGui.getSearchStack()) : null;
+                outputPosition = gpsSearchGui.getSearchStack() != null
+                    ? ItemGPSTool.getGPSLocation(gpsSearchGui.getSearchStack())
+                    : null;
             }
         }
         searchGui = null;
@@ -132,44 +153,56 @@ public class GuiAmadronAddTrade extends GuiPneumaticContainerBase{
         invSearchGui = null;
         gpsSearchGui = null;
 
-        inputNumberLabel = new WidgetLabel(guiLeft + 52, guiTop + 145, container.getStack(0) != null ? "x" : inputFluid.getFluid() != null ? "mB" : "");
-        outputNumberLabel = new WidgetLabel(guiLeft + 149, guiTop + 145, container.getStack(1) != null ? "x" : outputFluid.getFluid() != null ? "mB" : "");
+        inputNumberLabel = new WidgetLabel(
+            guiLeft + 52,
+            guiTop + 145,
+            container.getStack(0) != null ? "x" : inputFluid.getFluid() != null ? "mB" : "");
+        outputNumberLabel = new WidgetLabel(
+            guiLeft + 149,
+            guiTop + 145,
+            container.getStack(1) != null ? "x" : outputFluid.getFluid() != null ? "mB" : "");
         addWidget(inputNumberLabel);
         addWidget(outputNumberLabel);
     }
 
     @Override
-    public void actionPerformed(GuiButton button){
-        EntityPlayer player = FMLClientHandler.instance().getClient().thePlayer;
-        ContainerAmadronAddTrade container = (ContainerAmadronAddTrade)inventorySlots;
-        if(button.id < 6 && button.id >= 0) {
+    public void actionPerformed(GuiButton button) {
+        EntityPlayer player = FMLClientHandler.instance()
+            .getClient().thePlayer;
+        ContainerAmadronAddTrade container = (ContainerAmadronAddTrade) inventorySlots;
+        if (button.id < 6 && button.id >= 0) {
             isSettingInput = button.id < 3;
-            if(button.id % 3 == 0) {
+            if (button.id % 3 == 0) {
                 searchGui = new GuiSearcher(player);
                 searchGui.setSearchStack(container.getStack(isSettingInput ? 0 : 1));
-                FMLClientHandler.instance().showGuiScreen(searchGui);
-            } else if(button.id % 3 == 1) {
+                FMLClientHandler.instance()
+                    .showGuiScreen(searchGui);
+            } else if (button.id % 3 == 1) {
                 invSearchGui = new GuiInventorySearcher(player);
                 invSearchGui.setSearchStack(container.getStack(isSettingInput ? 0 : 1));
-                FMLClientHandler.instance().showGuiScreen(invSearchGui);
-            } else if(button.id % 3 == 2) {
+                FMLClientHandler.instance()
+                    .showGuiScreen(invSearchGui);
+            } else if (button.id % 3 == 2) {
                 fluidGui = new GuiLogisticsLiquidFilter(this);
                 fluidGui.setFilter(isSettingInput ? inputFluid.getFluid() : outputFluid.getFluid());
-                FMLClientHandler.instance().showGuiScreen(fluidGui);
+                FMLClientHandler.instance()
+                    .showGuiScreen(fluidGui);
             }
 
-        } else if(button.id == 8) {
+        } else if (button.id == 8) {
             Object input;
-            if(container.getStack(0) != null) {
-                input = container.getStack(0).copy();
-                ((ItemStack)input).stackSize = inputNumber.getValue();
+            if (container.getStack(0) != null) {
+                input = container.getStack(0)
+                    .copy();
+                ((ItemStack) input).stackSize = inputNumber.getValue();
             } else {
                 input = new FluidStack(inputFluid.getFluid(), inputNumber.getValue());
             }
             Object output;
-            if(container.getStack(1) != null) {
-                output = container.getStack(1).copy();
-                ((ItemStack)output).stackSize = outputNumber.getValue();
+            if (container.getStack(1) != null) {
+                output = container.getStack(1)
+                    .copy();
+                ((ItemStack) output).stackSize = outputNumber.getValue();
             } else {
                 output = new FluidStack(outputFluid.getFluid(), outputNumber.getValue());
             }
@@ -187,68 +220,92 @@ public class GuiAmadronAddTrade extends GuiPneumaticContainerBase{
     }
 
     @Override
-    public void actionPerformed(IGuiWidget widget){
-        if(widget.getID() == 6 || widget.getID() == 7) {
-            gpsSearchGui = new GuiInventorySearcher(FMLClientHandler.instance().getClientPlayerEntity());
+    public void actionPerformed(IGuiWidget widget) {
+        if (widget.getID() == 6 || widget.getID() == 7) {
+            gpsSearchGui = new GuiInventorySearcher(
+                FMLClientHandler.instance()
+                    .getClientPlayerEntity());
             isSettingInput = widget.getID() == 6;
             ItemStack gps = new ItemStack(Itemss.GPSTool);
             ChunkPosition pos;
-            if(widget.getID() == 6) {
+            if (widget.getID() == 6) {
                 pos = getInputPosition();
             } else {
                 pos = getOutputPosition();
             }
-            if(pos != null) ItemGPSTool.setGPSLocation(gps, pos.chunkPosX, pos.chunkPosY, pos.chunkPosZ);
+            if (pos != null) ItemGPSTool.setGPSLocation(gps, pos.chunkPosX, pos.chunkPosY, pos.chunkPosZ);
             gpsSearchGui.setSearchStack(ItemGPSTool.getGPSLocation(gps) != null ? gps : null);
-            FMLClientHandler.instance().showGuiScreen(gpsSearchGui);
+            FMLClientHandler.instance()
+                .showGuiScreen(gpsSearchGui);
         }
         super.actionPerformed(widget);
     }
 
-    private ChunkPosition getInputPosition(){
-        EntityPlayer player = FMLClientHandler.instance().getClient().thePlayer;
-        return inputPosition != null ? inputPosition : ((ContainerAmadronAddTrade)inventorySlots).getStack(0) != null ? ItemAmadronTablet.getItemProvidingLocation(player.getCurrentEquippedItem()) : ItemAmadronTablet.getLiquidProvidingLocation(player.getCurrentEquippedItem());
+    private ChunkPosition getInputPosition() {
+        EntityPlayer player = FMLClientHandler.instance()
+            .getClient().thePlayer;
+        return inputPosition != null ? inputPosition
+            : ((ContainerAmadronAddTrade) inventorySlots).getStack(0) != null
+                ? ItemAmadronTablet.getItemProvidingLocation(player.getCurrentEquippedItem())
+                : ItemAmadronTablet.getLiquidProvidingLocation(player.getCurrentEquippedItem());
     }
 
-    private ChunkPosition getOutputPosition(){
-        EntityPlayer player = FMLClientHandler.instance().getClient().thePlayer;
-        return outputPosition != null ? outputPosition : ((ContainerAmadronAddTrade)inventorySlots).getStack(1) != null ? ItemAmadronTablet.getItemProvidingLocation(player.getCurrentEquippedItem()) : ItemAmadronTablet.getLiquidProvidingLocation(player.getCurrentEquippedItem());
+    private ChunkPosition getOutputPosition() {
+        EntityPlayer player = FMLClientHandler.instance()
+            .getClient().thePlayer;
+        return outputPosition != null ? outputPosition
+            : ((ContainerAmadronAddTrade) inventorySlots).getStack(1) != null
+                ? ItemAmadronTablet.getItemProvidingLocation(player.getCurrentEquippedItem())
+                : ItemAmadronTablet.getLiquidProvidingLocation(player.getCurrentEquippedItem());
     }
 
-    private int getInputDimension(){
-        EntityPlayer player = FMLClientHandler.instance().getClient().thePlayer;
-        return inputPosition != null ? player.worldObj.provider.dimensionId : ((ContainerAmadronAddTrade)inventorySlots).getStack(0) != null ? ItemAmadronTablet.getItemProvidingDimension(player.getCurrentEquippedItem()) : ItemAmadronTablet.getLiquidProvidingDimension(player.getCurrentEquippedItem());
+    private int getInputDimension() {
+        EntityPlayer player = FMLClientHandler.instance()
+            .getClient().thePlayer;
+        return inputPosition != null ? player.worldObj.provider.dimensionId
+            : ((ContainerAmadronAddTrade) inventorySlots).getStack(0) != null
+                ? ItemAmadronTablet.getItemProvidingDimension(player.getCurrentEquippedItem())
+                : ItemAmadronTablet.getLiquidProvidingDimension(player.getCurrentEquippedItem());
     }
 
-    private int getOutputDimension(){
-        EntityPlayer player = FMLClientHandler.instance().getClient().thePlayer;
-        return outputPosition != null ? player.worldObj.provider.dimensionId : ((ContainerAmadronAddTrade)inventorySlots).getStack(1) != null ? ItemAmadronTablet.getItemProvidingDimension(player.getCurrentEquippedItem()) : ItemAmadronTablet.getLiquidProvidingDimension(player.getCurrentEquippedItem());
+    private int getOutputDimension() {
+        EntityPlayer player = FMLClientHandler.instance()
+            .getClient().thePlayer;
+        return outputPosition != null ? player.worldObj.provider.dimensionId
+            : ((ContainerAmadronAddTrade) inventorySlots).getStack(1) != null
+                ? ItemAmadronTablet.getItemProvidingDimension(player.getCurrentEquippedItem())
+                : ItemAmadronTablet.getLiquidProvidingDimension(player.getCurrentEquippedItem());
     }
 
     @Override
-    protected void keyTyped(char key, int keyCode){
-        /* if(keyCode == 1) {
-
-         } else {*/
+    protected void keyTyped(char key, int keyCode) {
+        /*
+         * if(keyCode == 1) {
+         * } else {
+         */
         super.keyTyped(key, keyCode);
-        //}
+        // }
     }
 
     @Override
-    protected Point getInvTextOffset(){
+    protected Point getInvTextOffset() {
         return null;
     }
 
     @Override
-    public void updateScreen(){
+    public void updateScreen() {
         super.updateScreen();
-        ContainerAmadronAddTrade container = (ContainerAmadronAddTrade)inventorySlots;
-        addButton.enabled = inputNumber.getValue() > 0 && outputNumber.getValue() > 0 && (inputFluid.getFluid() != null || container.getStack(0) != null) && (outputFluid.getFluid() != null || container.getStack(1) != null) && getInputPosition() != null && getOutputPosition() != null;
+        ContainerAmadronAddTrade container = (ContainerAmadronAddTrade) inventorySlots;
+        addButton.enabled = inputNumber.getValue() > 0 && outputNumber.getValue() > 0
+            && (inputFluid.getFluid() != null || container.getStack(0) != null)
+            && (outputFluid.getFluid() != null || container.getStack(1) != null)
+            && getInputPosition() != null
+            && getOutputPosition() != null;
     }
 
     @Override
-    protected void addProblems(List curInfo){
-        if(getInputPosition() == null || getOutputPosition() == null) {
+    protected void addProblems(List curInfo) {
+        if (getInputPosition() == null || getOutputPosition() == null) {
             curInfo.add("gui.amadron.addTrade.problems.noSellingOrPayingBlock");
         }
         super.addProblems(curInfo);

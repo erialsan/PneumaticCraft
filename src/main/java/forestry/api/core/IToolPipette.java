@@ -20,7 +20,7 @@ public interface IToolPipette {
 
     /**
      * @param pipette
-     *            ItemStack of the pipette.
+     *                ItemStack of the pipette.
      * @return Capacity of the pipette.
      */
     int getCapacity(ItemStack pipette);

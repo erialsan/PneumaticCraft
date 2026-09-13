@@ -4,13 +4,13 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class ThreadedSorter<T> extends Thread{
+public class ThreadedSorter<T> extends Thread {
 
     private boolean isDone;
     private final List<T> list;
     private final Comparator comparator;
 
-    public ThreadedSorter(List<T> list, Comparator comparator){
+    public ThreadedSorter(List<T> list, Comparator comparator) {
         this.list = list;
         this.comparator = comparator;
         setName("PneumaticCraft Drone Area Sorting Thread");
@@ -18,12 +18,12 @@ public class ThreadedSorter<T> extends Thread{
     }
 
     @Override
-    public void run(){
+    public void run() {
         Collections.sort(list, comparator);
         isDone = true;
     }
 
-    public boolean isDone(){
+    public boolean isDone() {
         return isDone;
     }
 }

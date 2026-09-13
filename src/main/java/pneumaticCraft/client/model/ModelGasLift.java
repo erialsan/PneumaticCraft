@@ -9,20 +9,21 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import org.lwjgl.opengl.GL11;
 
+import cpw.mods.fml.client.FMLClientHandler;
 import pneumaticCraft.common.block.tubes.ModuleRegulatorTube;
 import pneumaticCraft.common.tileentity.TileEntityGasLift;
 import pneumaticCraft.lib.Textures;
-import cpw.mods.fml.client.FMLClientHandler;
 
-public class ModelGasLift extends ModelBase implements IBaseModel{
-    //fields
+public class ModelGasLift extends ModelBase implements IBaseModel {
+
+    // fields
     ModelRenderer Shape1;
     ModelRenderer Shape2;
     ModelRenderer Shape3;
     private final ModelPressureTube tubeRenderer = new ModelPressureTube();
     private final ModuleRegulatorTube module = new ModuleRegulatorTube();
 
-    public ModelGasLift(){
+    public ModelGasLift() {
         textureWidth = 64;
         textureHeight = 64;
 
@@ -47,7 +48,7 @@ public class ModelGasLift extends ModelBase implements IBaseModel{
     }
 
     @Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5){
+    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         super.render(entity, f, f1, f2, f3, f4, f5);
         setRotationAngles(f, f1, f2, f3, f4, f5, entity);
         Shape1.render(f5);
@@ -55,24 +56,27 @@ public class ModelGasLift extends ModelBase implements IBaseModel{
         Shape3.render(f5);
     }
 
-    private void setRotation(ModelRenderer model, float x, float y, float z){
+    private void setRotation(ModelRenderer model, float x, float y, float z) {
         model.rotateAngleX = x;
         model.rotateAngleY = y;
         model.rotateAngleZ = z;
     }
 
     @Override
-    public void renderStatic(float size, TileEntity te){
+    public void renderStatic(float size, TileEntity te) {
         Shape1.render(size);
         Shape2.render(size);
         Shape3.render(size);
-        FMLClientHandler.instance().getClient().getTextureManager().bindTexture(Textures.MODEL_PRESSURE_TUBE);
-        if(te != null) {
-            boolean[] sidesConnected = ((TileEntityGasLift)te).sidesConnected;
+        FMLClientHandler.instance()
+            .getClient()
+            .getTextureManager()
+            .bindTexture(Textures.MODEL_PRESSURE_TUBE);
+        if (te != null) {
+            boolean[] sidesConnected = ((TileEntityGasLift) te).sidesConnected;
             tubeRenderer.renderModel(size, sidesConnected);
             GL11.glScalef(1.0F, -1F, -1F);
-            for(int i = 0; i < 6; i++) {
-                if(sidesConnected[i]) {
+            for (int i = 0; i < 6; i++) {
+                if (sidesConnected[i]) {
                     module.setDirection(ForgeDirection.getOrientation(i));
                     module.renderDynamic(-0.5, -1.5, -0.5, 0, 0, false);
                 }
@@ -83,15 +87,15 @@ public class ModelGasLift extends ModelBase implements IBaseModel{
     }
 
     @Override
-    public void renderDynamic(float size, TileEntity te, float partialTicks){}
+    public void renderDynamic(float size, TileEntity te, float partialTicks) {}
 
     @Override
-    public ResourceLocation getModelTexture(TileEntity tile){
+    public ResourceLocation getModelTexture(TileEntity tile) {
         return Textures.MODEL_GAS_LIFT;
     }
 
     @Override
-    public boolean rotateModelBasedOnBlockMeta(){
+    public boolean rotateModelBasedOnBlockMeta() {
         return false;
     }
 

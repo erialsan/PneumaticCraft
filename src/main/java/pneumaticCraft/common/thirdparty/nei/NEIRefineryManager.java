@@ -19,52 +19,54 @@ import pneumaticCraft.common.fluid.Fluids;
 import pneumaticCraft.common.tileentity.TileEntityRefinery;
 import pneumaticCraft.lib.Textures;
 
-public class NEIRefineryManager extends PneumaticCraftPlugins{
+public class NEIRefineryManager extends PneumaticCraftPlugins {
 
     @Override
-    public String getRecipeName(){
+    public String getRecipeName() {
         return StatCollector.translateToLocal(Blockss.refinery.getUnlocalizedName() + ".name");
     }
 
     @Override
-    public String getGuiTexture(){
+    public String getGuiTexture() {
         return Textures.GUI_REFINERY;
     }
 
     @Override
-    public void drawBackground(int recipe){
+    public void drawBackground(int recipe) {
         GL11.glColor4f(1, 1, 1, 1);
         changeTexture(getGuiTexture());
         drawTexturedModalRect(0, 0, 6, 3, 166, 79);
     }
 
     @Override
-    public Class<? extends GuiContainer> getGuiClass(){
+    public Class<? extends GuiContainer> getGuiClass() {
         return GuiRefinery.class;
     }
 
     @Override
-    public void loadTransferRects(){
+    public void loadTransferRects() {
         addTransferRect(new Rectangle(25, 20, 48, 22));
     }
 
-    /*   
-       private boolean tankClick(GuiRecipe gui, int recipe, boolean usage){
-           Point pos = getMousePosition();
-           Point offset = gui.getRecipePosition(recipe);
-           Point relMouse = new Point(pos.x - gui.guiLeft - offsetx, pos.y - gui.guiTop - offsety);
-       }*/
+    /*
+     * private boolean tankClick(GuiRecipe gui, int recipe, boolean usage){
+     * Point pos = getMousePosition();
+     * Point offset = gui.getRecipePosition(recipe);
+     * Point relMouse = new Point(pos.x - gui.guiLeft - offsetx, pos.y - gui.guiTop - offsety);
+     * }
+     */
 
-    private class RefineryNEIRecipe extends MultipleInputOutputRecipe{
+    private class RefineryNEIRecipe extends MultipleInputOutputRecipe {
+
         public final int refineries;
 
-        private RefineryNEIRecipe(int refineries, int[] outputs){
+        private RefineryNEIRecipe(int refineries, int[] outputs) {
             this.refineries = refineries;
             addInputLiquid(new FluidStack(Fluids.oil, 10), 2, 10);
             int x = 69;
             int y = 18;
-            for(int i = 0; i < outputs.length; i++) {
-                if(outputs[i] == 0) continue;
+            for (int i = 0; i < outputs.length; i++) {
+                if (outputs[i] == 0) continue;
                 x += 20;
                 y -= 4;
                 addOutputLiquid(new FluidStack(TileEntityRefinery.getRefiningFluids()[i], outputs[i]), x, y);
@@ -75,9 +77,9 @@ public class NEIRefineryManager extends PneumaticCraftPlugins{
     }
 
     @Override
-    protected List<MultipleInputOutputRecipe> getAllRecipes(){
+    protected List<MultipleInputOutputRecipe> getAllRecipes() {
         List<MultipleInputOutputRecipe> recipes = new ArrayList<MultipleInputOutputRecipe>();
-        for(int i = 0; i < TileEntityRefinery.REFINING_TABLE.length; i++) {
+        for (int i = 0; i < TileEntityRefinery.REFINING_TABLE.length; i++) {
             recipes.add(new RefineryNEIRecipe(2 + i, TileEntityRefinery.REFINING_TABLE[i]));
         }
         return recipes;

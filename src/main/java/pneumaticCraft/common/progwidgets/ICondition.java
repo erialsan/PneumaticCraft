@@ -2,7 +2,8 @@ package pneumaticCraft.common.progwidgets;
 
 import pneumaticCraft.common.ai.IDroneBase;
 
-public interface ICondition{
+public interface ICondition {
+
     public boolean isAndFunction();
 
     public void setAndFunction(boolean isAndFunction);
@@ -17,22 +18,25 @@ public interface ICondition{
 
     /**
      * Used in the CC compatibility.
+     * 
      * @param drone TODO
      * @return
      */
     public boolean evaluate(IDroneBase drone, IProgWidget widget);
 
-    public enum Operator{
-        EQUALS("="), HIGHER_THAN_EQUALS(">=");
+    public enum Operator {
+
+        EQUALS("="),
+        HIGHER_THAN_EQUALS(">=");
 
         private final String symbol;
 
-        private Operator(String symbol){
+        private Operator(String symbol) {
             this.symbol = symbol;
         }
 
         @Override
-        public String toString(){
+        public String toString() {
             return symbol;
         }
     }

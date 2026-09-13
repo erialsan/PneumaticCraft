@@ -3,12 +3,14 @@ package pneumaticCraft.common.tileentity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
-import pneumaticCraft.common.network.DescSynced;
-import pneumaticCraft.common.network.LazySynced;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import pneumaticCraft.common.network.DescSynced;
+import pneumaticCraft.common.network.LazySynced;
 
-public class TileEntityPneumaticDoor extends TileEntityBase{
+public class TileEntityPneumaticDoor extends TileEntityBase {
+
     @DescSynced
     @LazySynced
     public float rotation;
@@ -16,41 +18,41 @@ public class TileEntityPneumaticDoor extends TileEntityBase{
     @DescSynced
     public boolean rightGoing;
 
-    public void setRotation(float rotation){
+    public void setRotation(float rotation) {
         oldRotation = this.rotation;
         this.rotation = rotation;
         TileEntity te = null;
-        if(getBlockMetadata() < 6) {
+        if (getBlockMetadata() < 6) {
             te = worldObj.getTileEntity(xCoord, yCoord + 1, zCoord);
         } else {
             te = worldObj.getTileEntity(xCoord, yCoord - 1, zCoord);
         }
-        if(te instanceof TileEntityPneumaticDoor) {
-            TileEntityPneumaticDoor door = (TileEntityPneumaticDoor)te;
+        if (te instanceof TileEntityPneumaticDoor) {
+            TileEntityPneumaticDoor door = (TileEntityPneumaticDoor) te;
             door.rightGoing = rightGoing;
-            if(rotation != door.rotation) {
+            if (rotation != door.rotation) {
                 door.setRotation(rotation);
-                //door.rotation = rotation;
+                // door.rotation = rotation;
                 // door.oldRotation = oldRotation;
             }
         }
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound tag){
+    public void writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
         tag.setBoolean("rightGoing", rightGoing);
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound tag){
+    public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
         rightGoing = tag.getBoolean("rightGoing");
     }
 
     @Override
     @SideOnly(Side.CLIENT)
-    public AxisAlignedBB getRenderBoundingBox(){
+    public AxisAlignedBB getRenderBoundingBox() {
         return AxisAlignedBB.getBoundingBox(xCoord, yCoord, zCoord, xCoord + 1, yCoord + 2, zCoord + 1);
     }
 }

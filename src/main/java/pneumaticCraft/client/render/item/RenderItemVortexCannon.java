@@ -5,37 +5,37 @@ import net.minecraftforge.client.IItemRenderer;
 
 import org.lwjgl.opengl.GL11;
 
-import pneumaticCraft.client.model.ModelVortexCannon;
-import pneumaticCraft.lib.Textures;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import pneumaticCraft.client.model.ModelVortexCannon;
+import pneumaticCraft.lib.Textures;
 
 @SideOnly(Side.CLIENT)
-public class RenderItemVortexCannon implements IItemRenderer{
+public class RenderItemVortexCannon implements IItemRenderer {
 
     private final ModelVortexCannon model;
 
-    public RenderItemVortexCannon(){
+    public RenderItemVortexCannon() {
         model = new ModelVortexCannon();
     }
 
     @Override
-    public boolean handleRenderType(ItemStack item, ItemRenderType type){
+    public boolean handleRenderType(ItemStack item, ItemRenderType type) {
 
         return true;
     }
 
     @Override
-    public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper){
+    public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper) {
 
         return true;
     }
 
     @Override
-    public void renderItem(ItemRenderType type, ItemStack item, Object... data){
+    public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
 
-        switch(type){
+        switch (type) {
             case ENTITY: {
                 render(0.0F, 0.0F, 1.0F, 0.5F);
                 return;
@@ -60,7 +60,7 @@ public class RenderItemVortexCannon implements IItemRenderer{
         }
     }
 
-    private void render(float x, float y, float z, float scale){
+    private void render(float x, float y, float z, float scale) {
 
         GL11.glPushMatrix();
         // GL11.glDisable(GL11.GL_LIGHTING);
@@ -71,7 +71,10 @@ public class RenderItemVortexCannon implements IItemRenderer{
         GL11.glRotatef(-90F, 1F, 0, 0);
 
         // Bind texture
-        FMLClientHandler.instance().getClient().getTextureManager().bindTexture(Textures.MODEL_VORTEX_CANNON);
+        FMLClientHandler.instance()
+            .getClient()
+            .getTextureManager()
+            .bindTexture(Textures.MODEL_VORTEX_CANNON);
         // Render
         model.renderModel(1F / 16F);
         // GL11.glEnable(GL11.GL_LIGHTING);

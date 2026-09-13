@@ -14,7 +14,8 @@ import org.lwjgl.opengl.GL11;
 import pneumaticCraft.common.tileentity.TileEntityPressureChamberInterface;
 import pneumaticCraft.lib.Textures;
 
-public class ModelPressureChamberInterface extends ModelBase implements IBaseModel{
+public class ModelPressureChamberInterface extends ModelBase implements IBaseModel {
+
     // fields
     ModelRenderer Shape1;
     ModelRenderer Shape2;
@@ -29,7 +30,7 @@ public class ModelPressureChamberInterface extends ModelBase implements IBaseMod
 
     private final RenderItem customRenderItem;
 
-    public ModelPressureChamberInterface(){
+    public ModelPressureChamberInterface() {
         textureWidth = 128;
         textureHeight = 128;
 
@@ -96,9 +97,10 @@ public class ModelPressureChamberInterface extends ModelBase implements IBaseMod
         setRotation(Output, 0F, 0F, 0F);
 
         // EE3 snippet, to initialize an EntityItem which doesn't bob.
-        customRenderItem = new RenderItem(){
+        customRenderItem = new RenderItem() {
+
             @Override
-            public boolean shouldBob(){
+            public boolean shouldBob() {
 
                 return false;
             };
@@ -107,7 +109,7 @@ public class ModelPressureChamberInterface extends ModelBase implements IBaseMod
     }
 
     @Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5){
+    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         super.render(entity, f, f1, f2, f3, f4, f5);
         setRotationAngles(f, f1, f2, f3, f4, f5, entity);
         Shape1.render(f5);
@@ -122,7 +124,7 @@ public class ModelPressureChamberInterface extends ModelBase implements IBaseMod
         Output.render(f5);
     }
 
-    public void renderModel(float size, float inputDoor, float outputDoor){
+    public void renderModel(float size, float inputDoor, float outputDoor) {
         Shape1.render(size);
         Shape2.render(size);
         Shape3.render(size);
@@ -132,44 +134,49 @@ public class ModelPressureChamberInterface extends ModelBase implements IBaseMod
         Shape7.render(size);
         Shape8.render(size);
         GL11.glPushMatrix();
-        GL11.glTranslatef((1F - (float)Math.cos(inputDoor * Math.PI)) * 0.37F, 0, 0);
+        GL11.glTranslatef((1F - (float) Math.cos(inputDoor * Math.PI)) * 0.37F, 0, 0);
         Input.render(size);
         GL11.glPopMatrix();
         GL11.glPushMatrix();
-        GL11.glTranslatef((1F - (float)Math.cos(outputDoor * Math.PI)) * 0.37F, 0, 0);
+        GL11.glTranslatef((1F - (float) Math.cos(outputDoor * Math.PI)) * 0.37F, 0, 0);
         Output.render(size);
         GL11.glPopMatrix();
     }
 
-    private void setRotation(ModelRenderer model, float x, float y, float z){
+    private void setRotation(ModelRenderer model, float x, float y, float z) {
         model.rotateAngleX = x;
         model.rotateAngleY = y;
         model.rotateAngleZ = z;
     }
 
     @Override
-    public void renderStatic(float size, TileEntity te){
+    public void renderStatic(float size, TileEntity te) {
 
     }
 
     @Override
-    public ResourceLocation getModelTexture(TileEntity tile){
+    public ResourceLocation getModelTexture(TileEntity tile) {
         return Textures.MODEL_PRESSURE_CHAMBER_INTERFACE;
     }
 
     @Override
-    public boolean rotateModelBasedOnBlockMeta(){
+    public boolean rotateModelBasedOnBlockMeta() {
         return true;
     }
 
     @Override
-    public void renderDynamic(float size, TileEntity te, float partialTicks){
-        if(te instanceof TileEntityPressureChamberInterface) {
-            TileEntityPressureChamberInterface tile = (TileEntityPressureChamberInterface)te;
-            float renderInputProgress = tile.oldInputProgress + (tile.inputProgress - tile.oldInputProgress) * partialTicks;
-            float renderOutputProgress = tile.oldOutputProgress + (tile.outputProgress - tile.oldOutputProgress) * partialTicks;
-            renderModel(size, renderInputProgress / TileEntityPressureChamberInterface.MAX_PROGRESS, renderOutputProgress / TileEntityPressureChamberInterface.MAX_PROGRESS);
-            if(tile.getStackInSlot(0) != null) {
+    public void renderDynamic(float size, TileEntity te, float partialTicks) {
+        if (te instanceof TileEntityPressureChamberInterface) {
+            TileEntityPressureChamberInterface tile = (TileEntityPressureChamberInterface) te;
+            float renderInputProgress = tile.oldInputProgress
+                + (tile.inputProgress - tile.oldInputProgress) * partialTicks;
+            float renderOutputProgress = tile.oldOutputProgress
+                + (tile.outputProgress - tile.oldOutputProgress) * partialTicks;
+            renderModel(
+                size,
+                renderInputProgress / TileEntityPressureChamberInterface.MAX_PROGRESS,
+                renderOutputProgress / TileEntityPressureChamberInterface.MAX_PROGRESS);
+            if (tile.getStackInSlot(0) != null) {
                 GL11.glTranslated(0, 17 / 16F, 0);
                 GL11.glScalef(1.0F, -1F, -1F);
                 // GL11.glRotatef(rotationAngle, 0.0F, 1.0F, 0.0F);

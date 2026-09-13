@@ -12,57 +12,57 @@ import net.minecraft.world.World;
 
 import org.lwjgl.util.Rectangle;
 
-import pneumaticCraft.api.universalSensor.IPollSensorSetting;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import pneumaticCraft.api.universalSensor.IPollSensorSetting;
 
-public class WorldDayLightSensor implements IPollSensorSetting{
+public class WorldDayLightSensor implements IPollSensorSetting {
 
     @Override
-    public String getSensorPath(){
+    public String getSensorPath() {
         return "dispenser/World/Daylight";
     }
 
     @Override
-    public boolean needsTextBox(){
+    public boolean needsTextBox() {
         return false;
     }
 
     @Override
-    public List<String> getDescription(){
+    public List<String> getDescription() {
         List<String> text = new ArrayList<String>();
         text.add(EnumChatFormatting.BLACK + "A straight copy of the Daylight Sensor.");
         return text;
     }
 
     @Override
-    public int getPollFrequency(TileEntity te){
+    public int getPollFrequency(TileEntity te) {
         return 40;
     }
 
     @Override
-    public int getRedstoneValue(World world, int x, int y, int z, int sensorRange, String textBoxText){
+    public int getRedstoneValue(World world, int x, int y, int z, int sensorRange, String textBoxText) {
         return updateLightLevel(world, x, y, z);
     }
 
-    private int updateLightLevel(World par1World, int par2, int par3, int par4){
-        if(!par1World.provider.hasNoSky) {
+    private int updateLightLevel(World par1World, int par2, int par3, int par4) {
+        if (!par1World.provider.hasNoSky) {
             int i1 = par1World.getSavedLightValue(EnumSkyBlock.Sky, par2, par3, par4) - par1World.skylightSubtracted;
             float f = par1World.getCelestialAngleRadians(1.0F);
 
-            if(f < (float)Math.PI) {
+            if (f < (float) Math.PI) {
                 f += (0.0F - f) * 0.2F;
             } else {
-                f += ((float)Math.PI * 2F - f) * 0.2F;
+                f += ((float) Math.PI * 2F - f) * 0.2F;
             }
 
             i1 = Math.round(i1 * MathHelper.cos(f));
 
-            if(i1 < 0) {
+            if (i1 < 0) {
                 i1 = 0;
             }
 
-            if(i1 > 15) {
+            if (i1 > 15) {
                 i1 = 15;
             }
 
@@ -73,10 +73,10 @@ public class WorldDayLightSensor implements IPollSensorSetting{
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void drawAdditionalInfo(FontRenderer fontRenderer){}
+    public void drawAdditionalInfo(FontRenderer fontRenderer) {}
 
     @Override
-    public Rectangle needsSlot(){
+    public Rectangle needsSlot() {
         return null;
     }
 }

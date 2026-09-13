@@ -1,6 +1,7 @@
 package pneumaticCraft.lib;
 
-public class Sounds{
+public class Sounds {
+
     public static final String MOD_ID = "pneumaticcraft:";
     public static final String CANNON_SOUND = MOD_ID + "airCannon";
     public static final String LEAKING_GAS_SOUND = MOD_ID + "leakingGas";

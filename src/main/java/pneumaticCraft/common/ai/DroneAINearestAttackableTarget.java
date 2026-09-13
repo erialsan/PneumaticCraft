@@ -7,11 +7,13 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.EntityAITarget;
+
 import pneumaticCraft.common.entity.living.EntityDrone;
 import pneumaticCraft.common.progwidgets.IEntityProvider;
 import pneumaticCraft.common.progwidgets.ProgWidget;
 
-public class DroneAINearestAttackableTarget extends EntityAITarget{
+public class DroneAINearestAttackableTarget extends EntityAITarget {
+
     private final EntityDrone drone;
     private final ProgWidget widget;
 
@@ -20,12 +22,12 @@ public class DroneAINearestAttackableTarget extends EntityAITarget{
 
     private EntityLivingBase targetEntity;
 
-    public DroneAINearestAttackableTarget(EntityDrone drone, int par3, boolean checkSight, ProgWidget widget){
+    public DroneAINearestAttackableTarget(EntityDrone drone, int par3, boolean checkSight, ProgWidget widget) {
         this(drone, checkSight, false, widget);
     }
 
     public DroneAINearestAttackableTarget(EntityDrone drone, boolean checkSight, boolean easyTargetsOnly,
-            ProgWidget widget){
+        ProgWidget widget) {
         super(drone, checkSight, easyTargetsOnly);
         this.drone = drone;
         this.widget = widget;
@@ -37,13 +39,13 @@ public class DroneAINearestAttackableTarget extends EntityAITarget{
      * Returns whether the EntityAIBase should begin execution.
      */
     @Override
-    public boolean shouldExecute(){
-        if(drone.hasMinigun() && drone.getAmmo() == null) return false;
-        List<Entity> list = ((IEntityProvider)widget).getValidEntities(drone.worldObj);
+    public boolean shouldExecute() {
+        if (drone.hasMinigun() && drone.getAmmo() == null) return false;
+        List<Entity> list = ((IEntityProvider) widget).getValidEntities(drone.worldObj);
         Collections.sort(list, theNearestAttackableTargetSorter);
-        for(Entity entity : list) {
-            if(entity != taskOwner && entity instanceof EntityLivingBase) {
-                targetEntity = (EntityLivingBase)entity;
+        for (Entity entity : list) {
+            if (entity != taskOwner && entity instanceof EntityLivingBase) {
+                targetEntity = (EntityLivingBase) entity;
                 return true;
             }
         }
@@ -54,7 +56,7 @@ public class DroneAINearestAttackableTarget extends EntityAITarget{
      * Execute a one shot task or start executing a continuous task
      */
     @Override
-    public void startExecuting(){
+    public void startExecuting() {
         taskOwner.setAttackTarget(targetEntity);
         super.startExecuting();
     }

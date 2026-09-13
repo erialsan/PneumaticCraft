@@ -1,13 +1,12 @@
 package appeng.api.features;
 
-
 import java.util.List;
+
 import javax.annotation.Nonnull;
 
 import net.minecraft.item.ItemStack;
 
 import com.google.common.base.Optional;
-
 
 /**
  * Registration Records for {@link IInscriberRegistry}
@@ -21,45 +20,45 @@ import com.google.common.base.Optional;
  * @version rv2
  * @since rv2
  */
-public interface IInscriberRecipe
-{
-	/**
-	 * the current inputs
-	 *
-	 * @return inputs the inscriber will accept
-	 */
-	@Nonnull
-	List<ItemStack> getInputs();
+public interface IInscriberRecipe {
 
-	/**
-	 * gets the current output
-	 *
-	 * @return output that the recipe will produce
-	 */
-	@Nonnull
-	ItemStack getOutput();
+    /**
+     * the current inputs
+     *
+     * @return inputs the inscriber will accept
+     */
+    @Nonnull
+    List<ItemStack> getInputs();
 
-	/**
-	 * gets the top optional
-	 *
-	 * @return item which is used top
-	 */
-	@Nonnull
-	Optional<ItemStack> getTopOptional();
+    /**
+     * gets the current output
+     *
+     * @return output that the recipe will produce
+     */
+    @Nonnull
+    ItemStack getOutput();
 
-	/**
-	 * gets the bottom optional
-	 *
-	 * @return item which is used bottom
-	 */
-	@Nonnull
-	Optional<ItemStack> getBottomOptional();
+    /**
+     * gets the top optional
+     *
+     * @return item which is used top
+     */
+    @Nonnull
+    Optional<ItemStack> getTopOptional();
 
-	/**
-	 * type of inscriber process
-	 *
-	 * @return type of process the inscriber is doing
-	 */
-	@Nonnull
-	InscriberProcessType getProcessType();
+    /**
+     * gets the bottom optional
+     *
+     * @return item which is used bottom
+     */
+    @Nonnull
+    Optional<ItemStack> getBottomOptional();
+
+    /**
+     * type of inscriber process
+     *
+     * @return type of process the inscriber is doing
+     */
+    @Nonnull
+    InscriberProcessType getProcessType();
 }

@@ -22,6 +22,12 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.ChunkDataEvent;
 import net.minecraftforge.event.world.ChunkEvent;
+
+import com.google.common.collect.HashBiMap;
+
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.TickEvent;
+import cpw.mods.fml.common.registry.GameRegistry;
 import pneumaticCraft.PneumaticCraft;
 import pneumaticCraft.common.network.NetworkHandler;
 import pneumaticCraft.common.network.PacketDescription;
@@ -29,13 +35,8 @@ import pneumaticCraft.common.network.PacketSetSemiBlock;
 import pneumaticCraft.common.util.PneumaticCraftUtils;
 import pneumaticCraft.lib.Log;
 
-import com.google.common.collect.HashBiMap;
+public class SemiBlockManager {
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent;
-import cpw.mods.fml.common.registry.GameRegistry;
-
-public class SemiBlockManager{
     private final Map<Chunk, Map<ChunkPosition, ISemiBlock>> semiBlocks = new HashMap<Chunk, Map<ChunkPosition, ISemiBlock>>();
     private final List<ISemiBlock> addingBlocks = new ArrayList<ISemiBlock>();
     private final Map<Chunk, Set<EntityPlayerMP>> syncList = new HashMap<Chunk, Set<EntityPlayerMP>>();
@@ -46,23 +47,23 @@ public class SemiBlockManager{
     private static final SemiBlockManager INSTANCE = new SemiBlockManager();
     private static final SemiBlockManager CLIENT_INSTANCE = new SemiBlockManager();
 
-    public static SemiBlockManager getServerInstance(){
+    public static SemiBlockManager getServerInstance() {
         return INSTANCE;
     }
 
-    public static SemiBlockManager getClientOldInstance(){
+    public static SemiBlockManager getClientOldInstance() {
         return CLIENT_INSTANCE;
     }
 
-    public static SemiBlockManager getInstance(World world){
+    public static SemiBlockManager getInstance(World world) {
         return world.isRemote ? CLIENT_INSTANCE : INSTANCE;
     }
 
-    public static Item registerSemiBlock(String key, Class<? extends ISemiBlock> semiBlock, boolean addItem){
-        if(registeredTypes.containsKey(key)) throw new IllegalArgumentException("Duplicate registration key: " + key);
+    public static Item registerSemiBlock(String key, Class<? extends ISemiBlock> semiBlock, boolean addItem) {
+        if (registeredTypes.containsKey(key)) throw new IllegalArgumentException("Duplicate registration key: " + key);
         registeredTypes.put(key, semiBlock);
 
-        if(addItem) {
+        if (addItem) {
             ItemSemiBlockBase item = new ItemSemiBlockBase(key);
             GameRegistry.registerItem(item, key);
             PneumaticCraft.proxy.registerSemiBlockRenderer(item);
@@ -73,123 +74,138 @@ public class SemiBlockManager{
         }
     }
 
-    public static void registerSemiBlockToItemMapping(Class<? extends ISemiBlock> semiBlock, Item item){
+    public static void registerSemiBlockToItemMapping(Class<? extends ISemiBlock> semiBlock, Item item) {
         semiBlockToItems.put(semiBlock, item);
     }
 
-    public static Item getItemForSemiBlock(ISemiBlock semiBlock){
+    public static Item getItemForSemiBlock(ISemiBlock semiBlock) {
         return getItemForSemiBlock(semiBlock.getClass());
     }
 
-    public static Item getItemForSemiBlock(Class<? extends ISemiBlock> semiBlock){
+    public static Item getItemForSemiBlock(Class<? extends ISemiBlock> semiBlock) {
         return semiBlockToItems.get(semiBlock);
     }
 
-    public static Class<? extends ISemiBlock> getSemiBlockForItem(Item item){
-        return semiBlockToItems.inverse().get(item);
+    public static Class<? extends ISemiBlock> getSemiBlockForItem(Item item) {
+        return semiBlockToItems.inverse()
+            .get(item);
     }
 
-    public static String getKeyForSemiBlock(ISemiBlock semiBlock){
+    public static String getKeyForSemiBlock(ISemiBlock semiBlock) {
         return getKeyForSemiBlock(semiBlock.getClass());
     }
 
-    public static String getKeyForSemiBlock(Class<? extends ISemiBlock> semiBlock){
-        return registeredTypes.inverse().get(semiBlock);
+    public static String getKeyForSemiBlock(Class<? extends ISemiBlock> semiBlock) {
+        return registeredTypes.inverse()
+            .get(semiBlock);
     }
 
-    public static ISemiBlock getSemiBlockForKey(String key){
+    public static ISemiBlock getSemiBlockForKey(String key) {
         try {
             Class<? extends ISemiBlock> clazz = registeredTypes.get(key);
-            if(clazz != null) {
+            if (clazz != null) {
                 return clazz.newInstance();
             } else {
                 Log.warning("Semi Block with id \"" + key + "\" isn't registered!");
                 return null;
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
     }
 
     @SubscribeEvent
-    public void onChunkUnLoad(ChunkEvent.Unload event){
-        if(!event.world.isRemote) {
+    public void onChunkUnLoad(ChunkEvent.Unload event) {
+        if (!event.world.isRemote) {
             chunksMarkedForRemoval.add(event.getChunk());
         }
     }
 
     @SubscribeEvent
-    public void onChunkSave(ChunkDataEvent.Save event){
+    public void onChunkSave(ChunkDataEvent.Save event) {
         Map<ChunkPosition, ISemiBlock> map = semiBlocks.get(event.getChunk());
-        if(map != null && map.size() > 0) {
+        if (map != null && map.size() > 0) {
             NBTTagList tagList = new NBTTagList();
-            for(Map.Entry<ChunkPosition, ISemiBlock> entry : map.entrySet()) {
+            for (Map.Entry<ChunkPosition, ISemiBlock> entry : map.entrySet()) {
                 NBTTagCompound t = new NBTTagCompound();
-                entry.getValue().writeToNBT(t);
+                entry.getValue()
+                    .writeToNBT(t);
                 t.setInteger("x", entry.getKey().chunkPosX);
                 t.setInteger("y", entry.getKey().chunkPosY);
                 t.setInteger("z", entry.getKey().chunkPosZ);
                 t.setString("type", getKeyForSemiBlock(entry.getValue()));
                 tagList.appendTag(t);
             }
-            event.getData().setTag("SemiBlocks", tagList);
+            event.getData()
+                .setTag("SemiBlocks", tagList);
         }
     }
 
     @SubscribeEvent
-    public void onChunkLoad(ChunkDataEvent.Load event){
+    public void onChunkLoad(ChunkDataEvent.Load event) {
         try {
-            if(!event.world.isRemote) {
-                if(event.getData().hasKey("SemiBlocks")) {
+            if (!event.world.isRemote) {
+                if (event.getData()
+                    .hasKey("SemiBlocks")) {
                     Map<ChunkPosition, ISemiBlock> map = getOrCreateMap(event.getChunk());
                     map.clear();
-                    NBTTagList tagList = event.getData().getTagList("SemiBlocks", 10);
-                    for(int i = 0; i < tagList.tagCount(); i++) {
+                    NBTTagList tagList = event.getData()
+                        .getTagList("SemiBlocks", 10);
+                    for (int i = 0; i < tagList.tagCount(); i++) {
                         NBTTagCompound t = tagList.getCompoundTagAt(i);
                         ISemiBlock semiBlock = getSemiBlockForKey(t.getString("type"));
-                        if(semiBlock != null) {
+                        if (semiBlock != null) {
                             semiBlock.readFromNBT(t);
-                            setSemiBlock(event.world, t.getInteger("x"), t.getInteger("y"), t.getInteger("z"), semiBlock, event.getChunk());
+                            setSemiBlock(
+                                event.world,
+                                t.getInteger("x"),
+                                t.getInteger("y"),
+                                t.getInteger("z"),
+                                semiBlock,
+                                event.getChunk());
                         }
                     }
                 }
             }
-        } catch(Throwable e) {
+        } catch (Throwable e) {
             e.printStackTrace();
         }
     }
 
     @SubscribeEvent
-    public void onServerTick(TickEvent.ServerTickEvent event){
-        for(ISemiBlock semiBlock : addingBlocks) {
-            Chunk chunk = semiBlock.getWorld().getChunkFromBlockCoords(semiBlock.getPos().chunkPosX, semiBlock.getPos().chunkPosZ);
+    public void onServerTick(TickEvent.ServerTickEvent event) {
+        for (ISemiBlock semiBlock : addingBlocks) {
+            Chunk chunk = semiBlock.getWorld()
+                .getChunkFromBlockCoords(semiBlock.getPos().chunkPosX, semiBlock.getPos().chunkPosZ);
             getOrCreateMap(chunk).put(semiBlock.getPos(), semiBlock);
             chunk.setChunkModified();
 
-            for(EntityPlayerMP player : syncList.get(chunk)) {
+            for (EntityPlayerMP player : syncList.get(chunk)) {
                 NetworkHandler.sendTo(new PacketSetSemiBlock(semiBlock), player);
                 PacketDescription descPacket = semiBlock.getDescriptionPacket();
-                if(descPacket != null) NetworkHandler.sendTo(descPacket, player);
+                if (descPacket != null) NetworkHandler.sendTo(descPacket, player);
             }
         }
         addingBlocks.clear();
 
-        for(Chunk removingChunk : chunksMarkedForRemoval) {
-            if(!removingChunk.isChunkLoaded) {
+        for (Chunk removingChunk : chunksMarkedForRemoval) {
+            if (!removingChunk.isChunkLoaded) {
                 semiBlocks.remove(removingChunk);
                 syncList.remove(removingChunk);
             }
         }
         chunksMarkedForRemoval.clear();
 
-        for(Map<ChunkPosition, ISemiBlock> map : semiBlocks.values()) {
-            for(ISemiBlock semiBlock : map.values()) {
-                if(!semiBlock.isInvalid()) semiBlock.update();
+        for (Map<ChunkPosition, ISemiBlock> map : semiBlocks.values()) {
+            for (ISemiBlock semiBlock : map.values()) {
+                if (!semiBlock.isInvalid()) semiBlock.update();
             }
-            Iterator<ISemiBlock> iterator = map.values().iterator();
-            while(iterator.hasNext()) {
-                if(iterator.next().isInvalid()) {
+            Iterator<ISemiBlock> iterator = map.values()
+                .iterator();
+            while (iterator.hasNext()) {
+                if (iterator.next()
+                    .isInvalid()) {
                     iterator.remove();
                 }
             }
@@ -197,29 +213,41 @@ public class SemiBlockManager{
     }
 
     @SubscribeEvent
-    public void onClientTick(TickEvent.ClientTickEvent event){
-        if(this == getServerInstance()) getClientOldInstance().onClientTick(event);
+    public void onClientTick(TickEvent.ClientTickEvent event) {
+        if (this == getServerInstance()) getClientOldInstance().onClientTick(event);
         else {
             EntityPlayer player = PneumaticCraft.proxy.getPlayer();
-            if(player != null) {
-                for(ISemiBlock semiBlock : addingBlocks) {
-                    Chunk chunk = semiBlock.getWorld().getChunkFromBlockCoords(semiBlock.getPos().chunkPosX, semiBlock.getPos().chunkPosZ);
+            if (player != null) {
+                for (ISemiBlock semiBlock : addingBlocks) {
+                    Chunk chunk = semiBlock.getWorld()
+                        .getChunkFromBlockCoords(semiBlock.getPos().chunkPosX, semiBlock.getPos().chunkPosZ);
                     getOrCreateMap(chunk).put(semiBlock.getPos(), semiBlock);
                 }
                 addingBlocks.clear();
 
-                Iterator<Map.Entry<Chunk, Map<ChunkPosition, ISemiBlock>>> iterator = semiBlocks.entrySet().iterator();
-                while(iterator.hasNext()) {
+                Iterator<Map.Entry<Chunk, Map<ChunkPosition, ISemiBlock>>> iterator = semiBlocks.entrySet()
+                    .iterator();
+                while (iterator.hasNext()) {
                     Map.Entry<Chunk, Map<ChunkPosition, ISemiBlock>> entry = iterator.next();
-                    if(PneumaticCraftUtils.distBetween(player.posX, 0, player.posZ, entry.getKey().xPosition * 16 - 8, 0, entry.getKey().zPosition * 16 - 8) > SYNC_DISTANCE + 10) {
+                    if (PneumaticCraftUtils.distBetween(
+                        player.posX,
+                        0,
+                        player.posZ,
+                        entry.getKey().xPosition * 16 - 8,
+                        0,
+                        entry.getKey().zPosition * 16 - 8) > SYNC_DISTANCE + 10) {
                         iterator.remove();
                     } else {
-                        for(ISemiBlock semiBlock : entry.getValue().values()) {
-                            if(!semiBlock.isInvalid()) semiBlock.update();
+                        for (ISemiBlock semiBlock : entry.getValue()
+                            .values()) {
+                            if (!semiBlock.isInvalid()) semiBlock.update();
                         }
-                        Iterator<ISemiBlock> it = entry.getValue().values().iterator();
-                        while(it.hasNext()) {
-                            if(it.next().isInvalid()) {
+                        Iterator<ISemiBlock> it = entry.getValue()
+                            .values()
+                            .iterator();
+                        while (it.hasNext()) {
+                            if (it.next()
+                                .isInvalid()) {
                                 it.remove();
                             }
                         }
@@ -232,33 +260,35 @@ public class SemiBlockManager{
     }
 
     @SubscribeEvent
-    public void onWorldTick(TickEvent.WorldTickEvent event){
-        if(!event.world.isRemote) {
+    public void onWorldTick(TickEvent.WorldTickEvent event) {
+        if (!event.world.isRemote) {
             syncWithPlayers(event.world);
         }
     }
 
-    private void syncWithPlayers(World world){
-        List<EntityPlayerMP> players = world.playerEntities;
-        for(Map.Entry<Chunk, Set<EntityPlayerMP>> entry : syncList.entrySet()) {
+    private void syncWithPlayers(World world) {
+        List<EntityPlayer> players = world.playerEntities;
+        for (Map.Entry<Chunk, Set<EntityPlayerMP>> entry : syncList.entrySet()) {
             Chunk chunk = entry.getKey();
             Set<EntityPlayerMP> syncedPlayers = entry.getValue();
             int chunkX = chunk.xPosition * 16 - 8;
             int chunkZ = chunk.zPosition * 16 - 8;
-            for(EntityPlayerMP player : players) {
-                if(chunk.worldObj == world) {
+            for (EntityPlayer playerBase : players) {
+                EntityPlayerMP player = (EntityPlayerMP) playerBase;
+                if (chunk.worldObj == world) {
                     double dist = PneumaticCraftUtils.distBetween(player.posX, 0, player.posZ, chunkX, 0, chunkZ);
-                    if(dist < SYNC_DISTANCE) {
-                        if(syncedPlayers.add(player)) {
-                            for(ISemiBlock semiBlock : semiBlocks.get(chunk).values()) {
-                                if(!semiBlock.isInvalid()) {
+                    if (dist < SYNC_DISTANCE) {
+                        if (syncedPlayers.add(player)) {
+                            for (ISemiBlock semiBlock : semiBlocks.get(chunk)
+                                .values()) {
+                                if (!semiBlock.isInvalid()) {
                                     NetworkHandler.sendTo(new PacketSetSemiBlock(semiBlock), player);
                                     PacketDescription descPacket = semiBlock.getDescriptionPacket();
-                                    if(descPacket != null) NetworkHandler.sendTo(descPacket, player);
+                                    if (descPacket != null) NetworkHandler.sendTo(descPacket, player);
                                 }
                             }
                         }
-                    } else if(dist > SYNC_DISTANCE + 5) {
+                    } else if (dist > SYNC_DISTANCE + 5) {
                         syncedPlayers.remove(player);
                     }
                 } else {
@@ -269,27 +299,34 @@ public class SemiBlockManager{
     }
 
     @SubscribeEvent
-    public void onInteraction(PlayerInteractEvent event){
-        if(!event.world.isRemote && event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) {
+    public void onInteraction(PlayerInteractEvent event) {
+        if (!event.world.isRemote && event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) {
             ItemStack curItem = event.entityPlayer.getCurrentEquippedItem();
-            if(curItem != null && curItem.getItem() instanceof ISemiBlockItem) {
-                if(getSemiBlock(event.world, event.x, event.y, event.z) != null) {
-                    if(event.entityPlayer.capabilities.isCreativeMode) {
+            if (curItem != null && curItem.getItem() instanceof ISemiBlockItem) {
+                if (getSemiBlock(event.world, event.x, event.y, event.z) != null) {
+                    if (event.entityPlayer.capabilities.isCreativeMode) {
                         setSemiBlock(event.world, event.x, event.y, event.z, null);
                     } else {
                         breakSemiBlock(event.world, event.x, event.y, event.z, event.entityPlayer);
                     }
                     event.setCanceled(true);
                 } else {
-                    ISemiBlock newBlock = ((ISemiBlockItem)curItem.getItem()).getSemiBlock(event.world, event.x, event.y, event.z, curItem);
+                    ISemiBlock newBlock = ((ISemiBlockItem) curItem.getItem())
+                        .getSemiBlock(event.world, event.x, event.y, event.z, curItem);
                     newBlock.initialize(event.world, new ChunkPosition(event.x, event.y, event.z));
-                    if(newBlock.canPlace()) {
+                    if (newBlock.canPlace()) {
                         setSemiBlock(event.world, event.x, event.y, event.z, newBlock);
                         newBlock.onPlaced(event.entityPlayer, curItem);
-                        event.world.playSoundEffect(event.x + 0.5, event.y + 0.5, event.z + 0.5, Block.soundTypeGlass.func_150496_b(), (Block.soundTypeGlass.getVolume() + 1.0F) / 2.0F, Block.soundTypeGlass.getPitch() * 0.8F);
-                        if(!event.entityPlayer.capabilities.isCreativeMode) {
+                        event.world.playSoundEffect(
+                            event.x + 0.5,
+                            event.y + 0.5,
+                            event.z + 0.5,
+                            Block.soundTypeGlass.func_150496_b(),
+                            (Block.soundTypeGlass.getVolume() + 1.0F) / 2.0F,
+                            Block.soundTypeGlass.getPitch() * 0.8F);
+                        if (!event.entityPlayer.capabilities.isCreativeMode) {
                             curItem.stackSize--;
-                            if(curItem.stackSize <= 0) event.entityPlayer.setCurrentItemOrArmor(0, null);
+                            if (curItem.stackSize <= 0) event.entityPlayer.setCurrentItemOrArmor(0, null);
                         }
                         event.setCanceled(true);
                     }
@@ -298,9 +335,9 @@ public class SemiBlockManager{
         }
     }
 
-    private Map<ChunkPosition, ISemiBlock> getOrCreateMap(Chunk chunk){
+    private Map<ChunkPosition, ISemiBlock> getOrCreateMap(Chunk chunk) {
         Map<ChunkPosition, ISemiBlock> map = semiBlocks.get(chunk);
-        if(map == null) {
+        if (map == null) {
             map = new HashMap<ChunkPosition, ISemiBlock>();
             semiBlocks.put(chunk, map);
             syncList.put(chunk, new HashSet<EntityPlayerMP>());
@@ -308,39 +345,40 @@ public class SemiBlockManager{
         return map;
     }
 
-    public void breakSemiBlock(World world, int x, int y, int z){
+    public void breakSemiBlock(World world, int x, int y, int z) {
         breakSemiBlock(world, x, y, z, null);
     }
 
-    public void breakSemiBlock(World world, int x, int y, int z, EntityPlayer player){
+    public void breakSemiBlock(World world, int x, int y, int z, EntityPlayer player) {
         ISemiBlock semiBlock = getSemiBlock(world, x, y, z);
-        if(semiBlock != null) {
+        if (semiBlock != null) {
             List<ItemStack> drops = new ArrayList<ItemStack>();
             semiBlock.addDrops(drops);
-            for(ItemStack stack : drops) {
+            for (ItemStack stack : drops) {
                 EntityItem item = new EntityItem(world, x + 0.5, y + 0.5, z + 0.5, stack);
                 world.spawnEntityInWorld(item);
-                if(player != null) item.onCollideWithPlayer(player);
+                if (player != null) item.onCollideWithPlayer(player);
             }
             setSemiBlock(world, x, y, z, null);
         }
     }
 
-    public void setSemiBlock(World world, int x, int y, int z, ISemiBlock semiBlock){
+    public void setSemiBlock(World world, int x, int y, int z, ISemiBlock semiBlock) {
         setSemiBlock(world, x, y, z, semiBlock, world.getChunkFromBlockCoords(x, z));
     }
 
-    private void setSemiBlock(World world, int x, int y, int z, ISemiBlock semiBlock, Chunk chunk){
-        if(semiBlock != null && !registeredTypes.containsValue(semiBlock.getClass())) throw new IllegalStateException("ISemiBlock \"" + semiBlock + "\" was not registered!");
+    private void setSemiBlock(World world, int x, int y, int z, ISemiBlock semiBlock, Chunk chunk) {
+        if (semiBlock != null && !registeredTypes.containsValue(semiBlock.getClass()))
+            throw new IllegalStateException("ISemiBlock \"" + semiBlock + "\" was not registered!");
         ChunkPosition pos = new ChunkPosition(x, y, z);
-        if(semiBlock != null) {
+        if (semiBlock != null) {
             semiBlock.initialize(world, pos);
             addingBlocks.add(semiBlock);
         } else {
             ISemiBlock removedBlock = getOrCreateMap(chunk).get(pos);
-            if(removedBlock != null) {
+            if (removedBlock != null) {
                 removedBlock.invalidate();
-                for(EntityPlayerMP player : syncList.get(chunk)) {
+                for (EntityPlayerMP player : syncList.get(chunk)) {
                     NetworkHandler.sendTo(new PacketSetSemiBlock(pos, null), player);
                 }
             }
@@ -348,21 +386,22 @@ public class SemiBlockManager{
         chunk.setChunkModified();
     }
 
-    public ISemiBlock getSemiBlock(World world, int x, int y, int z){
-        for(ISemiBlock semiBlock : addingBlocks) {
-            if(semiBlock.getWorld() == world && semiBlock.getPos().equals(new ChunkPosition(x, y, z))) return semiBlock;
+    public ISemiBlock getSemiBlock(World world, int x, int y, int z) {
+        for (ISemiBlock semiBlock : addingBlocks) {
+            if (semiBlock.getWorld() == world && semiBlock.getPos()
+                .equals(new ChunkPosition(x, y, z))) return semiBlock;
         }
 
         Chunk chunk = world.getChunkFromBlockCoords(x, z);
         Map<ChunkPosition, ISemiBlock> map = semiBlocks.get(chunk);
-        if(map != null) {
+        if (map != null) {
             return map.get(new ChunkPosition(x, y, z));
         } else {
             return null;
         }
     }
 
-    public Map<Chunk, Map<ChunkPosition, ISemiBlock>> getSemiBlocks(){
+    public Map<Chunk, Map<ChunkPosition, ISemiBlock>> getSemiBlocks() {
         return semiBlocks;
     }
 }

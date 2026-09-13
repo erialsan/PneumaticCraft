@@ -12,18 +12,18 @@ import forestry.api.genetics.IIndividual;
 
 public interface IEntityButterfly extends IAnimals {
 
-	void changeExhaustion(int change);
+    void changeExhaustion(int change);
 
-	int getExhaustion();
+    int getExhaustion();
 
-	IButterfly getButterfly();
+    IButterfly getButterfly();
 
-	/**
-	 * @return The entity as an EntityCreature to save casting.
-	 */
-	EntityCreature getEntity();
+    /**
+     * @return The entity as an EntityCreature to save casting.
+     */
+    EntityCreature getEntity();
 
-	IIndividual getPollen();
+    IIndividual getPollen();
 
-	void setPollen(IIndividual pollen);
+    void setPollen(IIndividual pollen);
 }

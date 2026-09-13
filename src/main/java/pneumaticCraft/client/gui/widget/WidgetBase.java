@@ -4,17 +4,17 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WidgetBase implements IGuiWidget{
+public class WidgetBase implements IGuiWidget {
 
     private final int id;
-    public int value; //just a generic value
+    public int value; // just a generic value
     public int x, y;
     private final int width;
     private final int height;
     protected IWidgetListener listener;
     private final List<String> tooltipText = new ArrayList<String>();
 
-    public WidgetBase(int id, int x, int y, int width, int height){
+    public WidgetBase(int id, int x, int y, int width, int height) {
 
         this.id = id;
         this.x = x;
@@ -24,66 +24,66 @@ public class WidgetBase implements IGuiWidget{
     }
 
     @Override
-    public int getID(){
+    public int getID() {
 
         return id;
     }
 
     @Override
-    public void setListener(IWidgetListener gui){
+    public void setListener(IWidgetListener gui) {
 
         listener = gui;
     }
 
     @Override
-    public void onMouseClicked(int mouseX, int mouseY, int button){
+    public void onMouseClicked(int mouseX, int mouseY, int button) {
 
         listener.actionPerformed(this);
     }
 
     @Override
-    public void onMouseClickedOutsideBounds(int mouseX, int mouseY, int button){
+    public void onMouseClickedOutsideBounds(int mouseX, int mouseY, int button) {
 
     }
 
     @Override
-    public Rectangle getBounds(){
+    public Rectangle getBounds() {
 
         return new Rectangle(x, y, width, height);
     }
 
-    public void setTooltipText(String tooltip){
+    public void setTooltipText(String tooltip) {
         tooltipText.clear();
-        if(tooltip != null && !tooltip.equals("")) {
+        if (tooltip != null && !tooltip.equals("")) {
             tooltipText.add(tooltip);
         }
     }
 
     @Override
-    public void addTooltip(int mouseX, int mouseY, List<String> curTip, boolean shiftPressed){
+    public void addTooltip(int mouseX, int mouseY, List<String> curTip, boolean shiftPressed) {
         curTip.addAll(tooltipText);
     }
 
-    public String getTooltip(){
+    public String getTooltip() {
         return tooltipText.size() > 0 ? tooltipText.get(0) : "";
     }
 
     @Override
-    public boolean onKey(char key, int keyCode){
+    public boolean onKey(char key, int keyCode) {
         return false;
     }
 
     @Override
-    public void render(int mouseX, int mouseY, float partialTick){}
+    public void render(int mouseX, int mouseY, float partialTick) {}
 
     @Override
-    public void update(){}
+    public void update() {}
 
     @Override
-    public void handleMouseInput(){}
+    public void handleMouseInput() {}
 
     @Override
-    public void postRender(int mouseX, int mouseY, float partialTick){
+    public void postRender(int mouseX, int mouseY, float partialTick) {
 
     }
 }

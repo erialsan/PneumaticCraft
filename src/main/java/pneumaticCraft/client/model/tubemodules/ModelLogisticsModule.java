@@ -5,11 +5,13 @@ import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
+
 import pneumaticCraft.client.model.IBaseModel;
 import pneumaticCraft.lib.Textures;
 
-public class ModelLogisticsModule extends ModelBase implements IBaseModel{
-    //fields
+public class ModelLogisticsModule extends ModelBase implements IBaseModel {
+
+    // fields
     public ModelRenderer base1;
     ModelRenderer base2;
     ModelRenderer Shape1;
@@ -18,7 +20,7 @@ public class ModelLogisticsModule extends ModelBase implements IBaseModel{
     ModelRenderer Shape4;
     public ModelRenderer notPowered, powered, action, notEnoughAir;
 
-    public ModelLogisticsModule(){
+    public ModelLogisticsModule() {
         textureWidth = 128;
         textureHeight = 128;
 
@@ -80,7 +82,7 @@ public class ModelLogisticsModule extends ModelBase implements IBaseModel{
     }
 
     @Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5){
+    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         super.render(entity, f, f1, f2, f3, f4, f5);
         setRotationAngles(f, f1, f2, f3, f4, f5, entity);
         base1.render(f5);
@@ -91,20 +93,20 @@ public class ModelLogisticsModule extends ModelBase implements IBaseModel{
         Shape4.render(f5);
     }
 
-    private void setRotation(ModelRenderer model, float x, float y, float z){
+    private void setRotation(ModelRenderer model, float x, float y, float z) {
         model.rotateAngleX = x;
         model.rotateAngleY = y;
         model.rotateAngleZ = z;
     }
 
     @Override
-    public void renderStatic(float size, TileEntity te){
+    public void renderStatic(float size, TileEntity te) {
         base1.render(size);
         base2.render(size);
 
     }
 
-    public void renderChannelColorFrame(float size){
+    public void renderChannelColorFrame(float size) {
         Shape1.render(size);
         Shape2.render(size);
         Shape3.render(size);
@@ -112,17 +114,17 @@ public class ModelLogisticsModule extends ModelBase implements IBaseModel{
     }
 
     @Override
-    public void renderDynamic(float size, TileEntity te, float partialTicks){
+    public void renderDynamic(float size, TileEntity te, float partialTicks) {
 
     }
 
     @Override
-    public ResourceLocation getModelTexture(TileEntity tile){
+    public ResourceLocation getModelTexture(TileEntity tile) {
         return Textures.MODEL_LOGISTICS;
     }
 
     @Override
-    public boolean rotateModelBasedOnBlockMeta(){
+    public boolean rotateModelBasedOnBlockMeta() {
         return false;
     }
 }

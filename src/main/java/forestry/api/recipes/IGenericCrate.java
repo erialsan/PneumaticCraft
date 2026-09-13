@@ -11,8 +11,8 @@ import net.minecraft.item.ItemStack;
 @Deprecated
 public interface IGenericCrate {
 
-	void setContained(ItemStack crate, ItemStack contained);
+    void setContained(ItemStack crate, ItemStack contained);
 
-	ItemStack getContained(ItemStack crate);
+    ItemStack getContained(ItemStack crate);
 
 }

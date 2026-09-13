@@ -11,8 +11,9 @@ import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraftforge.common.util.ForgeDirection;
 
-public class ModelAdvancedPressureTube extends ModelBase{
-    //fields
+public class ModelAdvancedPressureTube extends ModelBase {
+
+    // fields
     ModelRenderer Front1;
     ModelRenderer Front2;
     ModelRenderer Front3;
@@ -92,7 +93,7 @@ public class ModelAdvancedPressureTube extends ModelBase{
     ModelRenderer CapUp;
     ModelRenderer CapDown;
 
-    public ModelAdvancedPressureTube(){
+    public ModelAdvancedPressureTube() {
         textureWidth = 64;
         textureHeight = 32;
 
@@ -567,7 +568,7 @@ public class ModelAdvancedPressureTube extends ModelBase{
     }
 
     @Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5){
+    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         super.render(entity, f, f1, f2, f3, f4, f5);
         setRotationAngles(f, f1, f2, f3, f4, f5, entity);
         Front1.render(f5);
@@ -650,8 +651,8 @@ public class ModelAdvancedPressureTube extends ModelBase{
         CapDown.render(f5);
     }
 
-    public void renderModel(float size, boolean[] sidesConnected, boolean grate){
-        if(sidesConnected[ForgeDirection.SOUTH.ordinal()]) {
+    public void renderModel(float size, boolean[] sidesConnected, boolean grate) {
+        if (sidesConnected[ForgeDirection.SOUTH.ordinal()]) {
             Front1.render(size);
             Front2.render(size);
             Front3.render(size);
@@ -660,10 +661,10 @@ public class ModelAdvancedPressureTube extends ModelBase{
             Front6.render(size);
             Front7.render(size);
             Front8.render(size);
-        } else if(!grate) {
+        } else if (!grate) {
             CapFront.render(size);
         }
-        if(sidesConnected[ForgeDirection.NORTH.ordinal()]) {
+        if (sidesConnected[ForgeDirection.NORTH.ordinal()]) {
             Back1.render(size);
             Back2.render(size);
             Back3.render(size);
@@ -672,10 +673,10 @@ public class ModelAdvancedPressureTube extends ModelBase{
             Back6.render(size);
             Back7.render(size);
             Back8.render(size);
-        } else if(!grate) {
+        } else if (!grate) {
             CapBack.render(size);
         }
-        if(sidesConnected[ForgeDirection.EAST.ordinal()]) {
+        if (sidesConnected[ForgeDirection.EAST.ordinal()]) {
             Left1.render(size);
             Left2.render(size);
             Left3.render(size);
@@ -684,10 +685,10 @@ public class ModelAdvancedPressureTube extends ModelBase{
             Left6.render(size);
             Left7.render(size);
             Left8.render(size);
-        } else if(!grate) {
+        } else if (!grate) {
             CapLeft.render(size);
         }
-        if(sidesConnected[ForgeDirection.WEST.ordinal()]) {
+        if (sidesConnected[ForgeDirection.WEST.ordinal()]) {
             Right1.render(size);
             Right2.render(size);
             Right3.render(size);
@@ -696,10 +697,10 @@ public class ModelAdvancedPressureTube extends ModelBase{
             Right6.render(size);
             Right7.render(size);
             Right8.render(size);
-        } else if(!grate) {
+        } else if (!grate) {
             CapRight.render(size);
         }
-        if(sidesConnected[ForgeDirection.UP.ordinal()]) {
+        if (sidesConnected[ForgeDirection.UP.ordinal()]) {
             Up1.render(size);
             Up2.render(size);
             Up3.render(size);
@@ -708,10 +709,10 @@ public class ModelAdvancedPressureTube extends ModelBase{
             Up6.render(size);
             Up7.render(size);
             Up8.render(size);
-        } else if(!grate) {
+        } else if (!grate) {
             CapUp.render(size);
         }
-        if(sidesConnected[ForgeDirection.DOWN.ordinal()]) {
+        if (sidesConnected[ForgeDirection.DOWN.ordinal()]) {
             Down1.render(size);
             Down2.render(size);
             Down3.render(size);
@@ -720,7 +721,7 @@ public class ModelAdvancedPressureTube extends ModelBase{
             Down6.render(size);
             Down7.render(size);
             Down8.render(size);
-        } else if(!grate) {
+        } else if (!grate) {
             CapDown.render(size);
         }
 
@@ -750,7 +751,7 @@ public class ModelAdvancedPressureTube extends ModelBase{
         Base24.render(size);
     }
 
-    private void setRotation(ModelRenderer model, float x, float y, float z){
+    private void setRotation(ModelRenderer model, float x, float y, float z) {
         model.rotateAngleX = x;
         model.rotateAngleY = y;
         model.rotateAngleZ = z;

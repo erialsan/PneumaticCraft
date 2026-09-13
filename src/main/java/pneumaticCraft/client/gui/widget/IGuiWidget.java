@@ -3,7 +3,8 @@ package pneumaticCraft.client.gui.widget;
 import java.awt.Rectangle;
 import java.util.List;
 
-public interface IGuiWidget{
+public interface IGuiWidget {
+
     public void setListener(IWidgetListener gui);
 
     public int getID();

@@ -20,6 +20,9 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import pneumaticCraft.api.client.pneumaticHelmet.IOptionPage;
 import pneumaticCraft.api.client.pneumaticHelmet.IUpgradeRenderHandler;
 import pneumaticCraft.client.KeyHandler;
@@ -32,11 +35,9 @@ import pneumaticCraft.common.item.Itemss;
 import pneumaticCraft.common.util.PneumaticCraftUtils;
 import pneumaticCraft.lib.PneumaticValues;
 import pneumaticCraft.lib.Textures;
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
-public class SearchUpgradeHandler implements IUpgradeRenderHandler{
+public class SearchUpgradeHandler implements IUpgradeRenderHandler {
+
     private int totalSearchedItemCount;
     public int searchedItemCounter;
     private int ticksExisted;
@@ -50,62 +51,72 @@ public class SearchUpgradeHandler implements IUpgradeRenderHandler{
 
     @Override
     @SideOnly(Side.CLIENT)
-    public String getUpgradeName(){
+    public String getUpgradeName() {
         return "itemSearcher";
     }
 
     @Override
-    public void initConfig(Configuration config){
-        statX = config.get("Helmet_Options" + Configuration.CATEGORY_SPLITTER + "Item_Search", "stat X", -1).getInt();
-        statY = config.get("Helmet_Options" + Configuration.CATEGORY_SPLITTER + "Item_Search", "stat Y", 17).getInt();
-        statLeftSided = config.get("Helmet_Options" + Configuration.CATEGORY_SPLITTER + "Item_Search", "stat leftsided", true).getBoolean(true);
+    public void initConfig(Configuration config) {
+        statX = config.get("Helmet_Options" + Configuration.CATEGORY_SPLITTER + "Item_Search", "stat X", -1)
+            .getInt();
+        statY = config.get("Helmet_Options" + Configuration.CATEGORY_SPLITTER + "Item_Search", "stat Y", 17)
+            .getInt();
+        statLeftSided = config
+            .get("Helmet_Options" + Configuration.CATEGORY_SPLITTER + "Item_Search", "stat leftsided", true)
+            .getBoolean(true);
     }
 
     @Override
-    public void saveToConfig(){
+    public void saveToConfig() {
         Configuration config = Config.config;
         config.load();
-        config.get("Helmet_Options" + Configuration.CATEGORY_SPLITTER + "Item_Search", "stat X", -1).set(searchInfo.getBaseX());
-        config.get("Helmet_Options" + Configuration.CATEGORY_SPLITTER + "Item_Search", "stat Y", 17).set(searchInfo.getBaseY());
-        config.get("Helmet_Options" + Configuration.CATEGORY_SPLITTER + "Item_Search", "stat leftsided", true).set(searchInfo.isLeftSided());
+        config.get("Helmet_Options" + Configuration.CATEGORY_SPLITTER + "Item_Search", "stat X", -1)
+            .set(searchInfo.getBaseX());
+        config.get("Helmet_Options" + Configuration.CATEGORY_SPLITTER + "Item_Search", "stat Y", 17)
+            .set(searchInfo.getBaseY());
+        config.get("Helmet_Options" + Configuration.CATEGORY_SPLITTER + "Item_Search", "stat leftsided", true)
+            .set(searchInfo.isLeftSided());
         config.save();
         statX = searchInfo.getBaseX();
         statY = searchInfo.getBaseY();
         statLeftSided = searchInfo.isLeftSided();
     }
 
-    public void addToSearchedItemCounter(int amount){
+    public void addToSearchedItemCounter(int amount) {
         searchedItemCounter += amount;
     }
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void update(EntityPlayer player, int rangeUpgrades){
+    public void update(EntityPlayer player, int rangeUpgrades) {
         ticksExisted++;
         ItemStack searchStack = ItemPneumaticArmor.getSearchedStack(player.getCurrentArmor(3));
 
-        if(ticksExisted % 20 == 0) {
-            List<EntityItem> items = player.worldObj.getEntitiesWithinAABB(EntityItem.class, EntityTrackUpgradeHandler.getAABBFromRange(player, rangeUpgrades));
+        if (ticksExisted % 20 == 0) {
+            List<EntityItem> items = player.worldObj.getEntitiesWithinAABB(
+                EntityItem.class,
+                EntityTrackUpgradeHandler.getAABBFromRange(player, rangeUpgrades));
             searchedItems.clear();
-            for(EntityItem item : items) {
-                if(item.getEntityItem() != null && searchStack != null) {
-                    if(item.getEntityItem().isItemEqual(searchStack)) searchedItems.put(item, item.getEntityItem().stackSize);
+            for (EntityItem item : items) {
+                if (item.getEntityItem() != null && searchStack != null) {
+                    if (item.getEntityItem()
+                        .isItemEqual(searchStack)) searchedItems.put(item, item.getEntityItem().stackSize);
                     else {
                         List<ItemStack> inventoryItems = PneumaticCraftUtils.getStacksInItem(item.getEntityItem());
                         int itemCount = 0;
-                        for(ItemStack inventoryItem : inventoryItems) {
-                            if(inventoryItem.isItemEqual(searchStack)) {
+                        for (ItemStack inventoryItem : inventoryItems) {
+                            if (inventoryItem.isItemEqual(searchStack)) {
                                 itemCount += inventoryItem.stackSize;
                             }
                         }
-                        if(itemCount > 0) searchedItems.put(item, itemCount);
+                        if (itemCount > 0) searchedItems.put(item, itemCount);
                     }
                 }
             }
 
             totalSearchedItemCount = searchedItemCounter;
             searchedItemCounter = 0;
-            for(Integer itemCount : searchedItems.values()) {
+            for (Integer itemCount : searchedItems.values()) {
                 searchedItemCounter += itemCount;
             }
         }
@@ -113,7 +124,7 @@ public class SearchUpgradeHandler implements IUpgradeRenderHandler{
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void render3D(float partialTicks){
+    public void render3D(float partialTicks) {
         GL11.glEnable(GL12.GL_RESCALE_NORMAL);
         GL11.glEnable(GL11.GL_TEXTURE_2D);
         GL11.glDepthMask(false);
@@ -123,14 +134,20 @@ public class SearchUpgradeHandler implements IUpgradeRenderHandler{
         GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         RenderManager.instance.renderEngine.bindTexture(Textures.GLOW_RESOURCE);
-        //  mc.func_110434_K().func_110577_a(Textures.GLOW_RESOURCE);
-        for(Map.Entry<EntityItem, Integer> entry : searchedItems.entrySet()) {
+        // mc.func_110434_K().func_110577_a(Textures.GLOW_RESOURCE);
+        for (Map.Entry<EntityItem, Integer> entry : searchedItems.entrySet()) {
             EntityItem item = entry.getKey();
             float height = MathHelper.sin((item.age + partialTicks) / 10.0F + item.hoverStart) * 0.1F + 0.2F;
-            RenderSearchItemBlock.renderSearch(item.lastTickPosX + (item.posX - item.lastTickPosX) * partialTicks, item.lastTickPosY + (item.posY - item.lastTickPosY) * partialTicks + height, item.lastTickPosZ + (item.posZ - item.lastTickPosZ) * partialTicks, entry.getValue(), totalSearchedItemCount);
+            RenderSearchItemBlock.renderSearch(
+                item.lastTickPosX + (item.posX - item.lastTickPosX) * partialTicks,
+                item.lastTickPosY + (item.posY - item.lastTickPosY) * partialTicks + height,
+                item.lastTickPosZ + (item.posZ - item.lastTickPosZ) * partialTicks,
+                entry.getValue(),
+                totalSearchedItemCount);
         }
-        for(int i = 0; i < searchedBlocks.size(); i++) {
-            if(!searchedBlocks.get(i).renderSearchBlock(totalSearchedItemCount)) {
+        for (int i = 0; i < searchedBlocks.size(); i++) {
+            if (!searchedBlocks.get(i)
+                .renderSearchBlock(totalSearchedItemCount)) {
                 searchedBlocks.remove(i);
                 i--;
             }
@@ -145,11 +162,15 @@ public class SearchUpgradeHandler implements IUpgradeRenderHandler{
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void render2D(float partialTicks, boolean helmetEnabled){
-        ItemStack searchStack = ItemPneumaticArmor.getSearchedStack(FMLClientHandler.instance().getClient().thePlayer.getCurrentArmor(3));
+    public void render2D(float partialTicks, boolean helmetEnabled) {
+        ItemStack searchStack = ItemPneumaticArmor.getSearchedStack(
+            FMLClientHandler.instance()
+                .getClient().thePlayer.getCurrentArmor(3));
         List<String> textList = new ArrayList<String>();
-        if(searchStack == null) {
-            textList.add("press '" + Keyboard.getKeyName(KeyHandler.getInstance().keybindOpenOptions.getKeyCode()) + "' to configure");
+        if (searchStack == null) {
+            textList.add(
+                "press '" + Keyboard.getKeyName(KeyHandler.getInstance().keybindOpenOptions.getKeyCode())
+                    + "' to configure");
         } else {
             textList.add(searchStack.getDisplayName() + " (" + totalSearchedItemCount + " found)");
         }
@@ -157,51 +178,58 @@ public class SearchUpgradeHandler implements IUpgradeRenderHandler{
     }
 
     @Override
-    public boolean isEnabled(ItemStack[] upgradeStacks){
-        for(ItemStack stack : upgradeStacks) {
-            if(stack != null && stack.getItem() == Itemss.machineUpgrade && stack.getItemDamage() == ItemMachineUpgrade.UPGRADE_SEARCH_DAMAGE) return true;
+    public boolean isEnabled(ItemStack[] upgradeStacks) {
+        for (ItemStack stack : upgradeStacks) {
+            if (stack != null && stack.getItem() == Itemss.machineUpgrade
+                && stack.getItemDamage() == ItemMachineUpgrade.UPGRADE_SEARCH_DAMAGE) return true;
         }
         return false;
     }
 
     /**
      * This method will be called by the BlockTrackUpgradeHandler when it finds inventories while scanning blocks.
-     * @param te TileEntity that already has been checked on if it implements IInventory, so it's save to cast it to IInventory.
+     * 
+     * @param te TileEntity that already has been checked on if it implements IInventory, so it's save to cast it to
+     *           IInventory.
      */
-    public void checkInventoryForItems(TileEntity te){
+    public void checkInventoryForItems(TileEntity te) {
         try {
-            ItemStack searchStack = ItemPneumaticArmor.getSearchedStack(FMLClientHandler.instance().getClient().thePlayer.getCurrentArmor(3));
-            IInventory inventory = (IInventory)te;
+            ItemStack searchStack = ItemPneumaticArmor.getSearchedStack(
+                FMLClientHandler.instance()
+                    .getClient().thePlayer.getCurrentArmor(3));
+            IInventory inventory = (IInventory) te;
             boolean hasFoundItem = false;
-            if(searchStack != null) {
-                for(int l = 0; l < inventory.getSizeInventory(); l++) {
-                    if(inventory.getStackInSlot(l) != null) {
-                        int items = RenderSearchItemBlock.getSearchedItemCount(inventory.getStackInSlot(l), searchStack);
-                        if(items > 0) {
+            if (searchStack != null) {
+                for (int l = 0; l < inventory.getSizeInventory(); l++) {
+                    if (inventory.getStackInSlot(l) != null) {
+                        int items = RenderSearchItemBlock
+                            .getSearchedItemCount(inventory.getStackInSlot(l), searchStack);
+                        if (items > 0) {
                             hasFoundItem = true;
                             searchedItemCounter += items;
                         }
                     }
                 }
             }
-            if(hasFoundItem) {
+            if (hasFoundItem) {
                 boolean inList = false;
-                for(RenderSearchItemBlock trackedBlock : searchedBlocks) {
-                    if(trackedBlock.isAlreadyTrackingCoord(te.xCoord, te.yCoord, te.zCoord)) {
+                for (RenderSearchItemBlock trackedBlock : searchedBlocks) {
+                    if (trackedBlock.isAlreadyTrackingCoord(te.xCoord, te.yCoord, te.zCoord)) {
                         inList = true;
                         break;
                     }
                 }
-                if(!inList) searchedBlocks.add(new RenderSearchItemBlock(te.getWorldObj(), te.xCoord, te.yCoord, te.zCoord));
+                if (!inList)
+                    searchedBlocks.add(new RenderSearchItemBlock(te.getWorldObj(), te.xCoord, te.yCoord, te.zCoord));
             }
-        } catch(Throwable e) {
+        } catch (Throwable e) {
 
         }
     }
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void reset(){
+    public void reset() {
         searchedBlocks.clear();
         searchedItemCounter = 0;
         searchedItems.clear();
@@ -210,23 +238,31 @@ public class SearchUpgradeHandler implements IUpgradeRenderHandler{
     }
 
     @Override
-    public float getEnergyUsage(int rangeUpgrades, EntityPlayer player){
+    public float getEnergyUsage(int rangeUpgrades, EntityPlayer player) {
         return PneumaticValues.USAGE_ITEM_SEARCHER;
     }
 
     @Override
     @SideOnly(Side.CLIENT)
-    public IOptionPage getGuiOptionsPage(){
+    public IOptionPage getGuiOptionsPage() {
         return new GuiSearchUpgradeOptions(this);
     }
 
     @Override
     @SideOnly(Side.CLIENT)
-    public GuiAnimatedStat getAnimatedStat(){
-        if(searchInfo == null) {
+    public GuiAnimatedStat getAnimatedStat() {
+        if (searchInfo == null) {
             Minecraft minecraft = Minecraft.getMinecraft();
             ScaledResolution sr = new ScaledResolution(minecraft, minecraft.displayWidth, minecraft.displayHeight);
-            searchInfo = new GuiAnimatedStat(null, "Currently searching for:", new ItemStack(Itemss.machineUpgrade, 1, ItemMachineUpgrade.UPGRADE_SEARCH_DAMAGE), statX != -1 ? statX : sr.getScaledWidth() - 2, statY, 0x3000AA00, null, statLeftSided);
+            searchInfo = new GuiAnimatedStat(
+                null,
+                "Currently searching for:",
+                new ItemStack(Itemss.machineUpgrade, 1, ItemMachineUpgrade.UPGRADE_SEARCH_DAMAGE),
+                statX != -1 ? statX : sr.getScaledWidth() - 2,
+                statY,
+                0x3000AA00,
+                null,
+                statLeftSided);
             searchInfo.setMinDimensionsAndReset(0, 0);
         }
         return searchInfo;

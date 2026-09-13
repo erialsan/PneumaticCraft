@@ -14,7 +14,7 @@ import pneumaticCraft.common.util.NBTToJsonConverter;
 import pneumaticCraft.common.util.PastebinHandler;
 import pneumaticCraft.lib.Textures;
 
-public class GuiPastebin extends GuiPneumaticScreenBase{
+public class GuiPastebin extends GuiPneumaticScreenBase {
 
     private WidgetTextField usernameBox, passwordBox;
     private WidgetTextField pastebinBox;
@@ -24,11 +24,15 @@ public class GuiPastebin extends GuiPneumaticScreenBase{
     public String errorMessage;
     private EnumState state = EnumState.NONE;
 
-    private enum EnumState{
-        NONE, GETTING, PUTTING, LOGIN, LOGOUT;
+    private enum EnumState {
+        NONE,
+        GETTING,
+        PUTTING,
+        LOGIN,
+        LOGOUT;
     }
 
-    public GuiPastebin(GuiScreen parentScreen, String pastingString){
+    public GuiPastebin(GuiScreen parentScreen, String pastingString) {
         xSize = 183;
         ySize = 202;
         this.pastingString = pastingString;
@@ -36,38 +40,51 @@ public class GuiPastebin extends GuiPneumaticScreenBase{
         Keyboard.enableRepeatEvents(true);
     }
 
-    public GuiPastebin(GuiScreen parentScreen, NBTTagCompound tag){
+    public GuiPastebin(GuiScreen parentScreen, NBTTagCompound tag) {
         this(parentScreen, new NBTToJsonConverter(tag).convert());
     }
 
     @Override
-    public void initGui(){
+    public void initGui() {
         super.initGui();
-        if(!PastebinHandler.isLoggedIn()) {
+        if (!PastebinHandler.isLoggedIn()) {
             usernameBox = new WidgetTextField(fontRendererObj, guiLeft + 10, guiTop + 30, 80, 10);
             addWidget(usernameBox);
 
             passwordBox = new WidgetTextField(fontRendererObj, guiLeft + 10, guiTop + 56, 80, 10).setAsPasswordBox();
             addWidget(passwordBox);
 
-            GuiButtonSpecial loginButton = new GuiButtonSpecial(0, guiLeft + 100, guiTop + 30, 60, 20, I18n.format("gui.pastebin.button.login"));
+            GuiButtonSpecial loginButton = new GuiButtonSpecial(
+                0,
+                guiLeft + 100,
+                guiTop + 30,
+                60,
+                20,
+                I18n.format("gui.pastebin.button.login"));
             addWidget(loginButton);
 
             addLabel(I18n.format("gui.pastebin.username"), guiLeft + 10, guiTop + 20);
             addLabel(I18n.format("gui.pastebin.password"), guiLeft + 10, guiTop + 46);
 
         } else {
-            GuiButtonSpecial logoutButton = new GuiButtonSpecial(3, guiLeft + 60, guiTop + 30, 60, 20, I18n.format("gui.pastebin.button.logout"));
+            GuiButtonSpecial logoutButton = new GuiButtonSpecial(
+                3,
+                guiLeft + 60,
+                guiTop + 30,
+                60,
+                20,
+                I18n.format("gui.pastebin.button.logout"));
             addWidget(logoutButton);
         }
 
-        pastebinBox = new WidgetTextField(fontRendererObj, guiLeft + 10, guiTop + 130, 160, 10){
+        pastebinBox = new WidgetTextField(fontRendererObj, guiLeft + 10, guiTop + 130, 160, 10) {
+
             @Override
-            public void onMouseClicked(int mouseX, int mouseY, int button){
+            public void onMouseClicked(int mouseX, int mouseY, int button) {
                 boolean wasFocused = isFocused();
                 super.onMouseClicked(mouseX, mouseY, button);
-                if(isFocused()) {
-                    if(!wasFocused) { //setText("");
+                if (isFocused()) {
+                    if (!wasFocused) { // setText("");
                         setCursorPositionEnd();
                         setSelectionPos(0);
                     }
@@ -77,9 +94,21 @@ public class GuiPastebin extends GuiPneumaticScreenBase{
         };
         addWidget(pastebinBox);
 
-        GuiButtonSpecial pasteButton = new GuiButtonSpecial(1, guiLeft + 31, guiTop + 78, 120, 20, I18n.format("gui.pastebin.button.upload"));
+        GuiButtonSpecial pasteButton = new GuiButtonSpecial(
+            1,
+            guiLeft + 31,
+            guiTop + 78,
+            120,
+            20,
+            I18n.format("gui.pastebin.button.upload"));
         addWidget(pasteButton);
-        GuiButtonSpecial getButton = new GuiButtonSpecial(2, guiLeft + 31, guiTop + 167, 120, 20, I18n.format("gui.pastebin.button.get"));
+        GuiButtonSpecial getButton = new GuiButtonSpecial(
+            2,
+            guiLeft + 31,
+            guiTop + 167,
+            120,
+            20,
+            I18n.format("gui.pastebin.button.get"));
         addWidget(getButton);
 
         GuiButtonSpecial putInClipBoard = new GuiButtonSpecial(4, guiLeft + 8, guiTop + 78, 20, 20, "");
@@ -96,31 +125,32 @@ public class GuiPastebin extends GuiPneumaticScreenBase{
     }
 
     @Override
-    public void updateScreen(){
+    public void updateScreen() {
         super.updateScreen();
-        if(state == EnumState.LOGOUT) {
+        if (state == EnumState.LOGOUT) {
             state = EnumState.NONE;
             initGui();
         }
-        if(state != EnumState.NONE && PastebinHandler.isDone()) {
+        if (state != EnumState.NONE && PastebinHandler.isDone()) {
             errorMessage = "";
             String pastebinText;
-            switch(state){
+            switch (state) {
                 case GETTING:
                     pastebinText = PastebinHandler.getHandler().contents;
-                    if(pastebinText != null) {
+                    if (pastebinText != null) {
                         readFromString(pastebinText);
                     } else {
                         errorMessage = I18n.format("gui.pastebin.invalidPastebin");
                     }
                     break;
                 case PUTTING:
-                    if(PastebinHandler.getException() != null) {
-                        errorMessage = PastebinHandler.getException().getMessage();
+                    if (PastebinHandler.getException() != null) {
+                        errorMessage = PastebinHandler.getException()
+                            .getMessage();
                     } else {
                         pastebinText = PastebinHandler.getHandler().getLink;
-                        if(pastebinText == null) pastebinText = "<ERROR>";
-                        if(pastebinText.contains("pastebin.com")) {
+                        if (pastebinText == null) pastebinText = "<ERROR>";
+                        if (pastebinText.contains("pastebin.com")) {
                             pastebinBox.setText(pastebinText);
                         } else {
                             errorMessage = pastebinText;
@@ -128,7 +158,7 @@ public class GuiPastebin extends GuiPneumaticScreenBase{
                     }
                     break;
                 case LOGIN:
-                    if(!PastebinHandler.isLoggedIn()) {
+                    if (!PastebinHandler.isLoggedIn()) {
                         errorMessage = I18n.format("gui.pastebin.invalidLogin");
                     }
                     initGui();
@@ -137,27 +167,27 @@ public class GuiPastebin extends GuiPneumaticScreenBase{
         }
     }
 
-    private void readFromString(String string){
+    private void readFromString(String string) {
         try {
             outputTag = new JsonToNBTConverter(string).convert();
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             errorMessage = I18n.format("gui.pastebin.invalidFormattedPastebin");
         }
     }
 
     @Override
-    public void drawScreen(int x, int y, float partialTicks){
+    public void drawScreen(int x, int y, float partialTicks) {
         super.drawScreen(x, y, partialTicks);
-        if(errorMessage != null) fontRendererObj.drawString(errorMessage, guiLeft + 5, guiTop + 5, 0xFFFF0000);
+        if (errorMessage != null) fontRendererObj.drawString(errorMessage, guiLeft + 5, guiTop + 5, 0xFFFF0000);
     }
 
     /**
      * Fired when a key is typed. This is the equivalent of KeyListener.keyTyped(KeyEvent e).
      */
     @Override
-    protected void keyTyped(char par1, int par2){
-        if(par2 == 1) {
+    protected void keyTyped(char par1, int par2) {
+        if (par2 == 1) {
             Keyboard.enableRepeatEvents(false);
             mc.displayGuiScreen(parentScreen);
             onGuiClosed();
@@ -167,40 +197,40 @@ public class GuiPastebin extends GuiPneumaticScreenBase{
     }
 
     @Override
-    public void actionPerformed(IGuiWidget widget){
+    public void actionPerformed(IGuiWidget widget) {
         super.actionPerformed(widget);
         errorMessage = "";
-        if(widget.getID() == 0) {
+        if (widget.getID() == 0) {
             PastebinHandler.login(usernameBox.getText(), passwordBox.getText());
             state = EnumState.LOGIN;
             errorMessage = I18n.format("gui.pastebin.loggingIn");
-        } else if(widget.getID() == 1) {
+        } else if (widget.getID() == 1) {
             PastebinHandler.put(pastingString);
             state = EnumState.PUTTING;
             errorMessage = I18n.format("gui.pastebin.uploadingToPastebin");
-        } else if(widget.getID() == 2) {
+        } else if (widget.getID() == 2) {
             PastebinHandler.get(pastebinBox.getText());
             state = EnumState.GETTING;
             errorMessage = I18n.format("gui.pastebin.retrievingFromPastebin");
-        } else if(widget.getID() == 3) {
+        } else if (widget.getID() == 3) {
             PastebinHandler.logout();
             state = EnumState.LOGOUT;
-        } else if(widget.getID() == 4) {
+        } else if (widget.getID() == 4) {
             GuiScreen.setClipboardString(pastingString);
             errorMessage = I18n.format("gui.pastebin.clipboardSetToContents");
-        } else if(widget.getID() == 5) {
+        } else if (widget.getID() == 5) {
             errorMessage = I18n.format("gui.pastebin.retrievedFromClipboard");
             readFromString(GuiScreen.getClipboardString());
         }
     }
 
     @Override
-    protected ResourceLocation getTexture(){
+    protected ResourceLocation getTexture() {
         return Textures.GUI_PASTEBIN;
     }
 
     @Override
-    public boolean doesGuiPauseGame(){
+    public boolean doesGuiPauseGame() {
         return false;
     }
 }

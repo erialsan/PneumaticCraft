@@ -12,8 +12,9 @@ import org.lwjgl.opengl.GL11;
 import pneumaticCraft.common.tileentity.TileEntityUniversalSensor;
 import pneumaticCraft.lib.Textures;
 
-public class ModelUniversalSensor extends ModelBase implements IBaseModel{
-    //fields
+public class ModelUniversalSensor extends ModelBase implements IBaseModel {
+
+    // fields
     ModelRenderer Base1;
     ModelRenderer Base2;
     ModelRenderer Dish1;
@@ -25,7 +26,7 @@ public class ModelUniversalSensor extends ModelBase implements IBaseModel{
     private final ModelRenderer[] dishes;
     ModelRenderer TubeConnection;
 
-    public ModelUniversalSensor(){
+    public ModelUniversalSensor() {
         textureWidth = 64;
         textureHeight = 64;
 
@@ -84,11 +85,11 @@ public class ModelUniversalSensor extends ModelBase implements IBaseModel{
         TubeConnection.mirror = true;
         setRotation(TubeConnection, 0F, 0F, 0F);
 
-        dishes = new ModelRenderer[]{Dish1, Dish2, Dish3, Dish4, Dish5, Dish6};
+        dishes = new ModelRenderer[] { Dish1, Dish2, Dish3, Dish4, Dish5, Dish6 };
     }
 
     @Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5){
+    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         super.render(entity, f, f1, f2, f3, f4, f5);
         setRotationAngles(f, f1, f2, f3, f4, f5, entity);
         Base1.render(f5);
@@ -102,7 +103,7 @@ public class ModelUniversalSensor extends ModelBase implements IBaseModel{
         TubeConnection.render(f5);
     }
 
-    public void renderModel(float size, float dishRotation, boolean[] sidesConnected){
+    public void renderModel(float size, float dishRotation, boolean[] sidesConnected) {
         Base1.render(size);
         Base2.render(size);
         GL11.glPushMatrix();
@@ -115,41 +116,44 @@ public class ModelUniversalSensor extends ModelBase implements IBaseModel{
         Dish6.render(size);
         GL11.glPopMatrix();
         ForgeDirection d = ForgeDirection.EAST;
-        for(int i = 0; i < 4; i++) {
+        for (int i = 0; i < 4; i++) {
             d = d.getRotation(ForgeDirection.UP);
-            if(sidesConnected[d.ordinal()]) {
-                TubeConnection.rotateAngleY = (float)(i * Math.PI / 2);
+            if (sidesConnected[d.ordinal()]) {
+                TubeConnection.rotateAngleY = (float) (i * Math.PI / 2);
                 TubeConnection.render(size);
             }
         }
     }
 
-    private void setRotation(ModelRenderer model, float x, float y, float z){
+    private void setRotation(ModelRenderer model, float x, float y, float z) {
         model.rotateAngleX = x;
         model.rotateAngleY = y;
         model.rotateAngleZ = z;
     }
 
     @Override
-    public void renderStatic(float size, TileEntity te){
+    public void renderStatic(float size, TileEntity te) {
 
     }
 
     @Override
-    public ResourceLocation getModelTexture(TileEntity tile){
+    public ResourceLocation getModelTexture(TileEntity tile) {
         return Textures.MODEL_UNIVERSAL_SENSOR;
     }
 
     @Override
-    public boolean rotateModelBasedOnBlockMeta(){
+    public boolean rotateModelBasedOnBlockMeta() {
         return false;
     }
 
     @Override
-    public void renderDynamic(float size, TileEntity te, float partialTicks){
-        if(te instanceof TileEntityUniversalSensor) {
-            TileEntityUniversalSensor tile = (TileEntityUniversalSensor)te;
-            renderModel(size, tile.oldDishRotation + (tile.dishRotation - tile.oldDishRotation) * partialTicks, tile.sidesConnected);
+    public void renderDynamic(float size, TileEntity te, float partialTicks) {
+        if (te instanceof TileEntityUniversalSensor) {
+            TileEntityUniversalSensor tile = (TileEntityUniversalSensor) te;
+            renderModel(
+                size,
+                tile.oldDishRotation + (tile.dishRotation - tile.oldDishRotation) * partialTicks,
+                tile.sidesConnected);
             tile.renderRangeLines();
         } else {
             renderModel(size, 0, new boolean[6]);

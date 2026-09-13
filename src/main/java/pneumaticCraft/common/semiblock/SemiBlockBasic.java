@@ -12,6 +12,7 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;
+
 import pneumaticCraft.common.inventory.SyncedField;
 import pneumaticCraft.common.network.DescSynced;
 import pneumaticCraft.common.network.IDescSynced;
@@ -20,7 +21,8 @@ import pneumaticCraft.common.network.NetworkUtils;
 import pneumaticCraft.common.network.PacketDescription;
 import pneumaticCraft.common.tileentity.IGUIButtonSensitive;
 
-public class SemiBlockBasic implements ISemiBlock, IDescSynced, IGUIButtonSensitive{
+public class SemiBlockBasic implements ISemiBlock, IDescSynced, IGUIButtonSensitive {
+
     protected World world;
     protected ChunkPosition pos;
     private boolean isInvalid;
@@ -29,130 +31,136 @@ public class SemiBlockBasic implements ISemiBlock, IDescSynced, IGUIButtonSensit
     private boolean descriptionPacketScheduled;
 
     @Override
-    public void initialize(World world, ChunkPosition pos){
+    public void initialize(World world, ChunkPosition pos) {
         this.world = world;
         this.pos = pos;
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound tag){
+    public void writeToNBT(NBTTagCompound tag) {
 
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound tag){
+    public void readFromNBT(NBTTagCompound tag) {
 
     }
 
     @Override
-    public void update(){
-        if(!world.isRemote && !canStay()) drop();
-        if(!world.isRemote) {
-            if(descriptionFields == null) descriptionPacketScheduled = true;
-            for(SyncedField field : getDescriptionFields()) {
-                if(field.update()) {
+    public void update() {
+        if (!world.isRemote && !canStay()) drop();
+        if (!world.isRemote) {
+            if (descriptionFields == null) descriptionPacketScheduled = true;
+            for (SyncedField field : getDescriptionFields()) {
+                if (field.update()) {
                     descriptionPacketScheduled = true;
                 }
             }
 
-            if(descriptionPacketScheduled) {
+            if (descriptionPacketScheduled) {
                 descriptionPacketScheduled = false;
                 sendDescriptionPacket();
             }
         }
     }
 
-    private void sendDescriptionPacket(){
+    private void sendDescriptionPacket() {
         NetworkHandler.sendToAllAround(getDescriptionPacket(), world);
     }
 
     @Override
-    public PacketDescription getDescriptionPacket(){
+    public PacketDescription getDescriptionPacket() {
         return new PacketDescription(this);
     }
 
-    protected void drop(){
-        SemiBlockManager.getInstance(world).breakSemiBlock(world, pos.chunkPosX, pos.chunkPosY, pos.chunkPosZ);
+    protected void drop() {
+        SemiBlockManager.getInstance(world)
+            .breakSemiBlock(world, pos.chunkPosX, pos.chunkPosY, pos.chunkPosZ);
     }
 
-    protected boolean isAirBlock(){
+    protected boolean isAirBlock() {
         return world.isAirBlock(pos.chunkPosX, pos.chunkPosY, pos.chunkPosZ);
     }
 
-    public Block getBlock(){
+    public Block getBlock() {
         return world.getBlock(pos.chunkPosX, pos.chunkPosY, pos.chunkPosZ);
     }
 
-    public TileEntity getTileEntity(){
-        if(cachedTE == null || cachedTE.isInvalid()) {
+    public TileEntity getTileEntity() {
+        if (cachedTE == null || cachedTE.isInvalid()) {
             cachedTE = world.getTileEntity(pos.chunkPosX, pos.chunkPosY, pos.chunkPosZ);
         }
         return cachedTE;
     }
 
     @Override
-    public void invalidate(){
+    public void invalidate() {
         isInvalid = true;
     }
 
     @Override
-    public boolean isInvalid(){
+    public boolean isInvalid() {
         return isInvalid;
     }
 
     @Override
-    public World getWorld(){
+    public World getWorld() {
         return world;
     }
 
     @Override
-    public ChunkPosition getPos(){
+    public ChunkPosition getPos() {
         return pos;
     }
 
     @Override
-    public void addDrops(List<ItemStack> drops){
+    public void addDrops(List<ItemStack> drops) {
         Item item = SemiBlockManager.getItemForSemiBlock(this);
-        if(item != null) drops.add(new ItemStack(item));
+        if (item != null) drops.add(new ItemStack(item));
     }
 
     @Override
-    public boolean canPlace(){
+    public boolean canPlace() {
         return true;
     }
 
     @Override
-    public void onPlaced(EntityPlayer player, ItemStack stack){
+    public void onPlaced(EntityPlayer player, ItemStack stack) {
 
     }
 
-    public boolean canStay(){
+    public boolean canStay() {
         return canPlace();
     }
 
     @Override
-    public boolean onRightClickWithConfigurator(EntityPlayer player){
+    public boolean onRightClickWithConfigurator(EntityPlayer player) {
         return false;
     }
 
-    public void addWailaTooltip(List<String> curInfo, NBTTagCompound tag){
-        curInfo.add(EnumChatFormatting.YELLOW + "[" + StatCollector.translateToLocal(SemiBlockManager.getItemForSemiBlock(this).getUnlocalizedName() + ".name") + "]");
+    public void addWailaTooltip(List<String> curInfo, NBTTagCompound tag) {
+        curInfo.add(
+            EnumChatFormatting.YELLOW + "["
+                + StatCollector.translateToLocal(
+                    SemiBlockManager.getItemForSemiBlock(this)
+                        .getUnlocalizedName() + ".name")
+                + "]");
     }
 
-    public void addWailaInfoToTag(NBTTagCompound tag){
+    public void addWailaInfoToTag(NBTTagCompound tag) {
 
     }
 
     @Override
-    public Type getSyncType(){
+    public Type getSyncType() {
         return Type.SEMI_BLOCK;
     }
 
     @Override
-    public List<SyncedField> getDescriptionFields(){
-        if(descriptionFields == null) {
+    public List<SyncedField> getDescriptionFields() {
+        if (descriptionFields == null) {
             descriptionFields = NetworkUtils.getSyncedFields(this, DescSynced.class);
-            for(SyncedField field : descriptionFields) {
+            for (SyncedField field : descriptionFields) {
                 field.update();
             }
         }
@@ -160,37 +168,37 @@ public class SemiBlockBasic implements ISemiBlock, IDescSynced, IGUIButtonSensit
     }
 
     @Override
-    public void writeToPacket(NBTTagCompound tag){
+    public void writeToPacket(NBTTagCompound tag) {
 
     }
 
     @Override
-    public void readFromPacket(NBTTagCompound tag){
+    public void readFromPacket(NBTTagCompound tag) {
 
     }
 
     @Override
-    public int getX(){
+    public int getX() {
         return pos.chunkPosX;
     }
 
     @Override
-    public int getY(){
+    public int getY() {
         return pos.chunkPosY;
     }
 
     @Override
-    public int getZ(){
+    public int getZ() {
         return pos.chunkPosZ;
     }
 
     @Override
-    public void onDescUpdate(){
+    public void onDescUpdate() {
 
     }
 
     @Override
-    public void handleGUIButtonPress(int guiID, EntityPlayer player){
+    public void handleGUIButtonPress(int guiID, EntityPlayer player) {
 
     }
 }

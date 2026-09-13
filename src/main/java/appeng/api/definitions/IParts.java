@@ -1,18 +1,14 @@
 /*
  * The MIT License (MIT)
- *
  * Copyright (c) 2013 AlgorithmX2
- *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
  * the Software without restriction, including without limitation the rights to
  * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
  * the Software, and to permit persons to whom the Software is furnished to do so,
  * subject to the following conditions:
- *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
  * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
@@ -23,86 +19,84 @@
 
 package appeng.api.definitions;
 
-
 import appeng.api.util.AEColoredItemDefinition;
-
 
 /**
  * A list of all parts in AE
  */
-public interface IParts
-{
-	AEColoredItemDefinition cableSmart();
+public interface IParts {
 
-	AEColoredItemDefinition cableCovered();
+    AEColoredItemDefinition cableSmart();
 
-	AEColoredItemDefinition cableGlass();
+    AEColoredItemDefinition cableCovered();
 
-	AEColoredItemDefinition cableDense();
+    AEColoredItemDefinition cableGlass();
 
-	AEColoredItemDefinition lumenCableSmart();
+    AEColoredItemDefinition cableDense();
 
-	AEColoredItemDefinition lumenCableCovered();
+    AEColoredItemDefinition lumenCableSmart();
 
-	AEColoredItemDefinition lumenCableGlass();
+    AEColoredItemDefinition lumenCableCovered();
 
-	AEColoredItemDefinition lumenCableDense();
+    AEColoredItemDefinition lumenCableGlass();
 
-	IItemDefinition quartzFiber();
+    AEColoredItemDefinition lumenCableDense();
 
-	IItemDefinition toggleBus();
+    IItemDefinition quartzFiber();
 
-	IItemDefinition invertedToggleBus();
+    IItemDefinition toggleBus();
 
-	IItemDefinition storageBus();
+    IItemDefinition invertedToggleBus();
 
-	IItemDefinition importBus();
+    IItemDefinition storageBus();
 
-	IItemDefinition exportBus();
+    IItemDefinition importBus();
 
-	IItemDefinition iface();
+    IItemDefinition exportBus();
 
-	IItemDefinition levelEmitter();
+    IItemDefinition iface();
 
-	IItemDefinition annihilationPlane();
+    IItemDefinition levelEmitter();
 
-	IItemDefinition identityAnnihilationPlane();
+    IItemDefinition annihilationPlane();
 
-	IItemDefinition formationPlane();
+    IItemDefinition identityAnnihilationPlane();
 
-	IItemDefinition p2PTunnelME();
+    IItemDefinition formationPlane();
 
-	IItemDefinition p2PTunnelRedstone();
+    IItemDefinition p2PTunnelME();
 
-	IItemDefinition p2PTunnelItems();
+    IItemDefinition p2PTunnelRedstone();
 
-	IItemDefinition p2PTunnelLiquids();
+    IItemDefinition p2PTunnelItems();
 
-	IItemDefinition p2PTunnelEU();
+    IItemDefinition p2PTunnelLiquids();
 
-	IItemDefinition p2PTunnelRF();
+    IItemDefinition p2PTunnelEU();
 
-	IItemDefinition p2PTunnelLight();
+    IItemDefinition p2PTunnelRF();
 
-	IItemDefinition p2PTunnelOpenComputers();
+    IItemDefinition p2PTunnelLight();
 
-	IItemDefinition cableAnchor();
+    IItemDefinition p2PTunnelOpenComputers();
 
-	IItemDefinition monitor();
+    IItemDefinition cableAnchor();
 
-	IItemDefinition semiDarkMonitor();
+    IItemDefinition monitor();
 
-	IItemDefinition darkMonitor();
+    IItemDefinition semiDarkMonitor();
 
-	IItemDefinition interfaceTerminal();
+    IItemDefinition darkMonitor();
 
-	IItemDefinition patternTerminal();
+    IItemDefinition interfaceTerminal();
 
-	IItemDefinition craftingTerminal();
+    IItemDefinition patternTerminal();
 
-	IItemDefinition terminal();
+    IItemDefinition craftingTerminal();
 
-	IItemDefinition storageMonitor();
+    IItemDefinition terminal();
 
-	IItemDefinition conversionMonitor();
+    IItemDefinition storageMonitor();
+
+    IItemDefinition conversionMonitor();
 }

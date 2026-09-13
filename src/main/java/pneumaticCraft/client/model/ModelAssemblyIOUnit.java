@@ -12,14 +12,15 @@ import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
+import cpw.mods.fml.client.FMLClientHandler;
 import pneumaticCraft.api.client.assemblymachine.AssemblyRenderOverriding;
 import pneumaticCraft.api.client.assemblymachine.AssemblyRenderOverriding.IAssemblyRenderOverriding;
 import pneumaticCraft.common.tileentity.TileEntityAssemblyIOUnit;
 import pneumaticCraft.lib.Textures;
-import cpw.mods.fml.client.FMLClientHandler;
 
-public class ModelAssemblyIOUnit extends ModelBase implements IBaseModel{
-    //fields
+public class ModelAssemblyIOUnit extends ModelBase implements IBaseModel {
+
+    // fields
     ModelRenderer Base;
     ModelRenderer BaseTurn;
     ModelRenderer BaseTurn2;
@@ -35,11 +36,12 @@ public class ModelAssemblyIOUnit extends ModelBase implements IBaseModel{
     ModelRenderer Claw2;
     private final RenderItem customRenderItem;
 
-    public ModelAssemblyIOUnit(){
+    public ModelAssemblyIOUnit() {
         // EE3 snippet, to initialize an EntityItem which doesn't bob.
-        customRenderItem = new RenderItem(){
+        customRenderItem = new RenderItem() {
+
             @Override
-            public boolean shouldBob(){
+            public boolean shouldBob() {
 
                 return false;
             };
@@ -130,7 +132,7 @@ public class ModelAssemblyIOUnit extends ModelBase implements IBaseModel{
     }
 
     @Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5){
+    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         super.render(entity, f, f1, f2, f3, f4, f5);
         setRotationAngles(f, f1, f2, f3, f4, f5, entity);
         Base.render(f5);
@@ -149,48 +151,58 @@ public class ModelAssemblyIOUnit extends ModelBase implements IBaseModel{
     }
 
     @Override
-    public void renderStatic(float size, TileEntity te){
+    public void renderStatic(float size, TileEntity te) {
 
     }
 
     @Override
-    public void renderDynamic(float size, TileEntity te, float partialTicks){
-        FMLClientHandler.instance().getClient().getTextureManager().bindTexture(te != null && te.getBlockMetadata() == 0 ? Textures.MODEL_ASSEMBLY_IO_IMPORT : Textures.MODEL_ASSEMBLY_IO_EXPORT);
-        if(te instanceof TileEntityAssemblyIOUnit) {
-            TileEntityAssemblyIOUnit tile = (TileEntityAssemblyIOUnit)te;
+    public void renderDynamic(float size, TileEntity te, float partialTicks) {
+        FMLClientHandler.instance()
+            .getClient()
+            .getTextureManager()
+            .bindTexture(
+                te != null && te.getBlockMetadata() == 0 ? Textures.MODEL_ASSEMBLY_IO_IMPORT
+                    : Textures.MODEL_ASSEMBLY_IO_EXPORT);
+        if (te instanceof TileEntityAssemblyIOUnit) {
+            TileEntityAssemblyIOUnit tile = (TileEntityAssemblyIOUnit) te;
             float[] renderAngles = new float[5];
-            for(int i = 0; i < 5; i++) {
+            for (int i = 0; i < 5; i++) {
                 renderAngles[i] = tile.oldAngles[i] + (tile.angles[i] - tile.oldAngles[i]) * partialTicks;
             }
             // float rotationAngle = (float) (720.0 *
             // (System.currentTimeMillis() & 0x3FFFL) / 0x3FFFL);
 
             EntityItem ghostEntityItem = null;
-            if(tile.inventory[0] != null) {
+            if (tile.inventory[0] != null) {
                 ghostEntityItem = new EntityItem(tile.getWorldObj());
                 ghostEntityItem.hoverStart = 0.0F;
                 ghostEntityItem.setEntityItemStack(tile.inventory[0]);
             }
             boolean fancySetting = RenderManager.instance.options.fancyGraphics;
             RenderManager.instance.options.fancyGraphics = true;
-            renderModel(size, renderAngles, tile.oldClawProgress + (tile.clawProgress - tile.oldClawProgress) * partialTicks, ghostEntityItem);
+            renderModel(
+                size,
+                renderAngles,
+                tile.oldClawProgress + (tile.clawProgress - tile.oldClawProgress) * partialTicks,
+                ghostEntityItem);
             RenderManager.instance.options.fancyGraphics = fancySetting;
         } else {
-            renderModel(size, new float[]{0, 0, 35, 55, 0}, 0, null);
+            renderModel(size, new float[] { 0, 0, 35, 55, 0 }, 0, null);
         }
     }
 
-    public void renderModel(float size, float[] angles, float clawProgress, EntityItem carriedItem){
+    public void renderModel(float size, float[] angles, float clawProgress, EntityItem carriedItem) {
         float clawTrans;
         float scaleFactor = 0.7F;
 
         IAssemblyRenderOverriding renderOverride = null;
-        if(carriedItem != null) {
+        if (carriedItem != null) {
             renderOverride = AssemblyRenderOverriding.renderOverrides.get(carriedItem.getEntityItem());
-            if(renderOverride != null) {
+            if (renderOverride != null) {
                 clawTrans = renderOverride.getIOUnitClawShift(carriedItem.getEntityItem());
             } else {
-                if(carriedItem.getEntityItem().getItem() instanceof ItemBlock) {
+                if (carriedItem.getEntityItem()
+                    .getItem() instanceof ItemBlock) {
                     clawTrans = 1.5F / 16F - clawProgress * 0.1F / 16F;
                 } else {
                     clawTrans = 1.5F / 16F - clawProgress * 1.4F / 16F;
@@ -232,10 +244,14 @@ public class ModelAssemblyIOUnit extends ModelBase implements IBaseModel{
         Claw2.render(size);
         GL11.glPopMatrix();
 
-        if(carriedItem != null) {
-            if(renderOverride == null || renderOverride.applyRenderChangeIOUnit(carriedItem.getEntityItem())) {
+        if (carriedItem != null) {
+            if (renderOverride == null || renderOverride.applyRenderChangeIOUnit(carriedItem.getEntityItem())) {
                 GL11.glRotated(90, 1, 0, 0);
-                GL11.glTranslated(0, carriedItem.getEntityItem().getItem() instanceof ItemBlock ? 1.5 / 16D : 0.5 / 16D, -3 / 16D);
+                GL11.glTranslated(
+                    0,
+                    carriedItem.getEntityItem()
+                        .getItem() instanceof ItemBlock ? 1.5 / 16D : 0.5 / 16D,
+                    -3 / 16D);
                 GL11.glRotated(-90, 0, 1, 0);
 
                 GL11.glScalef(scaleFactor, scaleFactor, scaleFactor);
@@ -246,19 +262,19 @@ public class ModelAssemblyIOUnit extends ModelBase implements IBaseModel{
         GL11.glPopMatrix();
     }
 
-    private void setRotation(ModelRenderer model, float x, float y, float z){
+    private void setRotation(ModelRenderer model, float x, float y, float z) {
         model.rotateAngleX = x;
         model.rotateAngleY = y;
         model.rotateAngleZ = z;
     }
 
     @Override
-    public ResourceLocation getModelTexture(TileEntity tile){
+    public ResourceLocation getModelTexture(TileEntity tile) {
         return null;
     }
 
     @Override
-    public boolean rotateModelBasedOnBlockMeta(){
+    public boolean rotateModelBasedOnBlockMeta() {
         return false;
     }
 

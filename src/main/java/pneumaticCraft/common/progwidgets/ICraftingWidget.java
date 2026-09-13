@@ -2,6 +2,7 @@ package pneumaticCraft.common.progwidgets;
 
 import net.minecraft.inventory.InventoryCrafting;
 
-public interface ICraftingWidget{
+public interface ICraftingWidget {
+
     public InventoryCrafting getCraftingGrid();
 }

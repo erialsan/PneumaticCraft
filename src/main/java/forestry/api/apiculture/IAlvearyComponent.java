@@ -12,21 +12,22 @@ import forestry.api.core.ITileStructure;
  */
 public interface IAlvearyComponent extends ITileStructure {
 
-	void registerBeeModifier(IBeeModifier modifier);
+    void registerBeeModifier(IBeeModifier modifier);
 
-	void removeBeeModifier(IBeeModifier modifier);
+    void removeBeeModifier(IBeeModifier modifier);
 
-	void registerBeeListener(IBeeListener event);
+    void registerBeeListener(IBeeListener event);
 
-	void removeBeeListener(IBeeListener event);
+    void removeBeeListener(IBeeListener event);
 
-	void addTemperatureChange(float change, float boundaryDown, float boundaryUp);
+    void addTemperatureChange(float change, float boundaryDown, float boundaryUp);
 
-	void addHumidityChange(float change, float boundaryDown, float boundaryUp);
+    void addHumidityChange(float change, float boundaryDown, float boundaryUp);
 
-	/**
-	 * @return true if this TE has a function other than a plain alveary block. Returning true prevents the TE from becoming master.
-	 */
-	boolean hasFunction();
+    /**
+     * @return true if this TE has a function other than a plain alveary block. Returning true prevents the TE from
+     *         becoming master.
+     */
+    boolean hasFunction();
 
 }
